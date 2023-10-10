@@ -21,6 +21,7 @@
     "@types/uuid": "^3.4.4",
     "@types/webpack": "4.4.17",
     "babel-loader": "^8.0.4",
+    "file-loader": "^6.2.0",
     "lodash": "^4.17.15",
     "np": "^3.0.4",
     "react": "^16.8.4",

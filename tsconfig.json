@@ -22,6 +22,6 @@
 		"declaration": true,
 		"types": ["react"]
 	},
-	"include": ["src/index.ts"],
+	"include": ["src/index.ts", "declarations.d.ts"],
 	"exclude": ["node_modules", "build", "scripts", "config"]
 }

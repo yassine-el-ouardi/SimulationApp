@@ -2,6 +2,7 @@ import { setOptions } from "@storybook/addon-options"
 import { configure } from "@storybook/react"
 
 setOptions({
+	name: 'Processing Twin',
 	hierarchySeparator: /\/|\./,
 	hierarchyRootSeparator: /\|/,
 })

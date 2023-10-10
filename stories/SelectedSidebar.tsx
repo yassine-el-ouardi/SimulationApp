@@ -12,21 +12,7 @@ const Message = styled.div`
   line-height: 1.4em;
 `
 
-const Button = styled.div`
-  padding: 10px 15px;
-  background: cornflowerblue;
-  color: white;
-  border-radius: 3px;
-  text-align: center;
-  transition: 0.3s ease all;
-  cursor: pointer;
-  &:hover {
-    box-shadow: 0 10px 20px rgba(0,0,0,.1);
-  }
-  &:active {
-    background: #5682d2;
-  }
-`
+
 
 export class SelectedSidebar extends React.Component {
   public state = cloneDeep(chartSimple)
@@ -53,7 +39,6 @@ export class SelectedSidebar extends React.Component {
                 We can re-use the onDeleteKey action. This will delete whatever is selected.
                 Otherwise, we have access to the state here so we can do whatever we want.
               */}
-              <Button onClick={() => stateActions.onDeleteKey({})}>Delete</Button>
             </Message>
           : <Message>Click on a Node, Port or Link</Message> }
         </Sidebar>
