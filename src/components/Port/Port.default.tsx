@@ -13,8 +13,8 @@ export interface IPortDefaultProps {
 }
 
 const PortDefaultOuter = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: white;
   cursor: pointer;
@@ -27,8 +27,8 @@ const PortDefaultOuter = styled.div`
 `
 
 const PortDefaultInner = styled.div<{ active: boolean }>`
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background:  ${(props) => props.active ? 'cornflowerblue' : 'grey' };
   cursor: pointer;

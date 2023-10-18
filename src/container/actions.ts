@@ -27,6 +27,8 @@ import {
 } from '../'
 import { rotate } from './utils/rotate'
 
+import { ISelectedOrHovered } from './../types/chart';
+
 function getOffset (config: any, data: any, zoom?: number) {
   let offset = { x: data.x, y: data.y }
   if (config && config.snapToGrid) {
@@ -168,7 +170,27 @@ export const onNodeMouseEnter: IStateCallback<IOnNodeMouseEnter> = ({ nodeId }) 
     hovered: {
       type: 'node',
       id: nodeId,
-    },
+      cellCharacteristics: {
+        netVolume: null,
+        pulpArea: null,
+        frothThickness: null,
+        airFlowRate: null,
+      },
+      feed: {
+        totalSolidFlow: null,
+        totalLiquidFlow: null,
+        pulpMassFlow: null,
+        pulpVolumetricFlow: null,
+        solidsSG: null,
+        pulpSG: null,
+        percentSolids: null,
+        solidsFraction: null,
+        cuPercentage: null,
+        fePercentage: null,
+        znPercentage: null,
+        pbPercentage: null,
+      }
+    } as ISelectedOrHovered,
   }
 }
 
@@ -211,7 +233,27 @@ export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart:
     chart.selected = {
       type: 'node',
       id: nodeId,
-    }
+      cellCharacteristics: {
+        netVolume: null,
+        pulpArea: null,
+        frothThickness: null,
+        airFlowRate: null,
+      },
+      feed: {
+        totalSolidFlow: null,
+        totalLiquidFlow: null,
+        pulpMassFlow: null,
+        pulpVolumetricFlow: null,
+        solidsSG: null,
+        pulpSG: null,
+        percentSolids: null,
+        solidsFraction: null,
+        cuPercentage: null,
+        fePercentage: null,
+        znPercentage: null,
+        pbPercentage: null,
+      }
+    } as ISelectedOrHovered;
   }
   return chart
 }
@@ -221,7 +263,27 @@ export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }
     chart.selected = {
       type: 'node',
       id: nodeId,
-    }
+      cellCharacteristics: {
+        netVolume: null,
+        pulpArea: null,
+        frothThickness: null,
+        airFlowRate: null,
+      },
+      feed: {
+        totalSolidFlow: null,
+        totalLiquidFlow: null,
+        pulpMassFlow: null,
+        pulpVolumetricFlow: null,
+        solidsSG: null,
+        pulpSG: null,
+        percentSolids: null,
+        solidsFraction: null,
+        cuPercentage: null,
+        fePercentage: null,
+        znPercentage: null,
+        pbPercentage: null,
+      }
+    } as ISelectedOrHovered;
   }
   return chart
 }
@@ -271,6 +333,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
   position,
   id,
 }) => (chart: IChart): IChart => {
+  console.log('onCanvasDrop data:', data);
   chart.nodes[id] = {
     id,
     position:
@@ -283,6 +346,23 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     orientation: data.orientation || 0,
     type: data.type,
     ports: data.ports,
+    cellCharacteristics: data.cellCharacteristics || {netVolume: null,
+    pulpArea: null,
+    frothThickness: null,
+    airFlowRate: null,},
+    feed: data.feed || {totalSolidFlow: null,
+      totalLiquidFlow: null,
+      pulpMassFlow: null,
+      pulpVolumetricFlow: null,
+      solidsSG: null,
+      pulpSG: null,
+      percentSolids: null,
+      solidsFraction: null,
+      cuPercentage: null,
+      fePercentage: null,
+      znPercentage: null,
+      pbPercentage: null,
+    },
     properties: data.properties,
   }
   return chart

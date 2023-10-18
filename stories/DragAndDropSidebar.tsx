@@ -20,7 +20,26 @@ export const DragAndDropSidebar = () => (
         Drag and drop
       </Message>
       <SidebarItem
-        type="all-sides"
+        type="Cell"
+        ports={ {
+          port1: {
+            id: 'port1',
+            type: 'left',
+
+          },
+
+          port3: {
+            id: 'port3',
+            type: 'top',
+          },
+          port4: {
+            id: 'port4',
+            type: 'bottom',
+          },
+        }}
+      />
+      <SidebarItem
+        type="First Cell"
         ports={ {
           port1: {
             id: 'port1',

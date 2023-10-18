@@ -2,6 +2,24 @@ import * as React from 'react'
 import { IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition } from '../../../'
 import { getDirectional } from '../utils'
 
+export const calculateAdjustedEndPos = (startPos: IPosition, endPos: IPosition): IPosition => {
+  const { leftToRight, topToBottom, isHorizontal } = getDirectional(startPos, endPos);
+  const adjustedEnd = { ...endPos };
+
+  if (leftToRight && isHorizontal) {
+      adjustedEnd.x -= 10;
+  } else if (!leftToRight && isHorizontal) {
+      adjustedEnd.x += 10;
+  } else if (topToBottom && !isHorizontal) {
+      adjustedEnd.y -= 10;
+  } else {
+      adjustedEnd.y += 10;
+  }
+
+  return adjustedEnd;
+};
+
+
 export interface IArrowLinkProps {
   className?: string
   link: ILink
@@ -57,15 +75,15 @@ export const ArrowLink = ({
       className={className}
     >
       <defs>
-        <marker
-          id={`arrowHead-${linkColor}`}
-          orient="auto-start-reverse"
-          markerWidth="2"
-          markerHeight="4"
-          refX="0.1"
-          refY="2"
-        >
-          <path d="M0,0 V4 L2,2 Z" fill={linkColor} />
+      <marker
+        id={`arrowHead-${linkColor}`}
+        orient="auto-start-reverse"
+        markerWidth="4"  // Doubled from 2 to 4
+        markerHeight="8" // Doubled from 4 to 8
+        refX="0.1"
+        refY="4"         // Adjusted from 2 to 4
+      >
+          <path d="M0,0 V8 L4,4 Z" fill={linkColor} />
         </marker>
       </defs>
       {/* Main line */}

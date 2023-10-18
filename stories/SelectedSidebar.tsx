@@ -18,9 +18,12 @@ export class SelectedSidebar extends React.Component {
   public state = cloneDeep(chartSimple)
   public render () {
     const chart = this.state
+    const selectedNode = chart.selected.id ? chart.nodes[chart.selected.id] : null;
     const stateActions = mapValues(actions, (func: any) =>
       (...args: any) => this.setState(func(...args))) as typeof actions
-
+    
+    console.log('selectedNode', selectedNode);
+    console.log('id',chart.selected.id);
     return (
       <Page>
         <Content>
@@ -29,18 +32,51 @@ export class SelectedSidebar extends React.Component {
             callbacks={stateActions}
           />
         </Content>
-        <Sidebar>
-          { chart.selected.type
-          ? <Message>
-              <div>Type: {chart.selected.type}</div>
-              <div>ID: {chart.selected.id}</div>
-              <br/>
-              {/*
-                We can re-use the onDeleteKey action. This will delete whatever is selected.
-                Otherwise, we have access to the state here so we can do whatever we want.
-              */}
-            </Message>
-          : <Message>Click on a Node, Port or Link</Message> }
+          <Sidebar>
+          {
+            chart.selected.type 
+            ? chart.selected.type === 'node' 
+              ? <>
+                  <Message>
+                    <div>Type: {chart.selected.type}</div>
+                    <div>ID: {chart.selected.id}</div>
+                  {
+                    selectedNode &&
+                    <>
+                      <h4>Cell Characteristics:</h4>
+                      {
+                        Object.entries(selectedNode.cellCharacteristics || {}).map(([key, value]) => (
+                          <div key={key}>
+                            <label>{key}: </label>
+                            <input type="text" defaultValue={typeof value === 'string' ? value : ''} onChange={(e) => {
+                              // Handle the change here. You may want to update the state with the new value.
+                              console.log(e.target.value);
+                            }}/>
+                          </div>
+                        ) )
+                      }
+                      <h4>Stream:</h4>
+                      {
+                        Object.entries(selectedNode.feed || {}).map(([key, value]) => (
+                          <div key={key}>
+                            <label>{key}: </label>
+                            <input type="text" defaultValue={typeof value === 'string' ? value : ''} onChange={(e) => {
+                              // Handle the change here. You may want to update the state with the new value.
+                              console.log(e.target.value);
+                            }}/>
+                          </div>
+                        ) )
+                      }
+                    </>
+                  }
+                </Message>
+                </>
+              : <Message>
+                  <div>Type: {chart.selected.type}</div>
+                  <div>ID: {chart.selected.id}</div>
+                </Message>
+            : <Message>Click on a Cell, or Stream</Message>
+          }
         </Sidebar>
       </Page>
     )

@@ -7,7 +7,7 @@ export const SelectableMode = () => {
   return (
     <Page>
       <Content>
-        <FlowChartWithState config={{ readonly: true, selectable: true }} initialValue={chartSimple} />
+        <FlowChartWithState config={{ readonly: false, selectable: true }} initialValue={chartSimple} />
       </Content>
 
       <Sidebar>
@@ -18,7 +18,7 @@ export const SelectableMode = () => {
         <Message>
           You just need to pass <strong>selectable</strong> property to chart config.
         </Message>
-        <Code>config = {JSON.stringify({ readonly: true, selectable: true }, null, 2)}</Code>
+        <Code>config = {JSON.stringify({ readonly: false, selectable: true }, null, 2)}</Code>
       </Sidebar>
     </Page>
   )
