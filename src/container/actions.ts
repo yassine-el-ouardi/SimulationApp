@@ -365,6 +365,62 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     },
     properties: data.properties,
   }
+  if (data.type === "First Cell") {
+    // Create a new link
+    const newLinkId = "First_Stream_id"; // Generate a unique ID for the new link
+
+    // Specify the target position for the link
+    const targetPosition = {
+      x: position.x - 100, // For example, 100 pixels to the right of the new node's position
+      y: position.y + 50,  // For example, 50 pixels below the new node's position
+    };
+
+    chart.links[newLinkId] = {
+      id: newLinkId,
+      from: {
+        position: targetPosition,
+      },
+      to: {
+        nodeId: id,
+        portId: "port1", // Specify the correct port ID
+      },
+    };
+  } else if(data.type === "Last Cell") {
+    // Create a new link
+    const newLinkId = "Last_Stream_id"; // Generate a unique ID for the new link
+    const newLinkId2 = "Last_Stream_id2"; // Generate a unique ID for the new link
+
+    // Specify the target position for the link
+    const targetPosition = {
+      x: position.x +200, // For example, 100 pixels to the right of the new node's position
+      y: position.y,  // For example, 50 pixels below the new node's position
+    };
+    const targetPosition2 = {
+      x: position.x + 50, // For example, 100 pixels to the right of the new node's position
+      y: position.y + 200,  // For example, 50 pixels below the new node's position
+    };
+
+    chart.links[newLinkId] = {
+      id: newLinkId,
+      from: {
+        nodeId: id,
+        portId: "port3", // Specify the correct port ID
+      },
+      to: {
+        position: targetPosition,
+      },
+    };
+    chart.links[newLinkId2] = {
+      id: newLinkId2,
+      from: {
+        nodeId: id,
+        portId: "port4", // Specify the correct port ID
+      },
+      to: {
+        position: targetPosition2,
+      },
+    };
+  }
   return chart
 }
 

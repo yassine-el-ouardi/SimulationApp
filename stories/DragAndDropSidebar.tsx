@@ -3,17 +3,21 @@ import styled from 'styled-components'
 import { FlowChartWithState } from '../src'
 import { Content, Page, Sidebar, SidebarItem } from './components'
 import { chartSimple } from './misc/exampleChartState'
+import { IChart } from '../src'
 
 const Message = styled.div`
 margin: 10px;
 padding: 10px;
 background: rgba(0,0,0,0.05);
 `
+interface DragAndDropSidebarProps {
+  onStateChange: (chart: IChart) => void;
+}
 
-export const DragAndDropSidebar = () => (
+export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateChange }) => (
   <Page>
     <Content>
-      <FlowChartWithState initialValue={chartSimple} />
+      <FlowChartWithState initialValue={chartSimple} onStateChange={onStateChange}/>
     </Content>
     <Sidebar>
       <Message>
@@ -40,6 +44,25 @@ export const DragAndDropSidebar = () => (
       />
       <SidebarItem
         type="First Cell"
+        ports={ {
+          port1: {
+            id: 'port1',
+            type: 'left',
+
+          },
+
+          port3: {
+            id: 'port3',
+            type: 'top',
+          },
+          port4: {
+            id: 'port4',
+            type: 'bottom',
+          },
+        }}
+      />
+      <SidebarItem
+        type="Last Cell"
         ports={ {
           port1: {
             id: 'port1',

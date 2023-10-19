@@ -100,8 +100,10 @@ export type IPort<PortProps = undefined> = {
 export type ILink<LinkProps = undefined> = {
   id: string
   from: {
-    nodeId: string
-    portId: string,
+    nodeId?: string;
+    portId?: string;
+    //-----
+    position?: IPosition;
   }
   to: {
     nodeId?: string;

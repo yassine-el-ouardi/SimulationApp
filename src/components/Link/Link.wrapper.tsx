@@ -9,7 +9,7 @@ export interface ILinkWrapperProps {
   link: ILink
   isSelected: boolean
   isHovered: boolean
-  fromNode: INode
+  fromNode: INode | undefined
   toNode: INode | undefined
   onLinkMouseEnter: IOnLinkMouseEnter
   onLinkMouseLeave: IOnLinkMouseLeave
@@ -32,8 +32,8 @@ export const LinkWrapper = React.memo(
     toNode,
     matrix,
   }: ILinkWrapperProps) => {
-    const startPos = getLinkPosition(fromNode, link.from.portId)
-    const fromPort = fromNode.ports[link.from.portId]
+    const startPos = fromNode && link.from.portId ? getLinkPosition(fromNode, link.from.portId) : link.from.position
+    const fromPort = fromNode && link.from.portId ? fromNode.ports[link.from.portId] : undefined
 
     const endPos = toNode && link.to.portId ? getLinkPosition(toNode, link.to.portId) : link.to.position
     const toPort = toNode && link.to.portId ? toNode.ports[link.to.portId] : undefined
@@ -41,6 +41,9 @@ export const LinkWrapper = React.memo(
     // Don't render the link yet if there is no end pos
     // This will occur if the link was just created
     if (!endPos) {
+      return null
+    }
+    if (!startPos) {
       return null
     }
 

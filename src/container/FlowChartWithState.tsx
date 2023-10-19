@@ -7,6 +7,7 @@ export interface IFlowChartWithStateProps {
   initialValue: IChart
   Components?: IFlowChartComponents
   config?: IConfig
+  onStateChange?: (chart: IChart) => void
 }
 
 /**
@@ -15,7 +16,14 @@ export interface IFlowChartWithStateProps {
 export class FlowChartWithState extends React.Component<IFlowChartWithStateProps, IChart> {
   public state: IChart
   private stateActions = mapValues(actions, (func: any) =>
-      (...args: any) => this.setState(func(...args)))
+  (...args: any) => {
+    const newState = func(...args)
+    this.setState(newState, () => {
+      if (this.props.onStateChange) {
+        this.props.onStateChange(this.state)
+      }
+    })
+  })
 
   constructor (props: IFlowChartWithStateProps) {
     super(props)

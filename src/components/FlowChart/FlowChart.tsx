@@ -129,7 +129,7 @@ export const FlowChart = (props: IFlowChartProps) => {
     const to = links[linkId].to
 
     return (
-      !to.nodeId ||
+      !to.nodeId || !from.nodeId ||
       nodesInView.indexOf(from.nodeId) !== -1 ||
       nodesInView.indexOf(to.nodeId) !== -1
     )
@@ -159,7 +159,7 @@ export const FlowChart = (props: IFlowChartProps) => {
             Component={Link}
             isSelected={isSelected}
             isHovered={isHovered}
-            fromNode={nodes[fromNodeId]}
+            fromNode={fromNodeId ? nodes[fromNodeId] : undefined}
             toNode={toNodeId ? nodes[toNodeId] : undefined}
             matrix={matrix}
             {...linkCallbacks}
