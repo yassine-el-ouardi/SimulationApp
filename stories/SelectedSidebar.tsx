@@ -122,40 +122,56 @@ export class SelectedSidebar extends React.Component {
       const currentLinkId = linkIds[0];
       const currentLink = updatedChart.links[currentLinkId];
   
-      let previousTotalSolidFlow = 0;
-      const sourceNodeId = currentLink.from.nodeId;
-      if (sourceNodeId) {
-        const incomingLinks = Object.values(updatedChart.links).filter(
-          l => l.to && l.to.nodeId === sourceNodeId && l.to.portId === 'port1'
-        );
-        if (incomingLinks.length > 0) {
-          const incomingLink = incomingLinks[0];
-          if (incomingLink.feed && typeof incomingLink.feed.totalSolidFlow === 'number') {
-            previousTotalSolidFlow = incomingLink.feed.totalSolidFlow;
+      // Only proceed if the link has a 'from' property
+      if (currentLink.from.nodeId) {
+        let previousTotalSolidFlow = 0;
+        const sourceNodeId = currentLink.from.nodeId;
+  
+        if (sourceNodeId) {
+          // Find incoming links that connect to the source node's 'port1'
+          const incomingLinks = Object.values(updatedChart.links).filter(l => {
+            return l.to && l.to.nodeId === sourceNodeId && l.to.portId === 'port1';
+          });
+  
+          if (incomingLinks.length == 1) {
+            const incomingLink = incomingLinks[0];
+            if (incomingLink.feed && typeof incomingLink.feed.totalSolidFlow === 'number') {
+              previousTotalSolidFlow = incomingLink.feed.totalSolidFlow;
+            }
+          }else{
+
+            if (incomingLinks.length > 1) {
+              if (incomingLinks[0].feed && incomingLinks[1].feed && typeof incomingLinks[0].feed.totalSolidFlow === 'number' && typeof incomingLinks[1].feed.totalSolidFlow === 'number') {
+                previousTotalSolidFlow = (incomingLinks[0].feed.totalSolidFlow + incomingLinks[1].feed.totalSolidFlow) /2;
+              }
+            }
           }
         }
-      }
   
-      // Log the retrieved previous totalSolidFlow value
-      console.log(`Retrieved previous totalSolidFlow for link ${currentLinkId}: ${previousTotalSolidFlow}`);
+        console.log(`Retrieved previous totalSolidFlow for link ${currentLinkId}: ${previousTotalSolidFlow}`);
   
-      if (!currentLink.feed) {
-        currentLink.feed = {
-          totalSolidFlow: null,
-          totalLiquidFlow: null,
-          pulpMassFlow: null,
-          pulpVolumetricFlow: null,
-          solidsSG: null,
-          pulpSG: null,
-          percentSolids: null,
-          solidsFraction: null,
-          cuPercentage: null,
-          fePercentage: null,
-          znPercentage: null,
-          pbPercentage: null,
-        };
+        if (!currentLink.feed) {
+          currentLink.feed = {
+            totalSolidFlow: null,
+            totalLiquidFlow: null,
+            pulpMassFlow: null,
+            pulpVolumetricFlow: null,
+            solidsSG: null,
+            pulpSG: null,
+            percentSolids: null,
+            solidsFraction: null,
+            cuPercentage: null,
+            fePercentage: null,
+            znPercentage: null,
+            pbPercentage: null,
+          };
+        }
+  
+        // Update totalSolidFlow for the current link
+        currentLink.feed.totalSolidFlow = previousTotalSolidFlow + 1;
+      } else {
+        console.log(`Skipping update for link ${currentLinkId} with no 'from' node`);
       }
-      currentLink.feed.totalSolidFlow = previousTotalSolidFlow + 1;
   
       this.setState({ ...updatedChart }, () => {
         console.log(`Link ${currentLinkId} updated`);
@@ -166,5 +182,6 @@ export class SelectedSidebar extends React.Component {
     const allLinkIds = Object.keys(updatedChart.links);
     updateLinkFlowSequentially(allLinkIds);
   }
+  
   
 }
