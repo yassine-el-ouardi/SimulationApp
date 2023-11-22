@@ -5,6 +5,7 @@ import { FlowChart } from '../src'
 import * as actions from '../src/container/actions'
 import { Content, Page, Sidebar } from './components'
 import { chartSimple } from './misc/exampleChartState'
+import { onUpdateNodeProperty, onUpdateLinkProperty } from '../src/container/actions'
 
 const Message = styled.div`
   margin: 10px;
@@ -34,7 +35,10 @@ export class SelectedSidebar extends React.Component {
     const stateActions = mapValues(actions, (func: any) =>
       (...args: any) => this.setState(func(...args))) as typeof actions
 
-    //console.log('selectedNode', selectedNode);
+    
+    console.log('from outside', selectedLink);
+    
+    // console.log('selectedNode', selectedNode);
     //console.log('id', chart.selected.id);
     return (
       <Page>
@@ -60,9 +64,15 @@ export class SelectedSidebar extends React.Component {
                           Object.entries(selectedNode.cellCharacteristics || {}).map(([key, value]) => (
                             <div key={key}>
                               <label>{key}: </label>
-                              <input type="text" defaultValue={typeof value === 'string' ? value : ''} onChange={(e) => {
-                                // Handle the change here. You may want to update the state with the new value.
-                                //console.log(e.target.value);
+                              <input type="text" 
+                                value={value !== null && value !== undefined ? value.toString() : ''}                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                const propertyKey = key; // The property name (e.g., 'netVolume', 'pulpArea', etc.)
+
+                                // Call the action function to update the state
+                                this.setState(onUpdateNodeProperty(propertyKey, newValue));
+
+                                
                               }} />
                             </div>
                           ))
@@ -83,17 +93,20 @@ export class SelectedSidebar extends React.Component {
                         <div>ID: {chart.selected.id}</div>
                         <h4>Stream:</h4>
                         {
+
                           selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
                             <div key={key}>
                               <label>{key}: </label>
-                              <input
-                                type="text"
-                                defaultValue={value !== null && value !== undefined ? value.toString() : ''}
-                                onChange={(e) => {
-                                  //console.log(e.target.value);
-                                  // Additional logic for handling link type changes
-                                }}
-                              />
+                              <input type="text" 
+                                value={value !== null && value !== undefined ? value.toString() : ''}                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                const propertyKey = key; // The property name (e.g., 'netVolume', 'pulpArea', etc.)
+
+                                // Call the action function to update the state
+                                this.setState(onUpdateLinkProperty(propertyKey, newValue, selectedLink.id));
+
+
+                              }} />
                             </div>
                           ))
                         }
