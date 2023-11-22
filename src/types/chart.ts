@@ -10,7 +10,7 @@ export type IChart<
     nodes: {//aka cell
       [id: string]: INode<NodeProps, PortProps>;
     }
-    links: {// aka arrows
+    links: {// aka arrows or stream
       [id: string]: ILink<LinkProps>;
     }
     scale: number
@@ -60,20 +60,6 @@ export type INode<NodeProps = undefined, PortProps = undefined> = {
     frothThickness: number| null
     airFlowRate: number| null
   }| null
-  feed: { //the feed data should actually be displayed when selecting a stream, only first stream feed should be editable by the user 
-    totalSolidFlow: number| null
-    totalLiquidFlow: number| null
-    pulpMassFlow: number| null
-    pulpVolumetricFlow: number| null
-    solidsSG: number| null
-    pulpSG: number| null
-    percentSolids: number| null
-    solidsFraction: number| null
-    cuPercentage: number| null
-    fePercentage: number| null
-    znPercentage: number| null
-    pbPercentage: number| null
-  }| null
   ports: {
     [id: string]: IPort<PortProps>;
   }
@@ -111,6 +97,20 @@ export type ILink<LinkProps = undefined> = {
     /** System Temp */
     position?: IPosition;
   },
+  feed: { //the feed data should actually be displayed when selecting a stream, only first stream feed should be editable by the user 
+    totalSolidFlow: number| null
+    totalLiquidFlow: number| null
+    pulpMassFlow: number| null
+    pulpVolumetricFlow: number| null
+    solidsSG: number| null
+    pulpSG: number| null
+    percentSolids: number| null
+    solidsFraction: number| null
+    cuPercentage: number| null
+    fePercentage: number| null
+    znPercentage: number| null
+    pbPercentage: number| null
+  }| null
 } & (LinkProps extends undefined ? {
   properties?: any,
 } : {

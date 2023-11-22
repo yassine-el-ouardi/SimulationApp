@@ -87,6 +87,20 @@ export const onLinkStart: IStateCallback<IOnLinkStart> = ({ linkId, fromNodeId, 
       portId: fromPortId,
     },
     to: {},
+    feed: {
+      totalSolidFlow: null,
+      totalLiquidFlow: null,
+      pulpMassFlow: null,
+      pulpVolumetricFlow: null,
+      solidsSG: null,
+      pulpSG: null,
+      percentSolids: null,
+      solidsFraction: null,
+      cuPercentage: null,
+      fePercentage: null,
+      znPercentage: null,
+      pbPercentage: null,
+    }
   }
   return chart
 }
@@ -152,6 +166,20 @@ export const onLinkClick: IStateCallback<IOnLinkClick> = ({ linkId }) => (chart:
     chart.selected = {
       type: 'link',
       id: linkId,
+      feed: {
+        totalSolidFlow: null,
+        totalLiquidFlow: null,
+        pulpMassFlow: null,
+        pulpVolumetricFlow: null,
+        solidsSG: null,
+        pulpSG: null,
+        percentSolids: null,
+        solidsFraction: null,
+        cuPercentage: null,
+        fePercentage: null,
+        znPercentage: null,
+        pbPercentage: null,
+      }
     }
   }
   return chart
@@ -175,20 +203,6 @@ export const onNodeMouseEnter: IStateCallback<IOnNodeMouseEnter> = ({ nodeId }) 
         pulpArea: null,
         frothThickness: null,
         airFlowRate: null,
-      },
-      feed: {
-        totalSolidFlow: null,
-        totalLiquidFlow: null,
-        pulpMassFlow: null,
-        pulpVolumetricFlow: null,
-        solidsSG: null,
-        pulpSG: null,
-        percentSolids: null,
-        solidsFraction: null,
-        cuPercentage: null,
-        fePercentage: null,
-        znPercentage: null,
-        pbPercentage: null,
       }
     } as ISelectedOrHovered,
   }
@@ -239,20 +253,6 @@ export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart:
         frothThickness: null,
         airFlowRate: null,
       },
-      feed: {
-        totalSolidFlow: null,
-        totalLiquidFlow: null,
-        pulpMassFlow: null,
-        pulpVolumetricFlow: null,
-        solidsSG: null,
-        pulpSG: null,
-        percentSolids: null,
-        solidsFraction: null,
-        cuPercentage: null,
-        fePercentage: null,
-        znPercentage: null,
-        pbPercentage: null,
-      }
     } as ISelectedOrHovered;
   }
   return chart
@@ -268,20 +268,6 @@ export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }
         pulpArea: null,
         frothThickness: null,
         airFlowRate: null,
-      },
-      feed: {
-        totalSolidFlow: null,
-        totalLiquidFlow: null,
-        pulpMassFlow: null,
-        pulpVolumetricFlow: null,
-        solidsSG: null,
-        pulpSG: null,
-        percentSolids: null,
-        solidsFraction: null,
-        cuPercentage: null,
-        fePercentage: null,
-        znPercentage: null,
-        pbPercentage: null,
       }
     } as ISelectedOrHovered;
   }
@@ -333,7 +319,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
   position,
   id,
 }) => (chart: IChart): IChart => {
-  console.log('onCanvasDrop data:', data);
+  //console.log('onCanvasDrop data:', data);
   chart.nodes[id] = {
     id,
     position:
@@ -350,19 +336,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     pulpArea: null,
     frothThickness: null,
     airFlowRate: null,},
-    feed: data.feed || {totalSolidFlow: null,
-      totalLiquidFlow: null,
-      pulpMassFlow: null,
-      pulpVolumetricFlow: null,
-      solidsSG: null,
-      pulpSG: null,
-      percentSolids: null,
-      solidsFraction: null,
-      cuPercentage: null,
-      fePercentage: null,
-      znPercentage: null,
-      pbPercentage: null,
-    },
+    
     properties: data.properties,
   }
   if (data.type === "First Cell") {
@@ -383,6 +357,19 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       to: {
         nodeId: id,
         portId: "port1", // Specify the correct port ID
+      },
+      feed: data.feed || {totalSolidFlow: 1,
+        totalLiquidFlow: null,
+        pulpMassFlow: null,
+        pulpVolumetricFlow: null,
+        solidsSG: null,
+        pulpSG: null,
+        percentSolids: null,
+        solidsFraction: null,
+        cuPercentage: null,
+        fePercentage: null,
+        znPercentage: null,
+        pbPercentage: null,
       },
     };
   } else if(data.type === "Last Cell") {
@@ -409,6 +396,19 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       to: {
         position: targetPosition,
       },
+      feed: data.feed || {totalSolidFlow: null,
+        totalLiquidFlow: null,
+        pulpMassFlow: null,
+        pulpVolumetricFlow: null,
+        solidsSG: null,
+        pulpSG: null,
+        percentSolids: null,
+        solidsFraction: null,
+        cuPercentage: null,
+        fePercentage: null,
+        znPercentage: null,
+        pbPercentage: null,
+      },
     };
     chart.links[newLinkId2] = {
       id: newLinkId2,
@@ -418,6 +418,19 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       },
       to: {
         position: targetPosition2,
+      },
+      feed: data.feed || {totalSolidFlow: null,
+        totalLiquidFlow: null,
+        pulpMassFlow: null,
+        pulpVolumetricFlow: null,
+        solidsSG: null,
+        pulpSG: null,
+        percentSolids: null,
+        solidsFraction: null,
+        cuPercentage: null,
+        fePercentage: null,
+        znPercentage: null,
+        pbPercentage: null,
       },
     };
   }

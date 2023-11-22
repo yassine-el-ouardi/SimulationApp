@@ -23,7 +23,5 @@ const StoryWrapper = () => {
 }
 
 storiesOf('Sidebar', module)
-  .add('Drag and Drop', () => <StoryWrapper />)
-  .add('Selected Sidebar', () => <SelectedSidebar />)
-storiesOf('Buttons', module)
-  .add('Check Ports Button', () => <StoryWrapper />);
+  .add('Flowsheet drawing', () => <StoryWrapper />)
+  .add('Simulation and data Analytics', () => <SelectedSidebar />)
