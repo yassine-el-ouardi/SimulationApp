@@ -82,21 +82,14 @@ export class SelectedSidebar extends React.Component {
                         <div>Type: {chart.selected.type}</div>
                         <div>ID: {chart.selected.id}</div>
                         <h4>Stream:</h4>
-                        {
-                          selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
-                            <div key={key}>
-                              <label>{key}: </label>
-                              <input
-                                type="text"
-                                defaultValue={value !== null && value !== undefined ? value.toString() : ''}
-                                onChange={(e) => {
-                                  //console.log(e.target.value);
-                                  // Additional logic for handling link type changes
-                                }}
-                              />
-                            </div>
-                          ))
-                        }
+                {
+                  selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
+                    <div key={key}>
+                      <span>{key}: </span>
+                      <span>{value !== null && value !== undefined ? value.toString() : 'N/A'}</span>
+                    </div>
+                  ))
+                }
 
                       </Message>
                     </>
@@ -137,12 +130,14 @@ export class SelectedSidebar extends React.Component {
         );
         if (incomingLinks.length > 0) {
           const incomingLink = incomingLinks[0];
-          // Check if feed and totalSolidFlow exists without using optional chaining
           if (incomingLink.feed && typeof incomingLink.feed.totalSolidFlow === 'number') {
             previousTotalSolidFlow = incomingLink.feed.totalSolidFlow;
           }
         }
       }
+  
+      // Log the retrieved previous totalSolidFlow value
+      console.log(`Retrieved previous totalSolidFlow for link ${currentLinkId}: ${previousTotalSolidFlow}`);
   
       if (!currentLink.feed) {
         currentLink.feed = {
@@ -171,9 +166,5 @@ export class SelectedSidebar extends React.Component {
     const allLinkIds = Object.keys(updatedChart.links);
     updateLinkFlowSequentially(allLinkIds);
   }
-  
-  
-
-  
   
 }
