@@ -358,7 +358,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         nodeId: id,
         portId: "port1", // Specify the correct port ID
       },
-      feed: data.feed || {totalSolidFlow: 1,
+      feed: data.feed || {totalSolidFlow: 2,
         totalLiquidFlow: null,
         pulpMassFlow: null,
         pulpVolumetricFlow: null,
@@ -442,3 +442,61 @@ export const onZoomCanvas: IOnZoomCanvas = ({ config, data }) => (chart: IChart)
   chart.scale = data.scale
   return chart
 }
+
+export const onUpdateNodeProperty = (key: string, value: string | number) => (chart: IChart) => {
+
+  const { selected } = chart;
+  if (selected.type === 'node' && selected.id) {
+    const selectedNode = chart.nodes[selected.id];
+    if (selectedNode) {
+      if (!selectedNode.cellCharacteristics) {
+        selectedNode.cellCharacteristics = {
+          netVolume: null,
+          pulpArea: null,
+          frothThickness: null,
+          airFlowRate: null,
+        };
+      }
+      selectedNode.cellCharacteristics = {
+        ...selectedNode.cellCharacteristics,
+        [key]: value,
+      };
+    }
+  }
+
+  return chart;
+};
+
+export const onUpdateLinkProperty = (key: string, value: string | number, linkId: string) => (chart: IChart) => {
+  const { selected } = chart;
+
+  if (selected.type === 'link' && selected.id === linkId) {
+    const selectedLink = chart.links[linkId];
+
+    if (selectedLink) {
+      if (!selectedLink.feed) {
+        selectedLink.feed = {
+          totalSolidFlow: null,
+          totalLiquidFlow: null,
+          pulpMassFlow: null,
+          pulpVolumetricFlow: null,
+          solidsSG: null,
+          pulpSG: null,
+          percentSolids: null,
+          solidsFraction: null,
+          cuPercentage: null,
+          fePercentage: null,
+          znPercentage: null,
+          pbPercentage: null,
+        };
+      }
+
+      selectedLink.feed = {
+        ...selectedLink.feed,
+        [key]: value,
+      };
+    }
+  }
+
+  return chart;
+};
