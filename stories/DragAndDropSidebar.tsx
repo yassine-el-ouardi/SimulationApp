@@ -62,7 +62,26 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
         }}
       />
       <SidebarItem
-        type="Last Cell"
+        type="Scanvenger"
+        ports={ {
+          port1: {
+            id: 'port1',
+            type: 'left',
+
+          },
+
+          port3: {
+            id: 'port3',
+            type: 'top',
+          },
+          port4: {
+            id: 'port4',
+            type: 'bottom',
+          },
+        }}
+      />
+      <SidebarItem
+        type="Cleaner"
         ports={ {
           port1: {
             id: 'port1',

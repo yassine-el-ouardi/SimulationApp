@@ -24,7 +24,18 @@ const SimulateButton = styled.button`
   margin: 4px 2px;
   cursor: pointer;
 `
-
+const CheckPortsButton = styled.button`
+  background-color: #f0ad4e; /* Orange */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`
 
 export class SelectedSidebar extends React.Component {
   public state = cloneDeep(chartSimple)
@@ -138,15 +149,49 @@ export class SelectedSidebar extends React.Component {
                     </Message>
               : <Message>Click on a Cell, or Stream</Message>
           }
-          <SimulateButton onClick={this.handleSimulateClick}>
+          <SimulateButton onClick={this.someMethodOrEventHandler}>
             Simulate
           </SimulateButton>
+          
+          <CheckPortsButton onClick={this.handleCheckPorts}>
+            Check Ports
+          </CheckPortsButton>
+
+          <Message>{this.handleCheckPorts()}</Message>
         </Sidebar>
       </Page>
     )
   }
+  someMethodOrEventHandler = () => {
+    const portsCount = this.getPortsTwoIncomingLinksCount();
+    this.handleSimulateClick(portsCount + 1 );
+  }
 
-  private handleSimulateClick = () => {
+  private getPortsTwoIncomingLinksCount = () => {
+    const { nodes, links } = this.state;
+    let count = 0;
+  
+    for (const nodeId in nodes) {
+      for (const portId in nodes[nodeId].ports) {
+        const incomingLinks = Object.values(links).filter(link => 
+          link.to && link.to.nodeId === nodeId && link.to.portId === portId
+        );
+  
+        if (incomingLinks.length === 2) {
+          count++;
+        }
+      }
+    }
+  
+    return count;
+  }
+
+  private handleSimulateClick = (iterationCount: number) => {
+    console.log(iterationCount);
+    if (iterationCount <= 0) {
+      return;
+    }
+    //let counter = 0;
     const updatedChart = cloneDeep(this.state);
 
     const updateLinkFlowSequentially = (linkIds: string[]) => {
@@ -179,6 +224,7 @@ export class SelectedSidebar extends React.Component {
             if (incomingLinks.length > 1) {
               if (incomingLinks[0].feed && incomingLinks[1].feed && typeof incomingLinks[0].feed.totalSolidFlow === 'number' && typeof incomingLinks[1].feed.totalSolidFlow === 'number') {
                 previousTotalSolidFlow = (incomingLinks[0].feed.totalSolidFlow + incomingLinks[1].feed.totalSolidFlow) / 2;
+                //counter++;
               }
             }
           }
@@ -217,7 +263,48 @@ export class SelectedSidebar extends React.Component {
 
     const allLinkIds = Object.keys(updatedChart.links);
     updateLinkFlowSequentially(allLinkIds);
+
+    this.handleSimulateClick(iterationCount - 1);
+
   }
 
+  private handleCheckPorts = () => {
+    const { nodes, links } = this.state;
+    let allPortsLinked = true;
+  
+    for (const nodeId in nodes) {
+      const node = nodes[nodeId];
+      for (const portId in node.ports) {
+        // Initialize as not linked
+        let isLinked = false;
+        
+        // Check if the portId is found in any 'from' or 'to' of the links
+        for (const linkId in links) {
+          const link = links[linkId];
+          if ((link.from.nodeId === nodeId && link.from.portId === portId) ||
+              (link.to.nodeId === nodeId && link.to.portId === portId)) {
+            isLinked = true;
+            break; // Stop checking if we found a link
+          }
+        }
+  
+        if (!isLinked) {
+          allPortsLinked = false;
+          console.log(`Port ${portId} on node ${nodeId} is not connected to any link.`);
+          break; // Stop checking other ports if one is already found not linked
+        }
+      }
+      if (!allPortsLinked) {
+        break; // Stop checking other nodes if one port is already found not linked
+      }
+    }
+  
+    if (allPortsLinked) {
+      return 'All ports are connected to links.';
+    } else {
+      return 'Some ports are not connected to links.';
+    }
+  }
+  
 
 }
