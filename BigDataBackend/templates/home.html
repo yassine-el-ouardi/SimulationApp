@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page d'Accueil</title>
+</head>
+<body>
+    <h1>Bienvenue sur l'Application de Flottation</h1>
+    <form id="predictionForm">
+        <!-- Ajoutez ici les champs de formulaire nécessaires pour votre prédiction -->
+        <input type="submit" value="Prédire">
+    </form>
+
+    <!-- Ajoutez une section pour afficher les résultats -->
+    <div id="predictionResult"></div>
+
+    <!-- Ajoutez du JavaScript pour gérer la soumission du formulaire avec AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#predictionForm').submit(function(e) {
+                e.preventDefault();
+
+                // Récupérez les données du formulaire (ajustez cela en fonction de votre structure)
+                var inputData = {
+                    // Exemple : champ1: $('#champ1').val(), champ2: $('#champ2').val(), ...
+                };
+
+                // Envoyez les données au serveur pour la prédiction
+                $.ajax({
+                    type: 'POST',
+                    url: '/make_prediction',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({ 'input_features': inputData }),
+                    success: function(data) {
+                        // Affichez les résultats sur la page
+                        $('#predictionResult').html('Résultat de la prédiction : ' + JSON.stringify(data.prediction));
+                    },
+                    error: function(error) {
+                        console.error('Erreur lors de la requête:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
