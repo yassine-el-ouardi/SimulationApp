@@ -482,6 +482,10 @@ export const onZoomCanvas: IOnZoomCanvas = ({ config, data }) => (chart: IChart)
   return chart
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 73e85b13de8da815cabaadbd8352bf98e3b07a4b
 export const onUpdateNodeProperty = (key: string, value: string | number) => (chart: IChart) => {
 
   const { selected } = chart;
@@ -540,6 +544,7 @@ export const onUpdateLinkProperty = (key: string, value: string | number, linkId
   return chart;
 };
 
+<<<<<<< HEAD
 export const saveState = (chart: IChart) => {
   // Here, you can implement the logic to save the state to disk or perform any other necessary actions
   // For now, I'm just logging the chart to the console
@@ -603,3 +608,5 @@ export const loadStateFromFile = (onLoad: (chart: IChart) => void) => {
     console.error('Error loading state from file:', error);
   }
 };
+=======
+>>>>>>> 73e85b13de8da815cabaadbd8352bf98e3b07a4b

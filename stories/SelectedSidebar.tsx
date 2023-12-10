@@ -71,7 +71,11 @@ export class SelectedSidebar extends React.Component {
     const stateActions = mapValues(actions, (func: any) =>
       (...args: any) => this.setState(func(...args))) as typeof actions
 
-
+    
+    console.log('from outside', selectedLink);
+    
+    // console.log('selectedNode', selectedNode);
+    //console.log('id', chart.selected.id);
     return (
       <Page>
         <Content>
@@ -125,6 +129,7 @@ export class SelectedSidebar extends React.Component {
                         <div>ID: {chart.selected.id}</div>
                         <h4>Stream:</h4>
                         {
+
                           selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
                             <div key={key}>
                               <span>{key}: </span>
