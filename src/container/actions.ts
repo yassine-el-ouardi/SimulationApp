@@ -539,3 +539,67 @@ export const onUpdateLinkProperty = (key: string, value: string | number, linkId
 
   return chart;
 };
+
+export const saveState = (chart: IChart) => {
+  // Here, you can implement the logic to save the state to disk or perform any other necessary actions
+  // For now, I'm just logging the chart to the console
+  console.log('Saving state:', chart);
+
+  try {
+    const chartString = JSON.stringify(chart);
+    const blob = new Blob([chartString], { type: 'application/json' });
+    const link = document.createElement('a');
+
+    link.href = URL.createObjectURL(blob);
+    link.download = 'chart_state.txt';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    console.log('State saved to file successfully:', chart);
+  } catch (error) {
+    console.error('Error saving state to file:', error);
+  }
+
+  return chart;
+}
+
+
+// actions.ts
+
+// actions.ts
+
+export const loadStateFromFile = (onLoad: (chart: IChart) => void) => {
+  try {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+
+    input.addEventListener('change', (event: Event) => {
+      const fileInput = event.target as HTMLInputElement;
+      const file = fileInput.files ? fileInput.files[0] : null;
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = (loadEvent) => {
+          try {
+            const chartString = (loadEvent.target as FileReader).result as string;
+            const chart = JSON.parse(chartString) as IChart;
+            onLoad(chart);
+            console.log('State loaded successfully:', chart);
+          } catch (error) {
+            console.error('Error parsing loaded state:', error);
+          }
+        };
+
+        reader.readAsText(file);
+      }
+    });
+
+    input.click();
+  } catch (error) {
+    console.error('Error loading state from file:', error);
+  }
+};

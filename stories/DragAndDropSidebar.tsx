@@ -4,20 +4,65 @@ import { FlowChartWithState } from '../src'
 import { Content, Page, Sidebar, SidebarItem } from './components'
 import { chartSimple } from './misc/exampleChartState'
 import { IChart } from '../src'
+import { /*saveState,*/ loadStateFromFile } from '../src/container/actions'
 
 const Message = styled.div`
 margin: 10px;
 padding: 10px;
 background: rgba(0,0,0,0.05);
 `
+
+
+const SaveStateButton = styled.button`
+  background-color: #E74C3C; /* red */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`
+
+const LoadStateButton = styled.button`
+  background-color: #B5BAB8; /* gray */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`
+
 interface DragAndDropSidebarProps {
   onStateChange: (chart: IChart) => void;
+
 }
 
-export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateChange }) => (
+export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateChange }) =>{ 
+  
+  const [chartState, setChartState] = React.useState(chartSimple);
+
+
+  const handleLoad = () => {
+    // Call the loadStateFromFile function and provide a callback to handle the loaded state
+    loadStateFromFile((loadedChart) => {
+      setChartState(loadedChart);
+      onStateChange(loadedChart); // Ensure onStateChange is called with the loaded state
+      console.log('Loaded Chart State:', loadedChart); // Log the loaded chart state for debugging
+    });
+  };
+  
+  
+  return(
   <Page>
     <Content>
-      <FlowChartWithState initialValue={chartSimple} onStateChange={onStateChange}/>
+      <FlowChartWithState initialValue={chartState} onStateChange={onStateChange}/>
     </Content>
     <Sidebar>
       <Message>
@@ -99,6 +144,14 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
           },
         }}
       />
+          <SaveStateButton /*onClick={this.handleSave}*/>
+            Save
+          </SaveStateButton>
+          <LoadStateButton onClick={handleLoad}>
+            Load
+          </LoadStateButton>
     </Sidebar>
   </Page>
-)
+
+
+)}
