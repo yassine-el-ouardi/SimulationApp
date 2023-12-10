@@ -6,6 +6,7 @@ import * as actions from '../src/container/actions'
 import { Content, Page, Sidebar } from './components'
 import { chartSimple } from './misc/exampleChartState'
 import { onUpdateNodeProperty, onUpdateLinkProperty } from '../src/container/actions'
+import { saveState, loadStateFromFile } from '../src/container/actions'
 
 const Message = styled.div`
   margin: 10px;
@@ -37,6 +38,30 @@ const CheckPortsButton = styled.button`
   cursor: pointer;
 `
 
+const SaveStateButton = styled.button`
+  background-color: #E74C3C; /* red */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`
+const LoadStateButton = styled.button`
+  background-color: #B5BAB8; /* gray */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`
 export class SelectedSidebar extends React.Component {
   public state = cloneDeep(chartSimple)
   public render() {
@@ -46,7 +71,10 @@ export class SelectedSidebar extends React.Component {
     const stateActions = mapValues(actions, (func: any) =>
       (...args: any) => this.setState(func(...args))) as typeof actions
 
-    //console.log('selectedNode', selectedNode);
+    
+    console.log('from outside', selectedLink);
+    
+    // console.log('selectedNode', selectedNode);
     //console.log('id', chart.selected.id);
     return (
       <Page>
@@ -101,6 +129,7 @@ export class SelectedSidebar extends React.Component {
                         <div>ID: {chart.selected.id}</div>
                         <h4>Stream:</h4>
                         {
+
                           selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
                             <div key={key}>
                               <span>{key}: </span>
@@ -157,11 +186,31 @@ export class SelectedSidebar extends React.Component {
             Check Ports
           </CheckPortsButton>
 
+          <SaveStateButton onClick={this.handleSave}>
+            Save
+          </SaveStateButton>
+
+          <LoadStateButton onClick={this.handleLoad}>
+            Load
+          </LoadStateButton>
           <Message>{this.handleCheckPorts()}</Message>
         </Sidebar>
       </Page>
     )
   }
+
+  handleSave = () => {
+
+    this.setState(saveState(this.state));
+  }
+
+  handleLoad = () => {
+    // Call the loadStateFromFile function and provide a callback to handle the loaded state
+    loadStateFromFile((loadedChart) => {
+      this.setState(loadedChart);
+    });
+  }
+
   someMethodOrEventHandler = () => {
     const portsCount = this.getPortsTwoIncomingLinksCount();
     this.handleSimulateClick(portsCount + 1 );
