@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {  generateRightAnglePath, generateSmartPath, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPort, IPosition } from '../../'
+import { generateRightAnglePath, generateSmartPath, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPort, IPosition } from '../../'
 import { ArrowLink } from './variants'
 
 export interface ILinkDefaultProps {
@@ -23,7 +23,6 @@ export const LinkDefault = (props: ILinkDefaultProps) => {
   const points = !!toPort && !!matrix && !!fromPort
   ? generateSmartPath(matrix, startPos, endPos, fromPort, toPort)
   : generateRightAnglePath(startPos, endPos);
-
 
   const linkColor: string = 'cornflowerblue'
 

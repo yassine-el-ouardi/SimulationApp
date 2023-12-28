@@ -1,16 +1,6 @@
 import * as PF from 'pathfinding'
 import { IPort, IPosition } from '../../../'
 import { MATRIX_PADDING } from '../../FlowChart/utils/grid'
-import { chartSimple } from '../../../../stories/misc/exampleChartState'
-import { cloneDeep} from 'lodash'
-//import { INode } from '../../../..'
-
-type NodeGridInfo = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
 
 export const getDirectional = (startPos: IPosition, endPos: IPosition) => {
   const width = Math.abs(startPos.x - endPos.x)
@@ -42,7 +32,10 @@ export const generateCurvePath = (startPos: IPosition, endPos: IPosition): strin
   return `M${start.x},${start.y} C ${start.x + curveX},${start.y + curveY} ${end.x - curveX},${end.y - curveY} ${end.x},${end.y}`
 }
 
-
+/*const finder = PF.JumpPointFinder({
+  heuristic: PF.Heuristic.manhattan,
+  diagonalMovement: PF.DiagonalMovement.Never,
+})*/
 
 export const generateRightAnglePath = (startPos: IPosition, endPos: IPosition) => {
   const { leftToRight,topToBottom,isHorizontal } = getDirectional(startPos,endPos)
@@ -61,23 +54,6 @@ export const generateRightAnglePath = (startPos: IPosition, endPos: IPosition) =
 
   return `M${start.x},${start.y} L ${vertex} ${end.x},${end.y}`
 }
-
-const setWalkableAtNodes = (nodes: NodeGridInfo[], grid: PF.Grid) => {
-  nodes.forEach((node) => {
-    // Assuming node.size and node.position are defined as per the INode interface above
-    const startX = node.x;
-    const startY = node.y;
-    const endX = startX + node.width;
-    const endY = startY + node.height;
-
-    for (let i = startX; i < endX; i++) {
-      for (let j = startY; j < endY; j++) {
-        grid.setWalkableAt(i, j, false);
-      }
-    }
-  });
-};
-
 
 const setWalkableAtPorts = (start: { pos: IPosition, port: IPort }, end: { pos: IPosition, port: IPort }, grid: PF.Grid) => {
   ([start, end]).forEach((point) => {
@@ -101,30 +77,11 @@ const setWalkableAtPorts = (start: { pos: IPosition, port: IPort }, end: { pos: 
   })
 }
 
-export const generateSmartPath = (
-  matrix: number[][],
-  startPos: IPosition,
-  endPos: IPosition,
-  fromPort: IPort,
-  toPort: IPort
-): string => {
+export const generateSmartPath = (matrix: number[][], startPos: IPosition, endPos: IPosition, fromPort: IPort, toPort: IPort): string => {
+  const grid = new PF.Grid(matrix)
 
-  const state = cloneDeep(chartSimple)
-
-
-  const nodes = Object.values(state.nodes).map(node => ({
-    x: node.position.x,
-    y: node.position.y,
-    width: 64,
-    height: 64
-  }));
-  const grid = new PF.Grid(matrix);
-  setWalkableAtPorts({ pos: startPos, port: fromPort }, { pos: endPos, port: toPort }, grid);
-  setWalkableAtNodes(nodes, grid);
-
-
-  const startPosScaled = { x: Math.ceil(startPos.x / 5), y: Math.ceil(startPos.y / 5) };
-  const endPosScaled = { x: Math.ceil(endPos.x / 5), y: Math.ceil(endPos.y / 5) };
+  const startPosScaled = { x: Math.ceil(startPos.x / 5), y: Math.ceil(startPos.y / 5) }
+  const endPosScaled = { x: Math.ceil(endPos.x / 5), y: Math.ceil(endPos.y / 5) }
 
   try {
     setWalkableAtPorts({ pos : startPosScaled, port: fromPort }, { pos : endPosScaled, port: toPort }, grid);

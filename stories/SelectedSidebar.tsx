@@ -80,7 +80,6 @@ export class SelectedSidebar extends React.Component {
       <Page>
         <Content>
           <FlowChart
-            config={{ smartRouting: true }}
             chart={chart}
             callbacks={stateActions}
           />

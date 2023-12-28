@@ -51,8 +51,6 @@ export interface ISelectedOrHovered {
 export type INode<NodeProps = undefined, PortProps = undefined> = {
   id: string
   type: string
-  height: number
-  width: number
   position: IPosition
   orientation?: number
   readonly?: boolean
