@@ -1,13 +1,23 @@
 import * as PF from 'pathfinding'
 import { IPort, IPosition } from '../../../'
 import { MATRIX_PADDING } from '../../FlowChart/utils/grid'
+import { chartSimple } from '../../../../stories/misc/exampleChartState'
+import { cloneDeep} from 'lodash'
+//import { INode } from '../../../..'
+
+type NodeGridInfo = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 
 export const getDirectional = (startPos: IPosition, endPos: IPosition) => {
   const width = Math.abs(startPos.x - endPos.x)
   const height = Math.abs(startPos.y - endPos.y)
   const leftToRight = startPos.x < endPos.x
   const topToBottom = startPos.y < endPos.y
-  const isHorizontal = width > height
+  const isHorizontal = false
 
   return { width, height,leftToRight,topToBottom,isHorizontal }
 }
@@ -32,10 +42,7 @@ export const generateCurvePath = (startPos: IPosition, endPos: IPosition): strin
   return `M${start.x},${start.y} C ${start.x + curveX},${start.y + curveY} ${end.x - curveX},${end.y - curveY} ${end.x},${end.y}`
 }
 
-const finder = PF.JumpPointFinder({
-  heuristic: PF.Heuristic.manhattan,
-  diagonalMovement: PF.DiagonalMovement.Never,
-})
+
 
 export const generateRightAnglePath = (startPos: IPosition, endPos: IPosition) => {
   const { leftToRight,topToBottom,isHorizontal } = getDirectional(startPos,endPos)
@@ -54,6 +61,23 @@ export const generateRightAnglePath = (startPos: IPosition, endPos: IPosition) =
 
   return `M${start.x},${start.y} L ${vertex} ${end.x},${end.y}`
 }
+
+const setWalkableAtNodes = (nodes: NodeGridInfo[], grid: PF.Grid) => {
+  nodes.forEach((node) => {
+    // Assuming node.size and node.position are defined as per the INode interface above
+    const startX = node.x;
+    const startY = node.y;
+    const endX = startX + node.width;
+    const endY = startY + node.height;
+
+    for (let i = startX; i < endX; i++) {
+      for (let j = startY; j < endY; j++) {
+        grid.setWalkableAt(i, j, false);
+      }
+    }
+  });
+};
+
 
 const setWalkableAtPorts = (start: { pos: IPosition, port: IPort }, end: { pos: IPosition, port: IPort }, grid: PF.Grid) => {
   ([start, end]).forEach((point) => {
@@ -77,34 +101,43 @@ const setWalkableAtPorts = (start: { pos: IPosition, port: IPort }, end: { pos: 
   })
 }
 
-export const generateSmartPath = (matrix: number[][], startPos: IPosition, endPos: IPosition, fromPort: IPort, toPort: IPort): string => {
-  const grid = new PF.Grid(matrix)
+export const generateSmartPath = (
+  matrix: number[][],
+  startPos: IPosition,
+  endPos: IPosition,
+  fromPort: IPort,
+  toPort: IPort
+): string => {
 
-  const startPosScaled = { x: Math.ceil(startPos.x / 5), y: Math.ceil(startPos.y / 5) }
-  const endPosScaled = { x: Math.ceil(endPos.x / 5), y: Math.ceil(endPos.y / 5) }
+  const state = cloneDeep(chartSimple)
+
+
+  const nodes = Object.values(state.nodes).map(node => ({
+    x: node.position.x,
+    y: node.position.y,
+    width: 64,
+    height: 64
+  }));
+  const grid = new PF.Grid(matrix);
+  setWalkableAtPorts({ pos: startPos, port: fromPort }, { pos: endPos, port: toPort }, grid);
+  setWalkableAtNodes(nodes, grid);
+
+
+  const startPosScaled = { x: Math.ceil(startPos.x / 5), y: Math.ceil(startPos.y / 5) };
+  const endPosScaled = { x: Math.ceil(endPos.x / 5), y: Math.ceil(endPos.y / 5) };
 
   try {
-    // try to find a smart path. use right angle path as a fallback
-    setWalkableAtPorts({ pos : startPosScaled, port: fromPort }, { pos : endPosScaled, port: toPort }, grid)
+    setWalkableAtPorts({ pos : startPosScaled, port: fromPort }, { pos : endPosScaled, port: toPort }, grid);
 
-    const path = PF.Util.compressPath(
-      finder.findPath(
-        startPosScaled.x,
-        startPosScaled.y,
-        endPosScaled.x,
-        endPosScaled.y,
-        grid,
-      ),
-    )
+    // Horizontally from `fromPort` to the vertical level of `toPort`
+    let d = `M${startPosScaled.x * 5},${startPosScaled.y * 5} ` +
+            `L${endPosScaled.x * 5},${startPosScaled.y * 5} `;
+    // Then vertically to `toPort`
+    d += `L${endPosScaled.x * 5},${endPosScaled.y * 5}`;
 
-    if (!path.length) return generateRightAnglePath(startPos, endPos)
-    const [first, ...rest] = path
-    let d = `M${first[0] * 5} ${first[1] * 5}`
-    rest.forEach(([x, y]) => {
-      d += ` L${x * 5} ${y * 5}`
-    })
-    return d
+
+    return d;
   } catch (e) {
-    return generateRightAnglePath(startPos, endPos)
+    return generateRightAnglePath(startPos, endPos);
   }
-}
+};
