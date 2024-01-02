@@ -1,0 +1,163 @@
+  {
+    "offset": {"x": 0, "y": 0},
+    "scale": 1,
+    "nodes": {
+      "cell_1": {
+        "id": "cell_1",
+        "position": {"x": 100, "y": 100},
+        "orientation": 0,
+        "type": "First Cell",
+        "ports": {
+          "port_1": {"id": "port_1", "type": "left", "position": {"x": -6, "y": 41}},
+          "port_2": {"id": "port_2", "type": "top", "position": {"x": 71, "y": -6}},
+          "port_3": {"id": "port_3", "type": "bottom", "position": {"x": 71, "y": 88}}
+        },
+        "cellCharacteristics": {
+        "Net Volume": 82.0148492464,
+        "Pulp Area": 31.7241341762,
+        "Froth surface area": 28.5517207586,
+        "Froth thickness": 18.1455844049,
+        "Air Flow rate": 10.0646439305,
+        "R_inf Ccp": 32.0247912143,
+        "R_inf Gn": 80.1577270177,
+        "R_inf Po": 19.7775512081,
+        "R_inf Sp": 13.7799090478,
+        "k_max Ccp": 1.751043396,
+        "k_max Gn": 1.7146302694,
+        "k_maxPo": 2.0660454008,
+        "k_max Sp": 1.9117405965,
+        "Entrainement Savassi parameters": 44.351308948
+        },
+        "size": {"width": 0, "height": 82}
+      },
+      "cell_2": {
+        "id": "cell_2",
+        "position": {"x": 350, "y": 100},
+        "orientation": 0,
+        "type": "Scavanger",
+        "ports": {
+          "port_1": {"id": "port_1", "type": "left", "position": {"x": -6, "y": 41}},
+          "port_2": {"id": "port_2", "type": "top", "position": {"x": 71, "y": -6}},
+          "port_3": {"id": "port_3", "type": "bottom", "position": {"x": 71, "y": 88}}
+        },
+        "cellCharacteristics": {
+        "Net Volume": 82.0148492464,
+        "Pulp Area": 31.7241341762,
+        "Froth surface area": 28.5517207586,
+        "Froth thickness": 18.1455844049,
+        "Air Flow rate": 10.0646439305,
+        "R_inf Ccp": 32.0247912143,
+        "R_inf Gn": 80.1577270177,
+        "R_inf Po": 19.7775512081,
+        "R_inf Sp": 13.7799090478,
+        "k_max Ccp": 1.751043396,
+        "k_max Gn": 1.7146302694,
+        "k_maxPo": 2.0660454008,
+        "k_max Sp": 1.9117405965,
+        "Entrainement Savassi parameters": 44.351308948
+        },
+        "size": {"width": 0, "height": 82}
+      },
+      "cell_3": {
+        "id": "cell_3",
+        "position": {"x": 600, "y": 100},
+        "orientation": 0,
+        "type": "Cleaner",
+        "ports": {
+          "port_1": {"id": "port_7", "type": "left", "position": {"x": -6, "y": 41}},
+          "port_2": {"id": "port_8", "type": "top", "position": {"x": 71, "y": -6}},
+          "port_3": {"id": "port_9", "type": "bottom", "position": {"x": 71, "y": 88}}
+        },
+        "cellCharacteristics": {
+        "Net Volume": 82.0148492464,
+        "Pulp Area": 31.7241341762,
+        "Froth surface area": 28.5517207586,
+        "Froth thickness": 18.1455844049,
+        "Air Flow rate": 10.0646439305,
+        "R_inf Ccp": 32.0247912143,
+        "R_inf Gn": 80.1577270177,
+        "R_inf Po": 19.7775512081,
+        "R_inf Sp": 13.7799090478,
+        "k_max Ccp": 1.751043396,
+        "k_max Gn": 1.7146302694,
+        "k_maxPo": 2.0660454008,
+        "k_max Sp": 1.9117405965,
+        "Entrainement Savassi parameters": 44.351308948
+        },
+        "size": {"width": 0, "height": 82}
+      }
+    },
+    "links": {
+      "firstLink": {
+        "id": "firstLink",
+        "from": null,
+        "to": {"nodeId": "cell_1", "portId": "port_1"},
+        "feed": {
+          "Total Solids Flow_Feed": 389.9437827797,
+          "Total Liquid Flow_Feed": 621.0115657339,
+          "Pulp Volumetric Flow_Feed": 704.6163977706,
+          "Solids SG_Feed": 4.7704331868,
+          "Pulp SG_Feed": 1.4347598945,
+          "Solids Fraction_Feed": 11.600893422,
+          "Cu_Feed": 5.4864368155,
+          "Fe_Feed": 17.5063003958,
+          "Pb_Feed": 25.9603555326,
+          "Zn_Feed": 7.5562582744
+        }
+      },
+      "link_1_to_2": {
+        "id": "link_1_to_2",
+        "from": {"nodeId": "cell_1", "portId": "port_2"},
+        "to": {"nodeId": "cell_2", "portId": "port_1"},
+        "feed": {
+          "Total Solids Flow_Feed": null,
+          "Total Liquid Flow_Feed": null,
+          "Pulp Volumetric Flow_Feed": null,
+          "Solids SG_Feed": null,
+          "Pulp SG_Feed": null,
+          "Solids Fraction_Feed": null,
+          "Cu_Feed": null,
+          "Fe_Feed": null,
+          "Pb_Feed": null,
+          "Zn_Feed":null
+        }
+      },
+      
+      "link_1_to_3": {
+        "id": "link_1_to_3",
+        "from": {"nodeId": "cell_1", "portId": "port_3"},
+        "to": {"nodeId": "cell_3", "portId": "port_1"},
+        "feed": {
+          "Total Solids Flow_Feed": null,
+          "Total Liquid Flow_Feed": null,
+          "Pulp Volumetric Flow_Feed": null,
+          "Solids SG_Feed": null,
+          "Pulp SG_Feed": null,
+          "Solids Fraction_Feed": null,
+          "Cu_Feed": null,
+          "Fe_Feed": null,
+          "Pb_Feed": null,
+          "Zn_Feed":null
+        }
+      } ,
+      "link_2_to_1": {
+        "id": "link_2_to_1",
+        "from": {"nodeId": "cell_2", "portId": "port_2"},
+        "to": {"nodeId": "cell_1", "portId": "port_1"},
+        "feed": {
+          "Total Solids Flow_Feed": null,
+          "Total Liquid Flow_Feed": null,
+          "Pulp Volumetric Flow_Feed": null,
+          "Solids SG_Feed": null,
+          "Pulp SG_Feed": null,
+          "Solids Fraction_Feed": null,
+          "Cu_Feed": null,
+          "Fe_Feed": null,
+          "Pb_Feed": null,
+          "Zn_Feed":null
+        }
+      }
+    },
+    "selected": {},
+    "hovered": {}
+  }
