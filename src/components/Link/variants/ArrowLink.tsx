@@ -71,6 +71,8 @@ export const ArrowLink = ({
         cursor: 'pointer',
         left: 0,
         right: 0,
+        zIndex: 1000,
+        pointerEvents: 'none',
       }}
       className={className}
     >
