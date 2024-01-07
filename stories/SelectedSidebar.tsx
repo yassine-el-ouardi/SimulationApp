@@ -285,11 +285,11 @@ export class SelectedSidebar extends React.Component {
           currentLink.feed = {
             totalSolidFlow: null,
             totalLiquidFlow: null,
-            pulpMassFlow: null,
+            //pulpMassFlow: null,
             pulpVolumetricFlow: null,
             solidsSG: null,
             pulpSG: null,
-            percentSolids: null,
+            //percentSolids: null,
             solidsFraction: null,
             cuPercentage: null,
             fePercentage: null,

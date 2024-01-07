@@ -90,16 +90,16 @@ export const onLinkStart: IStateCallback<IOnLinkStart> = ({ linkId, fromNodeId, 
     feed: {
       totalSolidFlow: null,
       totalLiquidFlow: null,
-      pulpMassFlow: null,
+      //pulpMassFlow: null,
       pulpVolumetricFlow: null,
       solidsSG: null,
       pulpSG: null,
-      percentSolids: null,
+      //percentSolids: null,
       solidsFraction: null,
       cuPercentage: null,
       fePercentage: null,
-      znPercentage: null,
       pbPercentage: null,
+      znPercentage: null,
     }
   }
   return chart
@@ -169,16 +169,16 @@ export const onLinkClick: IStateCallback<IOnLinkClick> = ({ linkId }) => (chart:
       feed: {
         totalSolidFlow: null,
         totalLiquidFlow: null,
-        pulpMassFlow: null,
+        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        percentSolids: null,
+        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
-        znPercentage: null,
         pbPercentage: null,
+        znPercentage: null,
       }
     }
   }
@@ -199,10 +199,20 @@ export const onNodeMouseEnter: IStateCallback<IOnNodeMouseEnter> = ({ nodeId }) 
       type: 'node',
       id: nodeId,
       cellCharacteristics: {
-        netVolume: null,
-        pulpArea: null,
-        frothThickness: null,
-        airFlowRate: null,
+        netVolume: 100,
+        pulpArea: 28.3,
+        frothSurfaceArea: 20,
+        frothThickness: 250,
+        airFlowRate: 18,
+        R_infCcp: 28.83,
+        R_infGn: 80.38,
+        R_infPo: 21.07,
+        R_infSp: 14.32,
+        k_maxCcp: 1.92,
+        k_maxGn: 0.73,
+        k_maxPo: 2.07,
+        k_maxSp: 1.94,
+        EntrainementSavassiparameters: 65.59,
       }
     } as ISelectedOrHovered,
   }
@@ -243,15 +253,27 @@ export const onDeleteKey: IStateCallback<IOnDeleteKey> = ({ config }: IConfig) =
 }
 
 export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart: IChart) => {
+  //const dashboardUrl = 'http://localhost:3000/app/InternalState'
+  //window.open(dashboardUrl, '_blank');
   if (chart.selected.id !== nodeId || chart.selected.type !== 'node') {
     chart.selected = {
       type: 'node',
       id: nodeId,
       cellCharacteristics: {
-        netVolume: null,
-        pulpArea: null,
-        frothThickness: null,
-        airFlowRate: null,
+        netVolume: 100,
+        pulpArea: 28.3,
+        frothSurfaceArea: 20,
+        frothThickness: 250,
+        airFlowRate: 18,
+        R_infCcp: 28.83,
+        R_infGn: 80.38,
+        R_infPo: 21.07,
+        R_infSp: 14.32,
+        k_maxCcp: 1.92,
+        k_maxGn: 0.73,
+        k_maxPo: 2.07,
+        k_maxSp: 1.94,
+        EntrainementSavassiparameters: 65.59,
       },
     } as ISelectedOrHovered;
   }
@@ -264,10 +286,20 @@ export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }
       type: 'node',
       id: nodeId,
       cellCharacteristics: {
-        netVolume: null,
-        pulpArea: null,
-        frothThickness: null,
-        airFlowRate: null,
+        netVolume: 100,
+        pulpArea: 28.3,
+        frothSurfaceArea: 20,
+        frothThickness: 250,
+        airFlowRate: 18,
+        R_infCcp: 28.83,
+        R_infGn: 80.38,
+        R_infPo: 21.07,
+        R_infSp: 14.32,
+        k_maxCcp: 1.92,
+        k_maxGn: 0.73,
+        k_maxPo: 2.07,
+        k_maxSp: 1.94,
+        EntrainementSavassiparameters: 65.59,
       }
     } as ISelectedOrHovered;
   }
@@ -332,10 +364,21 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     orientation: data.orientation || 0,
     type: data.type,
     ports: data.ports,
-    cellCharacteristics: data.cellCharacteristics || {netVolume: null,
-    pulpArea: null,
-    frothThickness: null,
-    airFlowRate: null,},
+    cellCharacteristics: data.cellCharacteristics || {netVolume: 100,
+    pulpArea: 28.3,
+    frothSurfaceArea: 20,
+    frothThickness: 250,
+    airFlowRate: 18,
+    R_infCcp: 28.83,
+    R_infGn: 80.38,
+    R_infPo: 21.07,
+    R_infSp: 14.32,
+    k_maxCcp: 1.92,
+    k_maxGn: 0.73,
+    k_maxPo: 2.07,
+    k_maxSp: 1.94,
+    EntrainementSavassiparameters: 65.59,
+    },
     
     properties: data.properties,
   }
@@ -358,18 +401,19 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         nodeId: id,
         portId: "port1", // Specify the correct port ID
       },
-      feed: data.feed || {totalSolidFlow: 2,
+      feed: data.feed || {
+        totalSolidFlow: null,
         totalLiquidFlow: null,
-        pulpMassFlow: null,
+        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        percentSolids: null,
+        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
-        znPercentage: null,
         pbPercentage: null,
+        znPercentage: null,
       },
     };
   } else if(data.type === "Scanvenger") {//scanvenger port 4 --- Cleaner port 3
@@ -397,18 +441,19 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       to: {
         position: targetPosition2,
       },
-      feed: data.feed || {totalSolidFlow: null,
+      feed: data.feed || {
+        totalSolidFlow: null,
         totalLiquidFlow: null,
-        pulpMassFlow: null,
+        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        percentSolids: null,
+        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
-        znPercentage: null,
         pbPercentage: null,
+        znPercentage: null,
       },
     };
   } else if(data.type === "Cleaner") {//scanvenger port 4 --- Cleaner port 3
@@ -435,18 +480,19 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       to: {
         position: targetPosition,
       },
-      feed: data.feed || {totalSolidFlow: null,
+      feed: data.feed || {
+        totalSolidFlow: null,
         totalLiquidFlow: null,
-        pulpMassFlow: null,
+        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        percentSolids: null,
+        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
-        znPercentage: null,
         pbPercentage: null,
+        znPercentage: null,
       },
     };
     /*chart.links[newLinkId2] = {
@@ -490,10 +536,20 @@ export const onUpdateNodeProperty = (key: string, value: string | number) => (ch
     if (selectedNode) {
       if (!selectedNode.cellCharacteristics) {
         selectedNode.cellCharacteristics = {
-          netVolume: null,
-          pulpArea: null,
-          frothThickness: null,
-          airFlowRate: null,
+          netVolume: 100,
+          pulpArea: 28.3,
+          frothSurfaceArea: 20,
+          frothThickness: 250,
+          airFlowRate: 18,
+          R_infCcp: 28.83,
+          R_infGn: 80.38,
+          R_infPo: 21.07,
+          R_infSp: 14.32,
+          k_maxCcp: 1.92,
+          k_maxGn: 0.73,
+          k_maxPo: 2.07,
+          k_maxSp: 1.94,
+          EntrainementSavassiparameters: 65.59,
         };
       }
       selectedNode.cellCharacteristics = {
@@ -517,16 +573,16 @@ export const onUpdateLinkProperty = (key: string, value: string | number, linkId
         selectedLink.feed = {
           totalSolidFlow: null,
           totalLiquidFlow: null,
-          pulpMassFlow: null,
+          //pulpMassFlow: null,
           pulpVolumetricFlow: null,
           solidsSG: null,
           pulpSG: null,
-          percentSolids: null,
+          //percentSolids: null,
           solidsFraction: null,
           cuPercentage: null,
           fePercentage: null,
-          znPercentage: null,
           pbPercentage: null,
+          znPercentage: null,
         };
       }
 

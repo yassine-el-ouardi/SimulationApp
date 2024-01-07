@@ -27,24 +27,34 @@ export interface ISelectedOrHovered {
   type?: 'link' | 'node' | 'port'
   id?: string
   cellCharacteristics?: {
-    netVolume?: number| null
-    pulpArea?: number| null
-    frothThickness?: number| null
-    airFlowRate?: number| null
+    netVolume: number| null
+    pulpArea: number| null
+    frothSurfaceArea: number|null
+    frothThickness: number| null
+    airFlowRate: number| null
+    R_infCcp: number| null,
+    R_infGn: number| null,
+    R_infPo: number| null,
+    R_infSp: number| null,
+    k_maxCcp: number| null,
+    k_maxGn: number| null,
+    k_maxPo: number| null,
+    k_maxSp: number| null,
+    EntrainementSavassiparameters: number| null
   }
   feed?: {
-    totalSolidFlow?: number| null
-    totalLiquidFlow?: number| null
-    pulpMassFlow?: number| null
-    pulpVolumetricFlow?: number| null
-    solidsSG?: number| null
-    pulpSG?: number| null
-    percentSolids?: number| null
-    solidsFraction?: number| null
-    cuPercentage?: number| null
-    fePercentage?: number| null
-    znPercentage?: number| null
-    pbPercentage?: number| null
+    totalSolidFlow: number| null
+    totalLiquidFlow: number| null
+    //pulpMassFlow: number| null
+    pulpVolumetricFlow: number| null
+    solidsSG: number| null
+    pulpSG: number| null
+    //percentSolids: number| null
+    solidsFraction: number| null
+    cuPercentage: number| null
+    fePercentage: number| null
+    pbPercentage: number| null
+    znPercentage: number| null
   }
 }
 
@@ -57,8 +67,18 @@ export type INode<NodeProps = undefined, PortProps = undefined> = {
   cellCharacteristics: {
     netVolume: number| null
     pulpArea: number| null
+    frothSurfaceArea: number|null
     frothThickness: number| null
     airFlowRate: number| null
+    R_infCcp: number| null,
+    R_infGn: number| null,
+    R_infPo: number| null,
+    R_infSp: number| null,
+    k_maxCcp: number| null,
+    k_maxGn: number| null,
+    k_maxPo: number| null,
+    k_maxSp: number| null,
+    EntrainementSavassiparameters: number| null
   }| null
   ports: {
     [id: string]: IPort<PortProps>;
@@ -100,16 +120,16 @@ export type ILink<LinkProps = undefined> = {
   feed: { //the feed data should actually be displayed when selecting a stream, only first stream feed should be editable by the user 
     totalSolidFlow: number| null
     totalLiquidFlow: number| null
-    pulpMassFlow: number| null
+    //pulpMassFlow: number| null
     pulpVolumetricFlow: number| null
     solidsSG: number| null
     pulpSG: number| null
-    percentSolids: number| null
+    //percentSolids: number| null
     solidsFraction: number| null
     cuPercentage: number| null
     fePercentage: number| null
-    znPercentage: number| null
     pbPercentage: number| null
+    znPercentage: number| null
   }| null
 } & (LinkProps extends undefined ? {
   properties?: any,
