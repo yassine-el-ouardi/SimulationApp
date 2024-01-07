@@ -1,3 +1,4 @@
+
 from flask import Flask, request, jsonify
 import json
 import requests
@@ -230,26 +231,45 @@ def extract_successors(json_data, current_node_id, traversal_port, max_iteration
 
 ###################################### prossing Boucles ##############################################
 
-
+import time
 
 def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, convergence_threshold=0.1, max_iterations=2):
-    # Dictionnaire pour stocker les sorties précédentes des nœuds
+    start_time_total = time.time()  # Temps au début de la fonction
+
+    # Initialisation du fichier de résultats
+    with open('results.txt', 'w') as file:
+        file.write("Debut du traitement des boucles.\n")
+
     previous_node_outputs = {node_id: {'concentrate': [0]*10, 'tailing': [0]*10} for boucle_nodes in boucle_node_ids.values() for node_id in boucle_nodes}
     converged = False
     iteration = 0
 
     while not converged and iteration < max_iterations:
+        start_time_iteration = time.time()  # Début de l'itération
+
         for boucle_id, node_ids in boucle_node_ids.items():
-            print(f"[LOG] Début de l'itération {iteration + 1} pour la boucle {boucle_id}.")
+            print(f"[LOG] Debut de l'iteration {iteration + 1} pour la boucle {boucle_id}.")
+
             for node_id in node_ids:
-                print(f"[LOG] Traitement du nœud {node_id} dans la boucle {boucle_id}.")
+                start_time_node = time.time()  # Début du traitement du nœud
+
+                # Effectuer la prédiction ou le traitement pour le nœud
                 nodes[node_id].predict(links, api_url)
+
+                end_time_node = time.time()  # Fin du traitement du nœud
+                node_time = end_time_node - start_time_node  # Temps écoulé pour ce nœud
 
                 # Récupération des résultats actuels et écriture dans le fichier
                 current_output = node_outputss[node_id]
                 with open('results.txt', 'a') as file:
-                    file.write(f"Iteration {iteration + 1}, Node ID: {node_id}, Current Output: {current_output}\n")
+                    file.write(f"Iteration {iteration + 1}, Node ID: {node_id}, Current Output: {current_output},  Temps ecoule : {node_time} secondes.\n")
+
             print(f"[LOG] Fin de l'itération {iteration + 1} pour la boucle {boucle_id}.")
+
+        end_time_iteration = time.time()  # Fin de l'itération
+        iteration_time = end_time_iteration - start_time_iteration  # Temps écoulé pour l'itération
+        with open('results.txt', 'a') as file:
+            file.write(f"Temps ecoule pour l'iteration {iteration + 1} : {iteration_time} secondes.\n")
 
         # Vérification de la convergence pour toutes les boucles
         converged = True
@@ -274,6 +294,10 @@ def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, 
         iteration += 1
         print(f"Iteration {iteration} completed, convergence status: {converged}")
 
+    end_time_total = time.time()  # Temps à la fin de la fonction
+    total_time = end_time_total - start_time_total  # Temps total écoulé
+    with open('results.txt', 'a') as file:
+        file.write(f"Temps total ecoule pour 'iterate_to_convergence_multi_boucle' : {total_time} secondes.\n")
 
 
 
@@ -315,10 +339,12 @@ def generate_final_circuit_json(nodes, links,parsed_data):
     
     # Étape 4 : Remplacer les liens dans api_json par ceux de final_json
     api_json["links"] = final_json["links"]
+    
 
 
 
     return api_json
+
 
 
 
@@ -404,10 +430,7 @@ def process_json(parsed_data):
 
 
 
-def save_json(data, filename):
-    with open(filename, 'w') as file:
-        json.dump(data, file, indent=4)
-    print(f"File saved as {filename}")
+
 @app.route('/process-circuit', methods=['POST'])
 def process_circuit():
     # Receive JSON data from frontend
@@ -417,9 +440,9 @@ def process_circuit():
 
     try:
         final_json = process_json(json_data)
-        save_json(final_json, 'final_output.json')
         print("Reçu:", json_data)
         return jsonify(final_json)
+        
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
