@@ -33,19 +33,20 @@ class Node:
         elif filtered_feeds:
             dynamic_features = [sum(feed) / len(feed) for feed in zip(*filtered_feeds)]
 
-        #print(f"dynamique value={dynamic_features}")
+        print(f"Average dynamique value={dynamic_features}")
 
 
         static_feature_keys = [
-            "Net Volume", "Pulp Area", "Froth surface area", "Froth thickness", "Air Flow rate",
-            "R_inf Ccp", "R_inf Gn", "R_inf Po", "R_inf Sp", "k_max Ccp", "k_max Gn", "k_maxPo", "k_max Sp", 
-            "Entrainement Savassi parameters"
+            "netVolume", "pulpArea", "frothSurfaceArea", "frothThickness", "airFlowRate",
+            "R_infCcp", "R_infGn", "R_infPo", "R_infSp", "k_maxCcp", "k_maxGn", "k_maxPo", "k_maxSp", 
+            "EntrainementSavassiparameters"
         ]
         static_features = [self.cell_characteristics.get(key, None) for key in static_feature_keys]
 
         if dynamic_features is not None:
             #print(f"Length of provided dynamic_features: {dynamic_features}")
             combined_features = static_features + dynamic_features
+            print(f"input finale ={combined_features}")
 
         # Validate and log the number of features
         if len(combined_features) != 24:
@@ -54,66 +55,20 @@ class Node:
 
         return combined_features
 
-   
-    def update_links(self, links, concentrate_keys, tailing_keys, concentrate, tailing):
-        # Log avant de commencer la mise à jour
-        print(f"Debut de mise à jour des liens pour le nœud {self.node_id}")
-
-        # Parcourir tous les liens pour mettre à jour
-        for link_id, link in links.items():
-            # Utilisation de la méthode .get pour accéder de manière sûre à nodeId et portId
-            source_node_id = link.source.get('nodeId') if link.source else None
-            source_port_id = link.source.get('portId') if link.source else None
-
-            # Vérifier si le nœud source du lien correspond à ce nœud
-            if source_node_id == self.node_id:
-                # Mise à jour basée sur le port
-                if source_port_id == 'port3':  # Supposition : 'port3' est pour le concentrate
-                    link.feed = dict(zip(concentrate_keys, concentrate))
-                    print(f"Mise à jour du lien {link_id} avec concentrate : {link.feed}")
-                    
-                elif source_port_id == 'port4':  # Supposition : 'port4' est pour le tailing
-                    link.feed = dict(zip(tailing_keys, tailing))
-                    print(f"Mise à jour du lien {link_id} avec tailing : {link.feed}")
-
-        # Log après la fin de la mise à jour
-        print(f"Fin de mise à jour des liens pour le nœud {self.node_id}")
-
-
-
-    def update_linksss(self, links, concentrate_keys, tailing_keys, concentrate, tailing):
-        # Update the links that are fed by the current cell's output
-        
-        for link_id, link in links.items():
-            # Using the .get method to safely access nodeId and portId
-            source_node_id = link.source.get('nodeId') if link.source else None
-            source_port_id = link.source.get('portId') if link.source else None
-
-            if source_node_id == self.node_id:
-                if source_port_id == 'port3':  # Assuming 'top' port is for concentrate
-                    link.feed = dict(zip(concentrate_keys, concentrate))
-                    
-                elif source_port_id == 'port4':  # Assuming 'bottom' port is for tailing
-                    link.feed = dict(zip(tailing_keys, tailing))
-
     
     def predict(self, links, api_url):
         
         # Extrait les caractéristiques à l'aide de la méthode combine_features de l'objet Node
         
-        features = self.input_features(links)
         print(f"[LOG] Prédiction pour le nœud {self.node_id} démarrée.")
         features = self.input_features(links)
-        print(f"[LOG] Caractéristiques combinées pour {self.node_id}: {features}")
 
-
-        #print(f"combined features = {features}")
 
         # Envoi des données à l'API Flask pour le traitement de la réponse
         response = requests.post(api_url, json={"features": features})
         if response.status_code == 200:
             response_data = response.json()
-            print(f"[LOG] Réponse de l'API Flask pour {self.node_id}: {response_data}")
+            #print(f"[LOG] Réponse de l'API Flask pour {self.node_id}: {response_data}")
 
             print("--------------------------------------------------------Response from Flask API:------------------------------------------------------------------------", response_data)
 
@@ -139,6 +94,31 @@ class Node:
 
         else:
             print(f"Error calling model API for Node {self.node_id}: {response.status_code}, {response.text}")
+
+
+    def update_links(self, links, concentrate_keys, tailing_keys, concentrate, tailing):
+        # Log avant de commencer la mise à jour
+        print(f"Debut de mise à jour des liens pour le nœud {self.node_id}")
+
+        # Parcourir tous les liens pour mettre à jour
+        for link_id, link in links.items():
+            # Utilisation de la méthode .get pour accéder de manière sûre à nodeId et portId
+            source_node_id = link.source.get('nodeId') if link.source else None
+            source_port_id = link.source.get('portId') if link.source else None
+
+            # Vérifier si le nœud source du lien correspond à ce nœud
+            if source_node_id == self.node_id:
+                # Mise à jour basée sur le port
+                if source_port_id == 'port3':  # Supposition : 'port3' est pour le concentrate
+                    link.feed = dict(zip(concentrate_keys, concentrate))
+                    print(f"Mise à jour du lien {link_id} avec concentrate : {link.feed}")
+                    
+                elif source_port_id == 'port4':  # Supposition : 'port4' est pour le tailing
+                    link.feed = dict(zip(tailing_keys, tailing))
+                    print(f"Mise à jour du lien {link_id} avec tailing : {link.feed}")
+
+        # Log après la fin de la mise à jour
+        print(f"Fin de mise à jour des liens pour le nœud {self.node_id}")
 
     
     #juste pour affichage d'info
@@ -199,7 +179,7 @@ import requests
 api_url = 'http://127.0.0.1:5000/predict'
 
 # Read data from the file
-file_path = 'chart_state.txt'
+file_path = 'chart_state_finale.txt'
 with open(file_path, 'r') as file:
     data = file.read()
 
@@ -210,21 +190,21 @@ parsed_data = json.loads(data)
 #Dictionnaires
 nodes = {}
 links = {}
-node_outputss = {}
+
 
 # Définition des Clés pour les Données Concentrées et de Queue (Tailing)
 concentrate_keys = [
-    'Total Solids Flow_Concentrate', 'Total Liquid Flow_Concentrate', 
-    'Pulp Volumetric Flow_Concentrate', 'Solids SG_Concentrate', 
-    'Pulp SG_Concentrate', 'Solids Fraction_Concentrate', 
-    'Cu_Concentrate', 'Fe_Concentrate', 'Pb_Concentrate', 'Zn_Concentrate'
+    'totalSolidFlow', 'totalLiquidFlow', 
+    'pulpVolumetricFlow', 'olidsSG', 
+    'pulpSG', 'solidsFraction', 
+    'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
 ]
 
 tailing_keys = [
-    'Total Solids Flow_Tailings', 'Total Liquid Flow_Tailings', 
-    'Pulp Volumetric Flow_Tailings', 'Solids SG_Tailings', 
-    'Pulp SG_Tailings', 'Solids Fraction_Tailings', 
-    'Cu_Tails', 'Fe_Tails', 'Pb_Tails', 'Zn_Tails'
+    'totalSolidFlow', 'totalLiquidFlow', 
+    'pulpVolumetricFlow', 'olidsSG', 
+    'pulpSG', 'solidsFraction', 
+    'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
 ]
 
 
@@ -240,12 +220,16 @@ for link_id, link_data in parsed_data["links"].items():
     links[link_id] = Link.from_json(link_id, link_data)
 
 ###################################### extracte boucle  ##############################################
-    
-def extract_successors(json_data, current_node_id, current_port_id, max_iterations=10, include_start_node=False):
+
+
+def extract_successors(json_data, current_node_id, traversal_port, max_iterations=10, include_start_node=False):
     successors = []
     links = json_data.get("links", {})
     visited_nodes = set()
     iterations = 0
+
+    if include_start_node:
+        successors.append(current_node_id)
 
     while iterations < max_iterations:
         found_link = False
@@ -255,75 +239,104 @@ def extract_successors(json_data, current_node_id, current_port_id, max_iteratio
             from_node_id = link_from.get("nodeId")
             from_port_id = link_from.get("portId")
 
-            if from_node_id == current_node_id and from_port_id == current_port_id:
+            if from_node_id == current_node_id and from_port_id == traversal_port:
                 link_to = link_info.get("to", {})
                 to_node_id = link_to.get("nodeId")
-                to_port_id = link_to.get("portId")
 
-                if include_start_node and not successors:
-                    successors.append(current_node_id)  # Add the start node only if specified
+                if to_node_id and to_node_id not in visited_nodes:
+                    successors.append(to_node_id)
+                    visited_nodes.add(to_node_id)
+                    current_node_id = to_node_id
+                    found_link = True
+                    break
 
-                if to_node_id in visited_nodes:
-                    return [node for node in successors if node]  # Remove None and return
-
-                successors.append(to_node_id)
-                visited_nodes.add(to_node_id)
-
-                current_node_id = to_node_id
-                current_port_id = "port1" if to_port_id == "port3" else "port3"
-                found_link = True
-                break
-
-        if not found_link or (current_port_id == "port3" and current_node_id == "-1"):
+        if not found_link:
             break
-        
+
         iterations += 1
 
-    return [node for node in successors if node]  # Remove None from the list
-
+    return successors
 # Assuming json_data is already loaded with your JSON content
-start_node = "eaa503a4-b098-496d-a80a-f65fbf118a08"
-start_port_concentrate = "port3"
+try:
+    parsed_data = json.loads(data) # Replace with actual JSON string or file load
+    # Initialiser une variable pour stocker l'ID du nœud de type 'First Cell'
+    first_cell_node_id = None
 
-successors_concentrate_firstcell = extract_successors(parsed_data, start_node, start_port_concentrate, include_start_node=True)
-print("Successors concentrate:", successors_concentrate_firstcell)
+    # Parcourir tous les nœuds pour trouver celui de type 'First Cell'
+    for node_id, node in nodes.items():
+        if node.node_type == "First Cell":
+            first_cell_node_id = node_id
+            break  # Arrêter la boucle une fois le premier nœud 'First Cell' trouvé
 
-start_port_tailing = "port4"
+    # Afficher l'ID du nœud 'First Cell'
+    if first_cell_node_id:
+        print("L'ID du nœud 'First Cell' est :", first_cell_node_id)
+    else:
+        print("Aucun nœud 'First Cell' trouvé.")
 
-successors_tailing_firstcell = extract_successors(parsed_data, start_node, start_port_tailing)
-print("Successors tailing:", successors_tailing_firstcell)
 
-# Dictionnaire contenant les ID de nœuds pour chaque boucle
-boucle_node_ids = {
-    'boucle1': successors_concentrate_firstcell,
-    'boucle2': successors_tailing_firstcell
-}
+    # Assuming json_data is already loaded with your JSON content
+    start_node = first_cell_node_id
+        
 
-# Afficher le dictionnaire pour vérifier
-print("Dictionnaire des boucles de nœuds:", boucle_node_ids)
+
+     # Tailing stream
+    tailing_successors = extract_successors(parsed_data, start_node, "port4",include_start_node=True)
+    print("Tailing stream successors:", tailing_successors)
+
+    # Concentrate stream
+    concentrate_successors = extract_successors(parsed_data, start_node, "port3")
+    print("Concentrate stream successors:", concentrate_successors)
+
+    # Dictionnaire contenant les ID de nœuds pour chaque boucle
+    boucle_node_ids = {
+        'boucle1': tailing_successors,
+        'boucle2': concentrate_successors
+    }
+    # Afficher le dictionnaire pour vérifier
+    print("Dictionnaire des boucles de nœuds:", boucle_node_ids)
+
+
+except ValueError as e:
+    print("Error:", e)
+except json.JSONDecodeError:
+    print("Error: Failed to parse JSON data.")
+
+
+
+
+
+
+
+
+
+
 
 
 ###################################### prossing Boucles ##############################################
 
-def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, convergence_threshold=0.01, max_iterations=100):
-    # Initialisation des sorties précédentes pour toutes les boucles
+node_outputss = {}
+
+def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, convergence_threshold=0.1, max_iterations=1):
+    # Dictionnaire pour stocker les sorties précédentes des nœuds
     previous_node_outputs = {node_id: {'concentrate': [0]*10, 'tailing': [0]*10} for boucle_nodes in boucle_node_ids.values() for node_id in boucle_nodes}
     converged = False
     iteration = 0
 
     while not converged and iteration < max_iterations:
-        # Boucle sur chaque groupe de boucle
-        print("[LOG] Début de l'itération principale.")
         for boucle_id, node_ids in boucle_node_ids.items():
-            print(f"[LOG] Début de l'itération {iteration + 1}.")
-            # Effectuer les prédictions pour les nœuds de la boucle actuelle
+            print(f"[LOG] Début de l'itération {iteration + 1} pour la boucle {boucle_id}.")
             for node_id in node_ids:
                 print(f"[LOG] Traitement du nœud {node_id} dans la boucle {boucle_id}.")
                 nodes[node_id].predict(links, api_url)
-            print(f"[LOG] Fin de l'itération {iteration + 1}.")
-        print("[LOG] Fin de l'itération principale.")
 
-        # Vérifier la convergence pour toutes les boucles
+                # Récupération des résultats actuels et écriture dans le fichier
+                current_output = node_outputss[node_id]
+                with open('results.txt', 'a') as file:
+                    file.write(f"Iteration {iteration + 1}, Node ID: {node_id}, Current Output: {current_output}\n")
+            print(f"[LOG] Fin de l'itération {iteration + 1} pour la boucle {boucle_id}.")
+
+        # Vérification de la convergence pour toutes les boucles
         converged = True
         for boucle_nodes in boucle_node_ids.values():
             for node_id in boucle_nodes:
@@ -333,13 +346,13 @@ def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, 
                 for key in current_output:
                     if any(abs(c - p) > convergence_threshold for c, p in zip(current_output[key], previous_output[key])):
                         converged = False
-                        break  # Arrêter la vérification dès qu'une non-convergence est détectée
+                        break
 
-            if not converged:
-                break  # Arrêter la vérification des boucles si une non-convergence est déjà détectée
+                if not converged:
+                    break
 
         if not converged:
-            # Mise à jour des sorties précédentes pour la prochaine itération pour toutes les boucles
+            # Mise à jour des sorties précédentes pour la prochaine itération
             for node_id in previous_node_outputs:
                 previous_node_outputs[node_id] = node_outputss[node_id]
 
@@ -347,16 +360,13 @@ def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, 
         print(f"Iteration {iteration} completed, convergence status: {converged}")
 
 
-# Dictionnaire contenant les ID de nœuds pour chaque boucle
-#boucle_node_ids = {
- #   'boucle1': ['eaa503a4-b098-496d-a80a-f65fbf118a08', '42173ee4-02ee-453e-a97e-23f2f7b67f4a', '0f4780cc-0f10-4b9c-a96f-24b4bfdb3e6d'],
-  #  'boucle2': ['3cfdd7af-bfab-4d15-82d1-d9264e17d38c', '41577566-4f1a-4e3c-8bd6-98734f9515be', 'f445318a-944f-483b-b3b1-d06da5b41ca8', '0fba832b-af06-42ec-a1bb-2ecb1c47633a']
-#}
+
 
 
 # Appel de la fonction avec les boucles multiples
-iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, convergence_threshold=0.001, max_iterations=2)
-print(" node outputs", node_outputss)
+iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids)
+#print(" node outputs", node_outputss)
+
 
 
 
@@ -364,6 +374,9 @@ print(" node outputs", node_outputss)
 ##################################################  Fichier  JSON Finale ###########################################
 
 def generate_final_circuit_json(nodes, links):
+    with open(file_path, 'r') as file:
+        api_json = json.load(file)
+
     final_json = {"links": {}}
 
     for link_id, link in links.items():
@@ -393,36 +406,26 @@ def generate_final_circuit_json(nodes, links):
                     concentrate_destination = link.destination if link.destination else {}
                 elif source_port_id == "port4":  # Assuming 'bottom' port is for tailing
                     tailing_destination = link.destination if link.destination else {}
+    
+    # Étape 4 : Remplacer les liens dans api_json par ceux de final_json
+    api_json["links"] = final_json["links"]
 
-        # Add concentrate link with detailed keys and destination
-        concentrate_link_id = f"{node_id}_concentrate"
-        final_json["links"][concentrate_link_id] = {
-            "id": concentrate_link_id,
-            "source": {"nodeId": node_id, "portId": "port3"},
-            "destination": concentrate_destination,
-            "feed": dict(zip(concentrate_keys, outputs.get('concentrate', [])))
-        }
 
-        # Add tailing link with detailed keys and destination
-        tailing_link_id = f"{node_id}_tailing"
-        final_json["links"][tailing_link_id] = {
-            "id": tailing_link_id,
-            "source": {"nodeId": node_id, "portId": "port4"},
-            "destination": tailing_destination,
-            "feed": dict(zip(tailing_keys, outputs.get('tailing', [])))
-        }
 
-    return final_json
+    return api_json
+
 
 final_circuit_json = generate_final_circuit_json(nodes, links)
 
 print(json.dumps(final_circuit_json, indent=4))
-
-
-
     
 
+# Enregistrer le JSON dans un fichier nommé 'final_circuit.json'
+with open('final_circuit.json', 'w') as file:
+    json.dump(final_circuit_json, file, indent=4)
 
+# Afficher le chemin du fichier
+print("Le fichier 'final_circuit.json' a été enregistré avec succès.")
 
 
 

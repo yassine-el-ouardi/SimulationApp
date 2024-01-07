@@ -52,31 +52,7 @@ def predict():
         prediction_list = final_prediction.tolist()[0]
         print(prediction_list)
         return jsonify({'prediction': prediction_list})
-        
-# def predict():
-#     # Get JSON data sent to the API
-#     data = request.get_json(force=True)
 
-#     # Extract and combine features from nodes and links
-#     combined_features = []
-#     for node_id, node_data in data["nodes"].items():
-#         cell_features = node_data['cellCharacteristics']
-#         for link_id, link_data in data["links"].items():
-#             if link_data['from']['nodeId'] == node_id:
-#                 feed_features = link_data['feed']
-#                 combined = cell_features + feed_features
-#                 combined_features.append(combined)
-
-#     # Prepare the combined features for prediction
-#     scaled_features = scalerX.transform(combined_features)
-#     predictions = model.predict(scaled_features)
-#     final_predictions = scalerY.inverse_transform(predictions)
-
-#     # Convert predictions to a list for JSON response
-#     predictions_list = final_predictions.tolist()
-
-#     # Create and send a response
-#     return jsonify({'predictions': predictions_list})
     except Exception as e:
         return jsonify({'error': str(e)})
 if __name__ == '__main__':
@@ -84,3 +60,14 @@ if __name__ == '__main__':
 @app.route('/')
 def home():
     return "Flask app is running!"
+
+
+
+
+
+
+
+
+ 
+#      cd c:/Users/dell/ProjetBigData/ & venv\Scripts\activate
+

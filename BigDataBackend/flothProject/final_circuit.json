@@ -1,0 +1,749 @@
+{
+    "offset": {
+        "x": 85.34,
+        "y": -52.08
+    },
+    "scale": 0.676,
+    "nodes": {
+        "20c7cc10-2c95-4aa2-915d-ecd524174b8f": {
+            "id": "20c7cc10-2c95-4aa2-915d-ecd524174b8f",
+            "position": {
+                "x": 59.627450980392176,
+                "y": 193.2941176470588
+            },
+            "orientation": 0,
+            "type": "First Cell",
+            "ports": {
+                "port1": {
+                    "id": "port1",
+                    "type": "left",
+                    "position": {
+                        "x": -6,
+                        "y": 41
+                    }
+                },
+                "port3": {
+                    "id": "port3",
+                    "type": "top",
+                    "position": {
+                        "x": 71,
+                        "y": -6
+                    }
+                },
+                "port4": {
+                    "id": "port4",
+                    "type": "bottom",
+                    "position": {
+                        "x": 71,
+                        "y": 87
+                    }
+                }
+            },
+            "cellCharacteristics": {
+                "netVolume": 100,
+                "pulpArea": 28.3,
+                "frothSurfaceArea": 20,
+                "frothThickness": 250,
+                "airFlowRate": 18,
+                "R_infCcp": 28.83,
+                "R_infGn": 80.38,
+                "R_infPo": 21.07,
+                "R_infSp": 14.32,
+                "k_maxCcp": 1.92,
+                "k_maxGn": 0.73,
+                "k_maxPo": 2.07,
+                "k_maxSp": 1.94,
+                "EntrainementSavassiparameters": 65.59
+            },
+            "size": {
+                "width": 0,
+                "height": 81
+            }
+        },
+        "7873561e-09f6-43ae-b8f8-203bea33146b": {
+            "id": "7873561e-09f6-43ae-b8f8-203bea33146b",
+            "position": {
+                "x": 297.8396946564885,
+                "y": 173.16793893129767
+            },
+            "orientation": 0,
+            "type": "Cell",
+            "ports": {
+                "port1": {
+                    "id": "port1",
+                    "type": "left",
+                    "position": {
+                        "x": -6,
+                        "y": 41
+                    }
+                },
+                "port3": {
+                    "id": "port3",
+                    "type": "top",
+                    "position": {
+                        "x": 71,
+                        "y": -6
+                    }
+                },
+                "port4": {
+                    "id": "port4",
+                    "type": "bottom",
+                    "position": {
+                        "x": 71,
+                        "y": 87
+                    }
+                }
+            },
+            "cellCharacteristics": {
+                "netVolume": 100,
+                "pulpArea": 28.3,
+                "frothSurfaceArea": 20,
+                "frothThickness": 250,
+                "airFlowRate": 18,
+                "R_infCcp": 28.83,
+                "R_infGn": 80.38,
+                "R_infPo": 21.07,
+                "R_infSp": 14.32,
+                "k_maxCcp": 1.92,
+                "k_maxGn": 0.73,
+                "k_maxPo": 2.07,
+                "k_maxSp": 1.94,
+                "EntrainementSavassiparameters": 65.59
+            },
+            "size": {
+                "width": 0,
+                "height": 81
+            }
+        },
+        "fe63a5d6-9170-4041-9dc2-d71b50750888": {
+            "id": "fe63a5d6-9170-4041-9dc2-d71b50750888",
+            "position": {
+                "x": 553.6030534351142,
+                "y": 153.06870229007626
+            },
+            "orientation": 0,
+            "type": "Scanvenger",
+            "ports": {
+                "port1": {
+                    "id": "port1",
+                    "type": "left",
+                    "position": {
+                        "x": -6,
+                        "y": 41
+                    }
+                },
+                "port3": {
+                    "id": "port3",
+                    "type": "top",
+                    "position": {
+                        "x": 71,
+                        "y": -6
+                    }
+                },
+                "port4": {
+                    "id": "port4",
+                    "type": "bottom",
+                    "position": {
+                        "x": 71,
+                        "y": 87
+                    }
+                }
+            },
+            "cellCharacteristics": {
+                "netVolume": 100,
+                "pulpArea": 28.3,
+                "frothSurfaceArea": 20,
+                "frothThickness": 250,
+                "airFlowRate": 18,
+                "R_infCcp": 28.83,
+                "R_infGn": 80.38,
+                "R_infPo": 21.07,
+                "R_infSp": 14.32,
+                "k_maxCcp": 1.92,
+                "k_maxGn": 0.73,
+                "k_maxPo": 2.07,
+                "k_maxSp": 1.94,
+                "EntrainementSavassiparameters": 65.59
+            },
+            "size": {
+                "width": 0,
+                "height": 81
+            }
+        },
+        "4b64cd5d-6415-4fe5-b1db-bf084b15ce5f": {
+            "id": "4b64cd5d-6415-4fe5-b1db-bf084b15ce5f",
+            "position": {
+                "x": 258.68462804969323,
+                "y": 369.1067205508157
+            },
+            "orientation": 0,
+            "type": "Cell",
+            "ports": {
+                "port1": {
+                    "id": "port1",
+                    "type": "left",
+                    "position": {
+                        "x": -6,
+                        "y": 41
+                    }
+                },
+                "port3": {
+                    "id": "port3",
+                    "type": "top",
+                    "position": {
+                        "x": 71,
+                        "y": -6
+                    }
+                },
+                "port4": {
+                    "id": "port4",
+                    "type": "bottom",
+                    "position": {
+                        "x": 71,
+                        "y": 87
+                    }
+                }
+            },
+            "cellCharacteristics": {
+                "netVolume": 100,
+                "pulpArea": 28.3,
+                "frothSurfaceArea": 20,
+                "frothThickness": 250,
+                "airFlowRate": 18,
+                "R_infCcp": 28.83,
+                "R_infGn": 80.38,
+                "R_infPo": 21.07,
+                "R_infSp": 14.32,
+                "k_maxCcp": 1.92,
+                "k_maxGn": 0.73,
+                "k_maxPo": 2.07,
+                "k_maxSp": 1.94,
+                "EntrainementSavassiparameters": 65.59
+            },
+            "size": {
+                "width": 0,
+                "height": 81
+            }
+        },
+        "ec2398d2-54d7-46a5-aa65-5b8fc734aef9": {
+            "id": "ec2398d2-54d7-46a5-aa65-5b8fc734aef9",
+            "position": {
+                "x": 448.2595419847327,
+                "y": 498.10687022900754
+            },
+            "orientation": 0,
+            "type": "Cell",
+            "ports": {
+                "port1": {
+                    "id": "port1",
+                    "type": "left",
+                    "position": {
+                        "x": -6,
+                        "y": 41
+                    }
+                },
+                "port3": {
+                    "id": "port3",
+                    "type": "top",
+                    "position": {
+                        "x": 71,
+                        "y": -6
+                    }
+                },
+                "port4": {
+                    "id": "port4",
+                    "type": "bottom",
+                    "position": {
+                        "x": 71,
+                        "y": 87
+                    }
+                }
+            },
+            "cellCharacteristics": {
+                "netVolume": 100,
+                "pulpArea": 28.3,
+                "frothSurfaceArea": 20,
+                "frothThickness": 250,
+                "airFlowRate": 18,
+                "R_infCcp": 28.83,
+                "R_infGn": 80.38,
+                "R_infPo": 21.07,
+                "R_infSp": 14.32,
+                "k_maxCcp": 1.92,
+                "k_maxGn": 0.73,
+                "k_maxPo": 2.07,
+                "k_maxSp": 1.94,
+                "EntrainementSavassiparameters": 65.59
+            },
+            "size": {
+                "width": 0,
+                "height": 81
+            }
+        },
+        "138b3b7a-deff-4156-a81b-4b1802ccd298": {
+            "id": "138b3b7a-deff-4156-a81b-4b1802ccd298",
+            "position": {
+                "x": 619.8640296662545,
+                "y": 625.2533992583436
+            },
+            "orientation": 0,
+            "type": "Cell",
+            "ports": {
+                "port1": {
+                    "id": "port1",
+                    "type": "left",
+                    "position": {
+                        "x": -6,
+                        "y": 41
+                    }
+                },
+                "port3": {
+                    "id": "port3",
+                    "type": "top",
+                    "position": {
+                        "x": 71,
+                        "y": -6
+                    }
+                },
+                "port4": {
+                    "id": "port4",
+                    "type": "bottom",
+                    "position": {
+                        "x": 71,
+                        "y": 87
+                    }
+                }
+            },
+            "cellCharacteristics": {
+                "netVolume": 100,
+                "pulpArea": 28.3,
+                "frothSurfaceArea": 20,
+                "frothThickness": 250,
+                "airFlowRate": 18,
+                "R_infCcp": 28.83,
+                "R_infGn": 80.38,
+                "R_infPo": 21.07,
+                "R_infSp": 14.32,
+                "k_maxCcp": 1.92,
+                "k_maxGn": 0.73,
+                "k_maxPo": 2.07,
+                "k_maxSp": 1.94,
+                "EntrainementSavassiparameters": 65.59
+            },
+            "size": {
+                "width": 0,
+                "height": 81
+            }
+        },
+        "458d72d3-5670-44da-9ce0-b1db9e672e98": {
+            "id": "458d72d3-5670-44da-9ce0-b1db9e672e98",
+            "position": {
+                "x": 815.1668726823237,
+                "y": 758.7515451174289
+            },
+            "orientation": 0,
+            "type": "Cleaner",
+            "ports": {
+                "port1": {
+                    "id": "port1",
+                    "type": "left",
+                    "position": {
+                        "x": -6,
+                        "y": 41
+                    }
+                },
+                "port3": {
+                    "id": "port3",
+                    "type": "top",
+                    "position": {
+                        "x": 71,
+                        "y": -6
+                    }
+                },
+                "port4": {
+                    "id": "port4",
+                    "type": "bottom",
+                    "position": {
+                        "x": 71,
+                        "y": 87
+                    }
+                }
+            },
+            "cellCharacteristics": {
+                "netVolume": 100,
+                "pulpArea": 28.3,
+                "frothSurfaceArea": 20,
+                "frothThickness": 250,
+                "airFlowRate": 18,
+                "R_infCcp": 28.83,
+                "R_infGn": 80.38,
+                "R_infPo": 21.07,
+                "R_infSp": 14.32,
+                "k_maxCcp": 1.92,
+                "k_maxGn": 0.73,
+                "k_maxPo": 2.07,
+                "k_maxSp": 1.94,
+                "EntrainementSavassiparameters": 65.59
+            },
+            "size": {
+                "width": 0,
+                "height": 81
+            }
+        }
+    },
+    "links": {
+        "First_Stream_id": {
+            "id": "First_Stream_id",
+            "source": {
+                "position": {
+                    "x": -9,
+                    "y": 208
+                }
+            },
+            "destination": {
+                "nodeId": "20c7cc10-2c95-4aa2-915d-ecd524174b8f",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 389.9437827797,
+                "totalLiquidFlow": 621.0115657339,
+                "pulpVolumetricFlow": 704.6163977706,
+                "solidsSG": 4.7704331868,
+                "pulpSG": 1.4347598945,
+                "solidsFraction": 11.600893422,
+                "cuPercentage": 5.4864368155,
+                "fePercentage": 17.5063003958,
+                "znPercentage": 25.9603555326,
+                "pbPercentage": 7.5562582744
+            }
+        },
+        "Scanvanger_Stream_id": {
+            "id": "Scanvanger_Stream_id",
+            "source": {
+                "nodeId": "fe63a5d6-9170-4041-9dc2-d71b50750888",
+                "portId": "port4"
+            },
+            "destination": {
+                "position": {
+                    "x": 673.8320610687023,
+                    "y": 394.29007633587787
+                }
+            },
+            "feed": {
+                "totalSolidFlow": 1070.6102294921875,
+                "totalLiquidFlow": -3070.380615234375,
+                "pulpVolumetricFlow": -2866.244384765625,
+                "olidsSG": 7.687872409820557,
+                "pulpSG": 277.19976806640625,
+                "solidsFraction": 9636.015625,
+                "cuPercentage": 64.60227966308594,
+                "fePercentage": 231.13299560546875,
+                "znPercentage": 29.92414093017578,
+                "pbPercentage": 63.27547073364258
+            }
+        },
+        "f7a9b2b3-06e8-41f7-a083-3af818680dc2": {
+            "id": "f7a9b2b3-06e8-41f7-a083-3af818680dc2",
+            "source": {
+                "nodeId": "20c7cc10-2c95-4aa2-915d-ecd524174b8f",
+                "portId": "port4"
+            },
+            "destination": {
+                "nodeId": "7873561e-09f6-43ae-b8f8-203bea33146b",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 80.63694763183594,
+                "totalLiquidFlow": 70.6458969116211,
+                "pulpVolumetricFlow": 63.841068267822266,
+                "olidsSG": 4.068271160125732,
+                "pulpSG": 3.553856611251831,
+                "solidsFraction": 82.00200653076172,
+                "cuPercentage": 8.796005249023438,
+                "fePercentage": 25.59585189819336,
+                "znPercentage": 11.374818801879883,
+                "pbPercentage": 9.004911422729492
+            }
+        },
+        "e4d4b487-aad0-4194-933b-1a5da59f005a": {
+            "id": "e4d4b487-aad0-4194-933b-1a5da59f005a",
+            "source": {
+                "nodeId": "7873561e-09f6-43ae-b8f8-203bea33146b",
+                "portId": "port4"
+            },
+            "destination": {
+                "nodeId": "fe63a5d6-9170-4041-9dc2-d71b50750888",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 111.30829620361328,
+                "totalLiquidFlow": -291.1768798828125,
+                "pulpVolumetricFlow": -299.5059814453125,
+                "olidsSG": 4.18146276473999,
+                "pulpSG": 29.57366371154785,
+                "solidsFraction": 989.1954956054688,
+                "cuPercentage": 11.615732192993164,
+                "fePercentage": 41.3659782409668,
+                "znPercentage": 3.3116695880889893,
+                "pbPercentage": 16.19060707092285
+            }
+        },
+        "24c73f56-8118-4dd9-b258-fe051f307b2e": {
+            "id": "24c73f56-8118-4dd9-b258-fe051f307b2e",
+            "source": {
+                "nodeId": "fe63a5d6-9170-4041-9dc2-d71b50750888",
+                "portId": "port3"
+            },
+            "destination": {
+                "nodeId": "7873561e-09f6-43ae-b8f8-203bea33146b",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 5002.5810546875,
+                "totalLiquidFlow": 7703.80224609375,
+                "pulpVolumetricFlow": 8968.3828125,
+                "olidsSG": -3.4631760120391846,
+                "pulpSG": 1.3171606063842773,
+                "solidsFraction": 109.8876953125,
+                "cuPercentage": 79.51182556152344,
+                "fePercentage": 249.62408447265625,
+                "znPercentage": -86.09735870361328,
+                "pbPercentage": 197.25653076171875
+            }
+        },
+        "fcea21f2-ee02-42f6-97dd-380f474c6868": {
+            "id": "fcea21f2-ee02-42f6-97dd-380f474c6868",
+            "source": {
+                "nodeId": "7873561e-09f6-43ae-b8f8-203bea33146b",
+                "portId": "port3"
+            },
+            "destination": {
+                "nodeId": "20c7cc10-2c95-4aa2-915d-ecd524174b8f",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 414.12701416015625,
+                "totalLiquidFlow": 765.887451171875,
+                "pulpVolumetricFlow": 734.611083984375,
+                "olidsSG": 3.573995351791382,
+                "pulpSG": 1.3565647602081299,
+                "solidsFraction": 18.128408432006836,
+                "cuPercentage": 13.733154296875,
+                "fePercentage": 41.309627532958984,
+                "znPercentage": 5.4910430908203125,
+                "pbPercentage": 22.83818244934082
+            }
+        },
+        "ea278aa7-be22-449e-a02c-559a7de87f41": {
+            "id": "ea278aa7-be22-449e-a02c-559a7de87f41",
+            "source": {
+                "nodeId": "20c7cc10-2c95-4aa2-915d-ecd524174b8f",
+                "portId": "port3"
+            },
+            "destination": {
+                "nodeId": "4b64cd5d-6415-4fe5-b1db-bf084b15ce5f",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 400.79583740234375,
+                "totalLiquidFlow": 616.816650390625,
+                "pulpVolumetricFlow": 702.7603149414062,
+                "olidsSG": 6.072895526885986,
+                "pulpSG": 1.4125256538391113,
+                "solidsFraction": 11.019015312194824,
+                "cuPercentage": 9.103697776794434,
+                "fePercentage": 21.739604949951172,
+                "znPercentage": 58.02445602416992,
+                "pbPercentage": 3.5058908462524414
+            }
+        },
+        "7ae5c93e-bb84-4961-8ec3-d7f5efa3e974": {
+            "id": "7ae5c93e-bb84-4961-8ec3-d7f5efa3e974",
+            "source": {
+                "nodeId": "4b64cd5d-6415-4fe5-b1db-bf084b15ce5f",
+                "portId": "port3"
+            },
+            "destination": {
+                "nodeId": "ec2398d2-54d7-46a5-aa65-5b8fc734aef9",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 529.5379638671875,
+                "totalLiquidFlow": 840.4545288085938,
+                "pulpVolumetricFlow": 970.2976684570312,
+                "olidsSG": 6.611429214477539,
+                "pulpSG": 1.4255527257919312,
+                "solidsFraction": 10.483933448791504,
+                "cuPercentage": 9.287495613098145,
+                "fePercentage": 23.72869110107422,
+                "znPercentage": 66.52983093261719,
+                "pbPercentage": 3.171454668045044
+            }
+        },
+        "9f893229-b624-45a8-bf9d-efb24583b685": {
+            "id": "9f893229-b624-45a8-bf9d-efb24583b685",
+            "source": {
+                "nodeId": "ec2398d2-54d7-46a5-aa65-5b8fc734aef9",
+                "portId": "port3"
+            },
+            "destination": {
+                "nodeId": "138b3b7a-deff-4156-a81b-4b1802ccd298",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 623.805908203125,
+                "totalLiquidFlow": 1008.89453125,
+                "pulpVolumetricFlow": 1170.2958984375,
+                "olidsSG": 6.804569721221924,
+                "pulpSG": 1.4304977655410767,
+                "solidsFraction": 10.12607192993164,
+                "cuPercentage": 9.471611976623535,
+                "fePercentage": 24.70354461669922,
+                "znPercentage": 68.39673614501953,
+                "pbPercentage": 3.067023754119873
+            }
+        },
+        "Cleaner_Stream_id": {
+            "id": "Cleaner_Stream_id",
+            "source": {
+                "nodeId": "458d72d3-5670-44da-9ce0-b1db9e672e98",
+                "portId": "port3"
+            },
+            "destination": {
+                "position": {
+                    "x": 1015.1668726823237,
+                    "y": 758.7515451174289
+                }
+            },
+            "feed": {
+                "totalSolidFlow": 716.8024291992188,
+                "totalLiquidFlow": 1181.8773193359375,
+                "pulpVolumetricFlow": 1369.8536376953125,
+                "olidsSG": 6.984282493591309,
+                "pulpSG": 1.4351084232330322,
+                "solidsFraction": 9.963274955749512,
+                "cuPercentage": 10.095706939697266,
+                "fePercentage": 25.47722053527832,
+                "znPercentage": 71.14309692382812,
+                "pbPercentage": 2.6209516525268555
+            }
+        },
+        "1afac42f-71b2-4917-9f78-427e3c78f16b": {
+            "id": "1afac42f-71b2-4917-9f78-427e3c78f16b",
+            "source": {
+                "nodeId": "138b3b7a-deff-4156-a81b-4b1802ccd298",
+                "portId": "port3"
+            },
+            "destination": {
+                "nodeId": "458d72d3-5670-44da-9ce0-b1db9e672e98",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 678.1943359375,
+                "totalLiquidFlow": 1112.5042724609375,
+                "pulpVolumetricFlow": 1291.1500244140625,
+                "olidsSG": 6.906529426574707,
+                "pulpSG": 1.4330464601516724,
+                "solidsFraction": 10.021537780761719,
+                "cuPercentage": 9.788925170898438,
+                "fePercentage": 25.183521270751953,
+                "znPercentage": 69.75556945800781,
+                "pbPercentage": 2.8163530826568604
+            }
+        },
+        "658475c2-caaf-435e-8afc-0f8fce15a34a": {
+            "id": "658475c2-caaf-435e-8afc-0f8fce15a34a",
+            "source": {
+                "nodeId": "458d72d3-5670-44da-9ce0-b1db9e672e98",
+                "portId": "port4"
+            },
+            "destination": {
+                "nodeId": "138b3b7a-deff-4156-a81b-4b1802ccd298",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 85.25208282470703,
+                "totalLiquidFlow": 42.69842529296875,
+                "pulpVolumetricFlow": 18.505828857421875,
+                "olidsSG": 4.345607757568359,
+                "pulpSG": 6.08196496963501,
+                "solidsFraction": 161.8199462890625,
+                "cuPercentage": 10.24920654296875,
+                "fePercentage": 36.62002182006836,
+                "znPercentage": 13.23831558227539,
+                "pbPercentage": 8.493223190307617
+            }
+        },
+        "8649af5f-91ca-41ba-8b76-b0f3d6f4bd5f": {
+            "id": "8649af5f-91ca-41ba-8b76-b0f3d6f4bd5f",
+            "source": {
+                "nodeId": "138b3b7a-deff-4156-a81b-4b1802ccd298",
+                "portId": "port4"
+            },
+            "destination": {
+                "nodeId": "ec2398d2-54d7-46a5-aa65-5b8fc734aef9",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 79.75535583496094,
+                "totalLiquidFlow": 45.23497009277344,
+                "pulpVolumetricFlow": 18.145191192626953,
+                "olidsSG": 4.3121442794799805,
+                "pulpSG": 5.926924228668213,
+                "solidsFraction": 155.6134033203125,
+                "cuPercentage": 10.110147476196289,
+                "fePercentage": 35.622825622558594,
+                "znPercentage": 13.095698356628418,
+                "pbPercentage": 8.431713104248047
+            }
+        },
+        "d593b61b-3249-4427-8fe0-fed2359dd54c": {
+            "id": "d593b61b-3249-4427-8fe0-fed2359dd54c",
+            "source": {
+                "nodeId": "ec2398d2-54d7-46a5-aa65-5b8fc734aef9",
+                "portId": "port4"
+            },
+            "destination": {
+                "nodeId": "4b64cd5d-6415-4fe5-b1db-bf084b15ce5f",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 71.32566833496094,
+                "totalLiquidFlow": 50.82426834106445,
+                "pulpVolumetricFlow": 18.645282745361328,
+                "olidsSG": 4.278869152069092,
+                "pulpSG": 5.663026332855225,
+                "solidsFraction": 146.47183227539062,
+                "cuPercentage": 10.019476890563965,
+                "fePercentage": 34.39585876464844,
+                "znPercentage": 13.115667343139648,
+                "pbPercentage": 8.329492568969727
+            }
+        },
+        "f693d4fb-1128-4e2d-baa4-25a2661c64ec": {
+            "id": "f693d4fb-1128-4e2d-baa4-25a2661c64ec",
+            "source": {
+                "nodeId": "4b64cd5d-6415-4fe5-b1db-bf084b15ce5f",
+                "portId": "port4"
+            },
+            "destination": {
+                "nodeId": "fe63a5d6-9170-4041-9dc2-d71b50750888",
+                "portId": "port1"
+            },
+            "feed": {
+                "totalSolidFlow": 66.5106201171875,
+                "totalLiquidFlow": 61.30768966674805,
+                "pulpVolumetricFlow": 28.372621536254883,
+                "olidsSG": 4.219160079956055,
+                "pulpSG": 5.064757823944092,
+                "solidsFraction": 127.54084777832031,
+                "cuPercentage": 9.922051429748535,
+                "fePercentage": 31.935340881347656,
+                "znPercentage": 13.12120532989502,
+                "pbPercentage": 8.042763710021973
+            }
+        }
+    },
+    "selected": {},
+    "hovered": {}
+}
