@@ -405,16 +405,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 389.9437827797,
-                "totalLiquidFlow": 621.0115657339,
-                "pulpVolumetricFlow": 704.6163977706,
-                "solidsSG": 4.7704331868,
-                "pulpSG": 1.4347598945,
-                "solidsFraction": 11.600893422,
-                "cuPercentage": 5.4864368155,
-                "fePercentage": 17.5063003958,
-                "znPercentage": 25.9603555326,
-                "pbPercentage": 7.5562582744
+                "totalSolidFlow": 0,
+                "totalLiquidFlow": 0,
+                "pulpVolumetricFlow": 0,
+                "solidsSG": 0,
+                "pulpSG": 0,
+                "solidsFraction": 0,
+                "cuPercentage": 0,
+                "fePercentage": 0,
+                "znPercentage": 0,
+                "pbPercentage": 0
             }
         },
         "Scanvanger_Stream_id": {
@@ -430,16 +430,16 @@
                 }
             },
             "feed": {
-                "totalSolidFlow": 1070.6102294921875,
-                "totalLiquidFlow": -3070.380615234375,
-                "pulpVolumetricFlow": -2866.244384765625,
-                "olidsSG": 7.687872409820557,
-                "pulpSG": 277.19976806640625,
-                "solidsFraction": 9636.015625,
-                "cuPercentage": 64.60227966308594,
-                "fePercentage": 231.13299560546875,
-                "znPercentage": 29.92414093017578,
-                "pbPercentage": 63.27547073364258
+                "totalSolidFlow": 269.56634521484375,
+                "totalLiquidFlow": -1118.9725341796875,
+                "pulpVolumetricFlow": -1127.530029296875,
+                "olidsSG": 5.525530815124512,
+                "pulpSG": 99.79132080078125,
+                "solidsFraction": 3377.489013671875,
+                "cuPercentage": 27.476831436157227,
+                "fePercentage": 106.91519165039062,
+                "znPercentage": 6.66072940826416,
+                "pbPercentage": 39.92406463623047
             }
         },
         "f7a9b2b3-06e8-41f7-a083-3af818680dc2": {
@@ -453,16 +453,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 80.63694763183594,
-                "totalLiquidFlow": 70.6458969116211,
-                "pulpVolumetricFlow": 63.841068267822266,
-                "olidsSG": 4.068271160125732,
-                "pulpSG": 3.553856611251831,
-                "solidsFraction": 82.00200653076172,
-                "cuPercentage": 8.796005249023438,
-                "fePercentage": 25.59585189819336,
-                "znPercentage": 11.374818801879883,
-                "pbPercentage": 9.004911422729492
+                "totalSolidFlow": 210.82386779785156,
+                "totalLiquidFlow": 115.96363830566406,
+                "pulpVolumetricFlow": 172.86135864257812,
+                "olidsSG": 4.369907379150391,
+                "pulpSG": 3.5509696006774902,
+                "solidsFraction": 71.29285430908203,
+                "cuPercentage": 10.229992866516113,
+                "fePercentage": 38.4705924987793,
+                "znPercentage": 7.058801651000977,
+                "pbPercentage": 17.157825469970703
             }
         },
         "e4d4b487-aad0-4194-933b-1a5da59f005a": {
@@ -476,16 +476,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 111.30829620361328,
-                "totalLiquidFlow": -291.1768798828125,
-                "pulpVolumetricFlow": -299.5059814453125,
-                "olidsSG": 4.18146276473999,
-                "pulpSG": 29.57366371154785,
-                "solidsFraction": 989.1954956054688,
-                "cuPercentage": 11.615732192993164,
-                "fePercentage": 41.3659782409668,
-                "znPercentage": 3.3116695880889893,
-                "pbPercentage": 16.19060707092285
+                "totalSolidFlow": 786.471435546875,
+                "totalLiquidFlow": 267.4473876953125,
+                "pulpVolumetricFlow": 373.6166076660156,
+                "olidsSG": 6.389150142669678,
+                "pulpSG": 14.693238258361816,
+                "solidsFraction": 398.2186279296875,
+                "cuPercentage": 29.83606719970703,
+                "fePercentage": 116.39679718017578,
+                "znPercentage": 5.92655611038208,
+                "pbPercentage": 57.99822998046875
             }
         },
         "24c73f56-8118-4dd9-b258-fe051f307b2e": {
@@ -499,16 +499,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 5002.5810546875,
-                "totalLiquidFlow": 7703.80224609375,
-                "pulpVolumetricFlow": 8968.3828125,
-                "olidsSG": -3.4631760120391846,
-                "pulpSG": 1.3171606063842773,
-                "solidsFraction": 109.8876953125,
-                "cuPercentage": 79.51182556152344,
-                "fePercentage": 249.62408447265625,
-                "znPercentage": -86.09735870361328,
-                "pbPercentage": 197.25653076171875
+                "totalSolidFlow": 1492.9879150390625,
+                "totalLiquidFlow": 2560.1181640625,
+                "pulpVolumetricFlow": 2879.686767578125,
+                "olidsSG": 1.4641709327697754,
+                "pulpSG": 1.3520095348358154,
+                "solidsFraction": 40.09124755859375,
+                "cuPercentage": 32.81583786010742,
+                "fePercentage": 106.66280364990234,
+                "znPercentage": -26.709762573242188,
+                "pbPercentage": 71.52368927001953
             }
         },
         "fcea21f2-ee02-42f6-97dd-380f474c6868": {
@@ -522,16 +522,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 414.12701416015625,
-                "totalLiquidFlow": 765.887451171875,
-                "pulpVolumetricFlow": 734.611083984375,
-                "olidsSG": 3.573995351791382,
-                "pulpSG": 1.3565647602081299,
-                "solidsFraction": 18.128408432006836,
-                "cuPercentage": 13.733154296875,
-                "fePercentage": 41.309627532958984,
-                "znPercentage": 5.4910430908203125,
-                "pbPercentage": 22.83818244934082
+                "totalSolidFlow": 1617.0635986328125,
+                "totalLiquidFlow": 2655.243408203125,
+                "pulpVolumetricFlow": 3531.6220703125,
+                "olidsSG": 5.610654354095459,
+                "pulpSG": 1.4088993072509766,
+                "solidsFraction": 23.88501739501953,
+                "cuPercentage": 47.75810241699219,
+                "fePercentage": 111.56085205078125,
+                "znPercentage": -4.465291976928711,
+                "pbPercentage": 61.87293243408203
             }
         },
         "ea278aa7-be22-449e-a02c-559a7de87f41": {
@@ -545,16 +545,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 400.79583740234375,
-                "totalLiquidFlow": 616.816650390625,
-                "pulpVolumetricFlow": 702.7603149414062,
-                "olidsSG": 6.072895526885986,
-                "pulpSG": 1.4125256538391113,
-                "solidsFraction": 11.019015312194824,
-                "cuPercentage": 9.103697776794434,
-                "fePercentage": 21.739604949951172,
-                "znPercentage": 58.02445602416992,
-                "pbPercentage": 3.5058908462524414
+                "totalSolidFlow": 248.3291473388672,
+                "totalLiquidFlow": 457.52301025390625,
+                "pulpVolumetricFlow": 606.8368530273438,
+                "olidsSG": 4.968286991119385,
+                "pulpSG": 1.3846940994262695,
+                "solidsFraction": 13.15157413482666,
+                "cuPercentage": 14.539412498474121,
+                "fePercentage": 36.524391174316406,
+                "znPercentage": 20.552459716796875,
+                "pbPercentage": 14.868423461914062
             }
         },
         "7ae5c93e-bb84-4961-8ec3-d7f5efa3e974": {
@@ -568,16 +568,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 529.5379638671875,
-                "totalLiquidFlow": 840.4545288085938,
-                "pulpVolumetricFlow": 970.2976684570312,
-                "olidsSG": 6.611429214477539,
-                "pulpSG": 1.4255527257919312,
-                "solidsFraction": 10.483933448791504,
-                "cuPercentage": 9.287495613098145,
-                "fePercentage": 23.72869110107422,
-                "znPercentage": 66.52983093261719,
-                "pbPercentage": 3.171454668045044
+                "totalSolidFlow": 480.1285095214844,
+                "totalLiquidFlow": 893.83154296875,
+                "pulpVolumetricFlow": 917.216064453125,
+                "olidsSG": 3.6482999324798584,
+                "pulpSG": 1.363304615020752,
+                "solidsFraction": 18.0668888092041,
+                "cuPercentage": 14.677043914794922,
+                "fePercentage": 45.205101013183594,
+                "znPercentage": 8.403346061706543,
+                "pbPercentage": 23.434341430664062
             }
         },
         "9f893229-b624-45a8-bf9d-efb24583b685": {
@@ -591,16 +591,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 623.805908203125,
-                "totalLiquidFlow": 1008.89453125,
-                "pulpVolumetricFlow": 1170.2958984375,
-                "olidsSG": 6.804569721221924,
-                "pulpSG": 1.4304977655410767,
-                "solidsFraction": 10.12607192993164,
-                "cuPercentage": 9.471611976623535,
-                "fePercentage": 24.70354461669922,
-                "znPercentage": 68.39673614501953,
-                "pbPercentage": 3.067023754119873
+                "totalSolidFlow": 486.9027099609375,
+                "totalLiquidFlow": 929.03564453125,
+                "pulpVolumetricFlow": 1002.3697509765625,
+                "olidsSG": 3.462202310562134,
+                "pulpSG": 1.3565069437026978,
+                "solidsFraction": 18.73110580444336,
+                "cuPercentage": 14.865166664123535,
+                "fePercentage": 47.932403564453125,
+                "znPercentage": 0.9709039926528931,
+                "pbPercentage": 24.982397079467773
             }
         },
         "Cleaner_Stream_id": {
@@ -616,16 +616,16 @@
                 }
             },
             "feed": {
-                "totalSolidFlow": 716.8024291992188,
-                "totalLiquidFlow": 1181.8773193359375,
-                "pulpVolumetricFlow": 1369.8536376953125,
-                "olidsSG": 6.984282493591309,
-                "pulpSG": 1.4351084232330322,
-                "solidsFraction": 9.963274955749512,
-                "cuPercentage": 10.095706939697266,
-                "fePercentage": 25.47722053527832,
-                "znPercentage": 71.14309692382812,
-                "pbPercentage": 2.6209516525268555
+                "totalSolidFlow": 299.7532958984375,
+                "totalLiquidFlow": 567.0664672851562,
+                "pulpVolumetricFlow": 718.6638793945312,
+                "olidsSG": 4.870455265045166,
+                "pulpSG": 1.385888934135437,
+                "solidsFraction": 13.816137313842773,
+                "cuPercentage": 17.084875106811523,
+                "fePercentage": 43.72434616088867,
+                "znPercentage": 14.641357421875,
+                "pbPercentage": 17.48944664001465
             }
         },
         "1afac42f-71b2-4917-9f78-427e3c78f16b": {
@@ -639,16 +639,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 678.1943359375,
-                "totalLiquidFlow": 1112.5042724609375,
-                "pulpVolumetricFlow": 1291.1500244140625,
-                "olidsSG": 6.906529426574707,
-                "pulpSG": 1.4330464601516724,
-                "solidsFraction": 10.021537780761719,
-                "cuPercentage": 9.788925170898438,
-                "fePercentage": 25.183521270751953,
-                "znPercentage": 69.75556945800781,
-                "pbPercentage": 2.8163530826568604
+                "totalSolidFlow": 491.5379943847656,
+                "totalLiquidFlow": 934.225341796875,
+                "pulpVolumetricFlow": 1026.4617919921875,
+                "olidsSG": 3.3789713382720947,
+                "pulpSG": 1.3543729782104492,
+                "solidsFraction": 19.11675453186035,
+                "cuPercentage": 15.174478530883789,
+                "fePercentage": 49.540931701660156,
+                "znPercentage": -1.737761378288269,
+                "pbPercentage": 25.79666519165039
             }
         },
         "658475c2-caaf-435e-8afc-0f8fce15a34a": {
@@ -662,16 +662,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 85.25208282470703,
-                "totalLiquidFlow": 42.69842529296875,
-                "pulpVolumetricFlow": 18.505828857421875,
-                "olidsSG": 4.345607757568359,
-                "pulpSG": 6.08196496963501,
-                "solidsFraction": 161.8199462890625,
-                "cuPercentage": 10.24920654296875,
-                "fePercentage": 36.62002182006836,
-                "znPercentage": 13.23831558227539,
-                "pbPercentage": 8.493223190307617
+                "totalSolidFlow": 255.15603637695312,
+                "totalLiquidFlow": 155.0999755859375,
+                "pulpVolumetricFlow": 231.34109497070312,
+                "olidsSG": 4.482428073883057,
+                "pulpSG": 3.3447628021240234,
+                "solidsFraction": 63.00242614746094,
+                "cuPercentage": 11.329591751098633,
+                "fePercentage": 44.98649597167969,
+                "znPercentage": 6.326574802398682,
+                "pbPercentage": 18.54618263244629
             }
         },
         "8649af5f-91ca-41ba-8b76-b0f3d6f4bd5f": {
@@ -685,16 +685,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 79.75535583496094,
-                "totalLiquidFlow": 45.23497009277344,
-                "pulpVolumetricFlow": 18.145191192626953,
-                "olidsSG": 4.3121442794799805,
-                "pulpSG": 5.926924228668213,
-                "solidsFraction": 155.6134033203125,
-                "cuPercentage": 10.110147476196289,
-                "fePercentage": 35.622825622558594,
-                "znPercentage": 13.095698356628418,
-                "pbPercentage": 8.431713104248047
+                "totalSolidFlow": 195.52676391601562,
+                "totalLiquidFlow": -343.057861328125,
+                "pulpVolumetricFlow": -325.8274230957031,
+                "olidsSG": 4.398571968078613,
+                "pulpSG": 33.2171745300293,
+                "solidsFraction": 1107.5684814453125,
+                "cuPercentage": 12.863748550415039,
+                "fePercentage": 49.45490646362305,
+                "znPercentage": 2.2079625129699707,
+                "pbPercentage": 18.678775787353516
             }
         },
         "d593b61b-3249-4427-8fe0-fed2359dd54c": {
@@ -708,16 +708,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 71.32566833496094,
-                "totalLiquidFlow": 50.82426834106445,
-                "pulpVolumetricFlow": 18.645282745361328,
-                "olidsSG": 4.278869152069092,
-                "pulpSG": 5.663026332855225,
-                "solidsFraction": 146.47183227539062,
-                "cuPercentage": 10.019476890563965,
-                "fePercentage": 34.39585876464844,
-                "znPercentage": 13.115667343139648,
-                "pbPercentage": 8.329492568969727
+                "totalSolidFlow": 188.3910675048828,
+                "totalLiquidFlow": -334.4126281738281,
+                "pulpVolumetricFlow": -319.8164367675781,
+                "olidsSG": 4.383398532867432,
+                "pulpSG": 32.47667694091797,
+                "solidsFraction": 1083.2020263671875,
+                "cuPercentage": 12.793411254882812,
+                "fePercentage": 48.42254638671875,
+                "znPercentage": 2.581812620162964,
+                "pbPercentage": 18.324970245361328
             }
         },
         "f693d4fb-1128-4e2d-baa4-25a2661c64ec": {
@@ -731,16 +731,16 @@
                 "portId": "port1"
             },
             "feed": {
-                "totalSolidFlow": 66.5106201171875,
-                "totalLiquidFlow": 61.30768966674805,
-                "pulpVolumetricFlow": 28.372621536254883,
-                "olidsSG": 4.219160079956055,
-                "pulpSG": 5.064757823944092,
-                "solidsFraction": 127.54084777832031,
-                "cuPercentage": 9.922051429748535,
-                "fePercentage": 31.935340881347656,
-                "znPercentage": 13.12120532989502,
-                "pbPercentage": 8.042763710021973
+                "totalSolidFlow": 137.5480499267578,
+                "totalLiquidFlow": -322.402587890625,
+                "pulpVolumetricFlow": -331.2083740234375,
+                "olidsSG": 4.372836112976074,
+                "pulpSG": 31.90108871459961,
+                "solidsFraction": 1061.4075927734375,
+                "cuPercentage": 12.965170860290527,
+                "fePercentage": 47.45032501220703,
+                "znPercentage": 3.964790105819702,
+                "pbPercentage": 17.150686264038086
             }
         }
     },

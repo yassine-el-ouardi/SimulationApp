@@ -56,7 +56,7 @@ def predict():
     except Exception as e:
         return jsonify({'error': str(e)})
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=8000)  # Replace 8000 with your desired port number
 @app.route('/')
 def home():
     return "Flask app is running!"

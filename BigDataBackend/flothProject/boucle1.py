@@ -1,3 +1,10 @@
+from flask import Flask, request, jsonify
+import json
+import requests
+
+# Assurez-vous d'importer ou de définir ici les classes Node et Link, ainsi que les fonctions nécessaires
+
+app = Flask(__name__)
 
 ############################################ Class Node ###############################################################
 
@@ -24,14 +31,21 @@ class Node:
 
         print("all feed is : ", all_feeds)
 
+
+
         # Remplacer les valeurs None par 0
         filtered_feeds = [[value if value is not None else 0 for value in feed] for feed in all_feeds]
 
         # Vérifier si la deuxième liste existe et est composée uniquement de zéros
-        if len(filtered_feeds) > 1 and all(value == 0 for value in filtered_feeds[1]):
+        if len(filtered_feeds) == 1:
             dynamic_features = filtered_feeds[0]
-        elif filtered_feeds:
-            dynamic_features = [sum(feed) / len(feed) for feed in zip(*filtered_feeds)]
+        elif all(value == 0 for value in filtered_feeds[0]):
+            dynamic_features = filtered_feeds[1]
+        elif all(value == 0 for value in filtered_feeds[1]):
+            dynamic_features = filtered_feeds[0]
+        else:
+            dynamic_features = [sum(feed) / 2 for feed in zip(*filtered_feeds)]
+
 
         print(f"Average dynamique value={dynamic_features}")
 
@@ -102,9 +116,18 @@ class Node:
 
         # Parcourir tous les liens pour mettre à jour
         for link_id, link in links.items():
+
+                 if link_id == "First_Stream_id":
+                    link.feed = dict.fromkeys(link.feed, 0)
+                    print("  feed a 0 pour fisrt cell", link.feed)
+
+         # Parcourir tous les liens pour mettre à jour
+        for link_id, link in links.items():
+            
             # Utilisation de la méthode .get pour accéder de manière sûre à nodeId et portId
             source_node_id = link.source.get('nodeId') if link.source else None
             source_port_id = link.source.get('portId') if link.source else None
+
 
             # Vérifier si le nœud source du lien correspond à ce nœud
             if source_node_id == self.node_id:
@@ -112,6 +135,9 @@ class Node:
                 if source_port_id == 'port3':  # Supposition : 'port3' est pour le concentrate
                     link.feed = dict(zip(concentrate_keys, concentrate))
                     print(f"Mise à jour du lien {link_id} avec concentrate : {link.feed}")
+
+           
+                
                     
                 elif source_port_id == 'port4':  # Supposition : 'port4' est pour le tailing
                     link.feed = dict(zip(tailing_keys, tailing))
@@ -121,17 +147,7 @@ class Node:
         print(f"Fin de mise à jour des liens pour le nœud {self.node_id}")
 
     
-    #juste pour affichage d'info
-    def get_sources(self, links):
-        sources = []
-        for link_id, link in links.items():
-            if 'nodeId' in link.destination and link.destination['nodeId'] == self.node_id:
-                if 'nodeId' in link.source:  # Check if nodeId exists in source
-                    source_node_id = link.source['nodeId']
-                    source_port_id = link.source['portId']
-                    sources.append((source_node_id, source_port_id, link.destination['portId']))
-        return sources
-    
+
 
 
         
@@ -170,54 +186,8 @@ class Link:
 
 
 
-################################################### Flask API ###################################################################
-    
-import json
-import requests
-
-# Flask API endpoint URL
-api_url = 'http://127.0.0.1:5000/predict'
-
-# Read data from the file
-file_path = 'chart_state_finale.txt'
-with open(file_path, 'r') as file:
-    data = file.read()
 
 
-# Parse the JSON data
-parsed_data = json.loads(data)
-
-#Dictionnaires
-nodes = {}
-links = {}
-
-
-# Définition des Clés pour les Données Concentrées et de Queue (Tailing)
-concentrate_keys = [
-    'totalSolidFlow', 'totalLiquidFlow', 
-    'pulpVolumetricFlow', 'olidsSG', 
-    'pulpSG', 'solidsFraction', 
-    'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
-]
-
-tailing_keys = [
-    'totalSolidFlow', 'totalLiquidFlow', 
-    'pulpVolumetricFlow', 'olidsSG', 
-    'pulpSG', 'solidsFraction', 
-    'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
-]
-
-
-###################################### prossing chaque node ##############################################
-
-
-# Processing nodes = {}
-for node_id, node_data in parsed_data["nodes"].items():
-    nodes[node_id] = Node.from_json(node_id, node_data)
-
-# Processing links = {}
-for link_id, link_data in parsed_data["links"].items():
-    links[link_id] = Link.from_json(link_id, link_data)
 
 ###################################### extracte boucle  ##############################################
 
@@ -256,68 +226,13 @@ def extract_successors(json_data, current_node_id, traversal_port, max_iteration
         iterations += 1
 
     return successors
-# Assuming json_data is already loaded with your JSON content
-try:
-    parsed_data = json.loads(data) # Replace with actual JSON string or file load
-    # Initialiser une variable pour stocker l'ID du nœud de type 'First Cell'
-    first_cell_node_id = None
-
-    # Parcourir tous les nœuds pour trouver celui de type 'First Cell'
-    for node_id, node in nodes.items():
-        if node.node_type == "First Cell":
-            first_cell_node_id = node_id
-            break  # Arrêter la boucle une fois le premier nœud 'First Cell' trouvé
-
-    # Afficher l'ID du nœud 'First Cell'
-    if first_cell_node_id:
-        print("L'ID du nœud 'First Cell' est :", first_cell_node_id)
-    else:
-        print("Aucun nœud 'First Cell' trouvé.")
-
-
-    # Assuming json_data is already loaded with your JSON content
-    start_node = first_cell_node_id
-        
-
-
-     # Tailing stream
-    tailing_successors = extract_successors(parsed_data, start_node, "port4",include_start_node=True)
-    print("Tailing stream successors:", tailing_successors)
-
-    # Concentrate stream
-    concentrate_successors = extract_successors(parsed_data, start_node, "port3")
-    print("Concentrate stream successors:", concentrate_successors)
-
-    # Dictionnaire contenant les ID de nœuds pour chaque boucle
-    boucle_node_ids = {
-        'boucle1': tailing_successors,
-        'boucle2': concentrate_successors
-    }
-    # Afficher le dictionnaire pour vérifier
-    print("Dictionnaire des boucles de nœuds:", boucle_node_ids)
-
-
-except ValueError as e:
-    print("Error:", e)
-except json.JSONDecodeError:
-    print("Error: Failed to parse JSON data.")
-
-
-
-
-
-
-
-
-
-
 
 
 ###################################### prossing Boucles ##############################################
 
-node_outputss = {}
 
-def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, convergence_threshold=0.1, max_iterations=1):
+
+def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, convergence_threshold=0.1, max_iterations=2):
     # Dictionnaire pour stocker les sorties précédentes des nœuds
     previous_node_outputs = {node_id: {'concentrate': [0]*10, 'tailing': [0]*10} for boucle_nodes in boucle_node_ids.values() for node_id in boucle_nodes}
     converged = False
@@ -362,20 +277,11 @@ def iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids, 
 
 
 
-
-# Appel de la fonction avec les boucles multiples
-iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids)
-#print(" node outputs", node_outputss)
-
-
-
-
-
 ##################################################  Fichier  JSON Finale ###########################################
 
-def generate_final_circuit_json(nodes, links):
-    with open(file_path, 'r') as file:
-        api_json = json.load(file)
+def generate_final_circuit_json(nodes, links,parsed_data):
+   
+    api_json = parsed_data
 
     final_json = {"links": {}}
 
@@ -415,19 +321,111 @@ def generate_final_circuit_json(nodes, links):
     return api_json
 
 
-final_circuit_json = generate_final_circuit_json(nodes, links)
 
-print(json.dumps(final_circuit_json, indent=4))
+
+
+
+
+###################################### prossing chaque node ############################################################
+
+
+
+
+
+################################################### Flask API pour model de predictio ###################################################################
+
+
+#Dictionnaires
+nodes = {}
+links = {}
+# Définition des Clés pour les Données Concentrées et de Queue (Tailing)
+concentrate_keys = [
+    'totalSolidFlow', 'totalLiquidFlow', 
+    'pulpVolumetricFlow', 'olidsSG', 
+    'pulpSG', 'solidsFraction', 
+    'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
+]
+
+tailing_keys = [
+    'totalSolidFlow', 'totalLiquidFlow', 
+    'pulpVolumetricFlow', 'olidsSG', 
+    'pulpSG', 'solidsFraction', 
+    'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
+]
+node_outputss = {}
+
+
+
+# Assurez-vous d'importer ou de définir ici les classes Node et Link, ainsi que les fonctions nécessaires
+
+
+
+def process_json(parsed_data):
+    api_url = 'http://127.0.0.1:8000/predict'
     
+    # Initialisation des dictionnaires pour les nœuds et les liens
+    nodes = {node_id: Node.from_json(node_id, node_data) for node_id, node_data in parsed_data["nodes"].items()}
+    links = {link_id: Link.from_json(link_id, link_data) for link_id, link_data in parsed_data["links"].items()}
 
-# Enregistrer le JSON dans un fichier nommé 'final_circuit.json'
-with open('final_circuit.json', 'w') as file:
-    json.dump(final_circuit_json, file, indent=4)
+    # Trouver le nœud de type 'First Cell'
+    first_cell_node_id = next((node_id for node_id, node in nodes.items() if node.node_type == "First Cell"), None)
 
-# Afficher le chemin du fichier
-print("Le fichier 'final_circuit.json' a été enregistré avec succès.")
+    # Extraction des successeurs pour tailing et concentrate streams
+    tailing_successors = extract_successors(parsed_data, first_cell_node_id, "port4", include_start_node=True)
+    concentrate_successors = extract_successors(parsed_data, first_cell_node_id, "port3")
+
+    # Dictionnaire des ID de nœuds pour chaque boucle
+    boucle_node_ids = {'boucle1': tailing_successors, 'boucle2': concentrate_successors}
+
+    # Itération pour la convergence
+    iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids)
+
+    # Génération du JSON final
+    final_circuit_json = generate_final_circuit_json(nodes, links,parsed_data)
+
+    return final_circuit_json
 
 
 
 
 
+
+
+
+
+
+##################################### Flask API ##########################""
+
+
+
+
+
+
+
+
+
+def save_json(data, filename):
+    with open(filename, 'w') as file:
+        json.dump(data, file, indent=4)
+    print(f"File saved as {filename}")
+@app.route('/process-circuit', methods=['POST'])
+def process_circuit():
+    # Receive JSON data from frontend
+    json_data = request.get_json()
+    if not json_data:
+        return jsonify({"error": "Aucune donnée JSON reçue"}), 400
+
+    try:
+        final_json = process_json(json_data)
+        save_json(final_json, 'final_output.json')
+        print("Reçu:", json_data)
+        return jsonify(final_json)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/')
+def home():
+    return "Flask app is running!"
+
+if __name__ == '__main__':
+    app.run(debug=True)
