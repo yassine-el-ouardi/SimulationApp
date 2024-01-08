@@ -1,4 +1,6 @@
 
+
+
 from flask import Flask, request, jsonify
 import json
 import requests
@@ -34,21 +36,19 @@ class Node:
 
 
 
+        
         # Remplacer les valeurs None par 0
         filtered_feeds = [[value if value is not None else 0 for value in feed] for feed in all_feeds]
 
-        # Vérifier si la deuxième liste existe et est composée uniquement de zéros
-        if len(filtered_feeds) == 1:
+         # Vérifier si la deuxième liste existe et est composée uniquement de zéros
+        if len(filtered_feeds) > 1 and all(value == 0 for value in filtered_feeds[1]):
             dynamic_features = filtered_feeds[0]
-        elif all(value == 0 for value in filtered_feeds[0]):
-            dynamic_features = filtered_feeds[1]
-        elif all(value == 0 for value in filtered_feeds[1]):
-            dynamic_features = filtered_feeds[0]
-        else:
-            dynamic_features = [sum(feed) / 2 for feed in zip(*filtered_feeds)]
-
+        elif filtered_feeds:
+            dynamic_features = [sum(feed) / len(feed) for feed in zip(*filtered_feeds)]
 
         print(f"Average dynamique value={dynamic_features}")
+
+
 
 
         static_feature_keys = [
@@ -115,13 +115,6 @@ class Node:
         # Log avant de commencer la mise à jour
         print(f"Debut de mise à jour des liens pour le nœud {self.node_id}")
 
-        # Parcourir tous les liens pour mettre à jour
-        for link_id, link in links.items():
-
-                 if link_id == "First_Stream_id":
-                    link.feed = dict.fromkeys(link.feed, 0)
-                    print("  feed a 0 pour fisrt cell", link.feed)
-
          # Parcourir tous les liens pour mettre à jour
         for link_id, link in links.items():
             
@@ -183,13 +176,6 @@ class Link:
             link_data.get("feed")
         )
     
-
-
-
-
-
-
-
 ###################################### extracte boucle  ##############################################
 
 
@@ -315,8 +301,8 @@ def generate_final_circuit_json(nodes, links,parsed_data):
         # Add link details and model prediction data to the final JSON
         final_json["links"][link_id] = {
             "id": link.link_id,
-            "source": link.source if link.source else {},
-            "destination": link.destination if link.destination else {},
+            "from": link.source if link.source else {},
+            "to": link.destination if link.destination else {},
             "feed": link.feed  # This contains the concentrate/tailing data
         }
 
@@ -413,21 +399,7 @@ def process_json(parsed_data):
 
 
 
-
-
-
-
-
-
-
 ##################################### Flask API ##########################""
-
-
-
-
-
-
-
 
 
 
