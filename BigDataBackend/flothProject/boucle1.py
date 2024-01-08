@@ -2,10 +2,13 @@
 from flask import Flask, request, jsonify
 import json
 import requests
+from flask_cors import CORS
+
 
 # Assurez-vous d'importer ou de définir ici les classes Node et Link, ainsi que les fonctions nécessaires
 
 app = Flask(__name__)
+CORS(app)
 
 ############################################ Class Node ###############################################################
 
@@ -315,8 +318,8 @@ def generate_final_circuit_json(nodes, links,parsed_data):
         # Add link details and model prediction data to the final JSON
         final_json["links"][link_id] = {
             "id": link.link_id,
-            "source": link.source if link.source else {},
-            "destination": link.destination if link.destination else {},
+            "from": link.source if link.source else {},
+            "to": link.destination if link.destination else {},
             "feed": link.feed  # This contains the concentrate/tailing data
         }
 
@@ -367,14 +370,14 @@ links = {}
 # Définition des Clés pour les Données Concentrées et de Queue (Tailing)
 concentrate_keys = [
     'totalSolidFlow', 'totalLiquidFlow', 
-    'pulpVolumetricFlow', 'olidsSG', 
+    'pulpVolumetricFlow', 'solidsSG', 
     'pulpSG', 'solidsFraction', 
     'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
 ]
 
 tailing_keys = [
     'totalSolidFlow', 'totalLiquidFlow', 
-    'pulpVolumetricFlow', 'olidsSG', 
+    'pulpVolumetricFlow', 'solidsSG', 
     'pulpSG', 'solidsFraction', 
     'cuPercentage', 'fePercentage', 'znPercentage', 'pbPercentage'
 ]
@@ -387,28 +390,31 @@ node_outputss = {}
 
 
 def process_json(parsed_data):
+    print('the beginning ')
+
     api_url = 'http://127.0.0.1:8000/predict'
     
     # Initialisation des dictionnaires pour les nœuds et les liens
     nodes = {node_id: Node.from_json(node_id, node_data) for node_id, node_data in parsed_data["nodes"].items()}
     links = {link_id: Link.from_json(link_id, link_data) for link_id, link_data in parsed_data["links"].items()}
+    print('the beginning 2')
 
     # Trouver le nœud de type 'First Cell'
     first_cell_node_id = next((node_id for node_id, node in nodes.items() if node.node_type == "First Cell"), None)
-
+    print('before trouver')
     # Extraction des successeurs pour tailing et concentrate streams
     tailing_successors = extract_successors(parsed_data, first_cell_node_id, "port4", include_start_node=True)
     concentrate_successors = extract_successors(parsed_data, first_cell_node_id, "port3")
-
+    print('after trouver')
     # Dictionnaire des ID de nœuds pour chaque boucle
     boucle_node_ids = {'boucle1': tailing_successors, 'boucle2': concentrate_successors}
-
+    print('before iterate')
     # Itération pour la convergence
     iterate_to_convergence_multi_boucle(nodes, links, api_url, boucle_node_ids)
-
+    print('after iterate')
     # Génération du JSON final
     final_circuit_json = generate_final_circuit_json(nodes, links,parsed_data)
-
+    print('after final')
     return final_circuit_json
 
 
@@ -435,12 +441,17 @@ def process_json(parsed_data):
 def process_circuit():
     # Receive JSON data from frontend
     json_data = request.get_json()
+
+    json_data = json.loads(json_data)
+
+    
+
     if not json_data:
         return jsonify({"error": "Aucune donnée JSON reçue"}), 400
 
     try:
         final_json = process_json(json_data)
-        print("Reçu:", json_data)
+        print("Reçu:", final_json)
         return jsonify(final_json)
         
     except Exception as e:

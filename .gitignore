@@ -66,3 +66,6 @@ typings/
 
 /BigDataBackend/venv/
 /BigDataBackend/__pycache__
+
+/bigdata/*
+/bigdata

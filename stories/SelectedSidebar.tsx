@@ -72,7 +72,7 @@ export class SelectedSidebar extends React.Component {
       (...args: any) => this.setState(func(...args))) as typeof actions
 
     
-    console.log('from outside', selectedLink);
+  /*console.log('from outside', selectedLink);*/
     
     // console.log('selectedNode', selectedNode);
     //console.log('id', chart.selected.id);
@@ -178,7 +178,7 @@ export class SelectedSidebar extends React.Component {
                     </Message>
               : <Message>Click on a Cell, or Stream</Message>
           }
-          <SimulateButton onClick={this.someMethodOrEventHandler}>
+          <SimulateButton onClick={this.handleSimulateClick}>
             Simulate
           </SimulateButton>
           
@@ -211,112 +211,47 @@ export class SelectedSidebar extends React.Component {
     });
   }
 
-  someMethodOrEventHandler = () => {
-    const portsCount = this.getPortsTwoIncomingLinksCount();
-    this.handleSimulateClick(portsCount + 1 );
-  }
 
-  private getPortsTwoIncomingLinksCount = () => {
-    const { nodes, links } = this.state;
-    let count = 0;
+
+  //----------------------------------------------------------------------
+
+  private handleSimulateClick = async () => {
+
+    const url = 'http://127.0.0.1:5000/process-circuit';
+
+    // Assuming you have the data available as a JavaScript object
+    // If you need to read from a file, you'll have to handle that differently in a browser context
+    const chart = this.state;
+    const chartString = JSON.stringify(chart);
+    const parsedData = chartString;
   
-    for (const nodeId in nodes) {
-      for (const portId in nodes[nodeId].ports) {
-        const incomingLinks = Object.values(links).filter(link => 
-          link.to && link.to.nodeId === nodeId && link.to.portId === portId
-        );
-  
-        if (incomingLinks.length === 2) {
-          count++;
-        }
-      }
-    }
-  
-    return count;
-  }
-
-  private handleSimulateClick = (iterationCount: number) => {
-    console.log(iterationCount);
-    if (iterationCount <= 0) {
-      return;
-    }
-    //let counter = 0;
-    const updatedChart = cloneDeep(this.state);
-
-    const updateLinkFlowSequentially = (linkIds: string[]) => {
-      if (linkIds.length === 0) {
-        this.setState(updatedChart);
-        console.log('All links have been updated');
-        return;
-      }
-
-      const currentLinkId = linkIds[0];
-      const currentLink = updatedChart.links[currentLinkId];
-
-      // Only proceed if the link has a 'from' property
-      if (currentLink.from.nodeId) {
-        let previousTotalSolidFlow = 0;
-        const sourceNodeId = currentLink.from.nodeId;
-
-        if (sourceNodeId) {
-          // Find incoming links that connect to the source node's 'port1'
-          const incomingLinks = Object.values(updatedChart.links).filter(l => {
-            return l.to && l.to.nodeId === sourceNodeId && l.to.portId === 'port1';
-          });
-
-          if (incomingLinks.length == 1) {
-            const incomingLink = incomingLinks[0];
-            if (incomingLink.feed && typeof incomingLink.feed.totalSolidFlow === 'number') {
-              previousTotalSolidFlow = incomingLink.feed.totalSolidFlow;
-            }
-          } else {
-            if (incomingLinks.length > 1) {
-              if (incomingLinks[0].feed && incomingLinks[1].feed && typeof incomingLinks[0].feed.totalSolidFlow === 'number' && typeof incomingLinks[1].feed.totalSolidFlow === 'number') {
-                previousTotalSolidFlow = (incomingLinks[0].feed.totalSolidFlow + incomingLinks[1].feed.totalSolidFlow) / 2;
-                //counter++;
-              }
-            }
-          }
-        }
-
-        console.log(`Retrieved previous totalSolidFlow for link ${currentLinkId}: ${previousTotalSolidFlow}`);
-
-        if (!currentLink.feed) {
-          currentLink.feed = {
-            totalSolidFlow: null,
-            totalLiquidFlow: null,
-            //pulpMassFlow: null,
-            pulpVolumetricFlow: null,
-            solidsSG: null,
-            pulpSG: null,
-            //percentSolids: null,
-            solidsFraction: null,
-            cuPercentage: null,
-            fePercentage: null,
-            znPercentage: null,
-            pbPercentage: null,
-          };
-        }
-
-        // Update totalSolidFlow for the current link
-        currentLink.feed.totalSolidFlow = previousTotalSolidFlow + 1;
-      } else {
-        console.log(`Skipping update for link ${currentLinkId} with no 'from' node`);
-      }
-
-      this.setState({ ...updatedChart }, () => {
-        console.log(`Link ${currentLinkId} updated`);
-        updateLinkFlowSequentially(linkIds.slice(1));
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(parsedData),
       });
-    };
+  
+      if (response.ok) {
+        const responseData = await response.json();
 
-    const allLinkIds = Object.keys(updatedChart.links);
-    updateLinkFlowSequentially(allLinkIds);
+        this.setState(responseData);
 
-    this.handleSimulateClick(iterationCount - 1);
+        console.log("Response from the Flask app:", responseData);
+      } else {
+        console.error(`Error occurred: ${response.status}, ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error sending request:', error);
+    }
+
 
   }
 
+
+  //----------------------------------------------
   private handleCheckPorts = () => {
     const { nodes, links } = this.state;
     let allPortsLinked = true;

@@ -71,7 +71,6 @@ export const ArrowLink = ({
         cursor: 'pointer',
         left: 0,
         right: 0,
-        zIndex: 1000,
       }}
       className={className}
     >
@@ -101,7 +100,8 @@ export const ArrowLink = ({
         stroke={linkColor}
         strokeWidth="20"
         fill="none"
-        strokeOpacity={0}
+        strokeLinecap="round"
+        strokeOpacity={isHovered || isSelected ? 0.1 : 0}
         onMouseEnter={() => onLinkMouseEnter({ config, linkId: link.id })}
         onMouseLeave={() => onLinkMouseLeave({ config, linkId: link.id })}
         onClick={(e) => {
