@@ -22,6 +22,7 @@ const PageContent = styled.div`
   flex: 1;
   max-width: 100vw;
   max-height: 100vh;
+  height: 100vh;
 `
 
 export const Page = ({ children }: { children: any}) => (

@@ -1,0 +1,36 @@
+/* In your CSS file or style block */
+.styled-input-container {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center; /* Align label, input, and unit vertically */
+  }
+  
+.styled-input-container label {
+  margin-right: 10px;
+  width: 250px;
+}
+
+.input-unit-container {
+  display: flex;
+  align-items: center;
+}
+
+.styled-input {
+  width: 45%;
+  padding: 3px; /* Adjust padding for a tighter input */
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 5px; /* Add margin between input and unit */
+}
+
+.unit {
+  font-size: 12px;
+  color: #555; /* Adjust color for the unit */
+}
+  
+
+/* .styled-input-container .value {
+    flex-grow: 1; 
+    text-align: left; 
+  } */

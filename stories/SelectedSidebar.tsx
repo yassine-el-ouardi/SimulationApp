@@ -7,6 +7,10 @@ import { Content, Page, Sidebar } from './components'
 import { chartSimple } from './misc/exampleChartState'
 import { onUpdateNodeProperty, onUpdateLinkProperty } from '../src/container/actions'
 import { saveState, loadStateFromFile } from '../src/container/actions'
+import '../src/custom.css'
+
+
+const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
 
 const Message = styled.div`
   margin: 10px;
@@ -37,6 +41,7 @@ const CheckPortsButton = styled.button`
   margin: 4px 2px;
   cursor: pointer;
 `
+console.log(CheckPortsButton);
 
 const SaveStateButton = styled.button`
   background-color: #E74C3C; /* red */
@@ -64,18 +69,16 @@ const LoadStateButton = styled.button`
 `
 export class SelectedSidebar extends React.Component {
   public state = cloneDeep(chartSimple)
+
+
   public render() {
     const chart = this.state
+    // console.log('selected item', chart);
     const selectedNode = chart.selected.id ? chart.nodes[chart.selected.id] : null;
     const selectedLink = chart.selected.id ? chart.links[chart.selected.id] : null;
     const stateActions = mapValues(actions, (func: any) =>
       (...args: any) => this.setState(func(...args))) as typeof actions
 
-    
-  /*console.log('from outside', selectedLink);*/
-    
-    // console.log('selectedNode', selectedNode);
-    //console.log('id', chart.selected.id);
     return (
       <Page>
         <Content>
@@ -97,19 +100,24 @@ export class SelectedSidebar extends React.Component {
                       <>
                         <h4>Cell Characteristics:</h4>
                         {
-                          Object.entries(selectedNode.cellCharacteristics || {}).map(([key, value]) => (
-                            <div key={key}>
+                          Object.entries(selectedNode.cellCharacteristics || {}).map(([key, value], index) => (
+                            <div key={key} className='styled-input-container'>
                               <label>{key}: </label>
-                              <input type="text"
-                                value={value !== null && value !== undefined ? value.toString() : ''} onChange={(e) => {
-                                  const newValue = e.target.value;
-                                  const propertyKey = key; // The property name (e.g., 'netVolume', 'pulpArea', etc.)
-
-                                  // Call the action function to update the state
-                                  this.setState(onUpdateNodeProperty(propertyKey, newValue));
-
-
-                                }} />
+                              <div className="input-unit-container">
+                                <input
+                                  className="styled-input"
+                                  type="text"
+                                  value={value !== null && value !== undefined ? value.toString() : ''}
+                                  onChange={(e) => {
+                                    const newValue = e.target.value;
+                                    const propertyKey = key;
+                                
+                                    // Call the action function to update the state
+                                    this.setState(onUpdateNodeProperty(propertyKey, newValue));
+                                  }}
+                                />
+                                <span className="unit">{unitsArray[index]}</span>
+                              </div>
                             </div>
                           ))
                         }
@@ -118,8 +126,6 @@ export class SelectedSidebar extends React.Component {
                     }
                   </Message>
                 </>
-
-
                 : chart.selected.type === 'link' && chart.selected.id !== 'First_Stream_id'
                   ? (
                     // New link type handling
@@ -129,11 +135,10 @@ export class SelectedSidebar extends React.Component {
                         <div>ID: {chart.selected.id}</div>
                         <h4>Stream:</h4>
                         {
-
                           selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
-                            <div key={key}>
-                              <span>{key}: </span>
-                              <span>{value !== null && value !== undefined ? value.toString() : 'N/A'}</span>
+                            <div key={key} className='styled-input-container'>
+                              <label>{key}: </label>
+                              <span className="value">{value !== null && value !== undefined ? value.toString() : 'N/A'}</span>
                             </div>
                           ))
                         }
@@ -152,9 +157,9 @@ export class SelectedSidebar extends React.Component {
                           <h4>Stream:</h4>
                           {
                             selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
-                              <div key={key}>
+                              <div key={key} className='styled-input-container'>
                                 <label>{key}: </label>
-                                <input type="text"
+                                <input type="text" className='styled-input'
                                   value={value !== null && value !== undefined ? value.toString() : ''} onChange={(e) => {
                                     const newValue = e.target.value;
                                     const propertyKey = key; // The property name (e.g., 'netVolume', 'pulpArea', etc.)
@@ -182,9 +187,9 @@ export class SelectedSidebar extends React.Component {
             Simulate
           </SimulateButton>
           
-          <CheckPortsButton onClick={this.handleCheckPorts}>
+          {/* <CheckPortsButton onClick={this.handleCheckPorts}>
             Check Ports
-          </CheckPortsButton>
+          </CheckPortsButton> */}
 
           <SaveStateButton onClick={this.handleSave}>
             Save

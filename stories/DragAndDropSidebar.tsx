@@ -39,6 +39,8 @@ const LoadStateButton = styled.button`
   cursor: pointer;
 `
 
+console.log(LoadStateButton, SaveStateButton);
+
 interface DragAndDropSidebarProps {
   onStateChange: (chart: IChart) => void;
 
@@ -48,7 +50,6 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
   
   const [chartState, setChartState] = React.useState(chartSimple);
 
-
   const handleLoad = () => {
     // Call the loadStateFromFile function and provide a callback to handle the loaded state
     loadStateFromFile((loadedChart) => {
@@ -57,8 +58,7 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
       console.log('Loaded Chart State:', loadedChart); // Log the loaded chart state for debugging
     });
   };
-  
-  
+  handleLoad
   return(
   <Page>
     <Content>
@@ -144,12 +144,12 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
           },
         }}
       />
-          <SaveStateButton /*onClick={this.handleSave}*/>
+          {/* <SaveStateButton /*onClick={this.handleSave}>
             Save
           </SaveStateButton>
           <LoadStateButton onClick={handleLoad}>
             Load
-          </LoadStateButton>
+          </LoadStateButton> */}
     </Sidebar>
   </Page>
 
