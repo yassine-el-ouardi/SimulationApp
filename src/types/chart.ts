@@ -103,7 +103,7 @@ export type IPort<PortProps = undefined> = {
   properties: PortProps,
 })
 
-export type ILink<LinkProps = undefined> = {
+export type ILink<LinkProps = undefined> = {//add way points like achik diagram also first last cell should not have a fixed position for its from or to link
   id: string
   from: {
     nodeId?: string;

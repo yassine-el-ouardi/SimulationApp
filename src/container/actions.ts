@@ -255,6 +255,8 @@ export const onDeleteKey: IStateCallback<IOnDeleteKey> = ({ config }: IConfig) =
 export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart: IChart) => {
   //const dashboardUrl = 'http://localhost:3000/app/InternalState'
   //window.open(dashboardUrl, '_blank');
+  //front end will keep sending cell data from moment its dashboard is opened when closed everything is deleted
+  //add help with names of devs or teachers fetched from json
   if (chart.selected.id !== nodeId || chart.selected.type !== 'node') {
     chart.selected = {
       type: 'node',
