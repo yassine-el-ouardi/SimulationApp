@@ -10,6 +10,19 @@ import { saveState, loadStateFromFile } from '../src/container/actions'
 import '../src/custom.css'
 
 
+// interface DataObject {
+//   cuPercentage: number;
+//   fePercentage: number;
+//   pbPercentage: number;
+//   pulpSG: number;
+//   pulpVolumetricFlow: number;
+//   solidsFraction: number;
+//   solidsSG: number;
+//   totalLiquidFlow: number;
+//   totalSolidFlow: number;
+//   znPercentage: number;
+//  }
+
 const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
 
 const Message = styled.div`
@@ -29,19 +42,6 @@ const SimulateButton = styled.button`
   margin: 4px 2px;
   cursor: pointer;
 `
-const CheckPortsButton = styled.button`
-  background-color: #f0ad4e; /* Orange */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-`
-console.log(CheckPortsButton);
 
 const SaveStateButton = styled.button`
   background-color: #E74C3C; /* red */
@@ -57,6 +57,18 @@ const SaveStateButton = styled.button`
 `
 const LoadStateButton = styled.button`
   background-color: #B5BAB8; /* gray */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`
+const SenarioButton = styled.button`
+  background-color: #f0ad4e; /* Orange */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -186,11 +198,6 @@ export class SelectedSidebar extends React.Component {
           <SimulateButton onClick={this.handleSimulateClick}>
             Simulate
           </SimulateButton>
-          
-          {/* <CheckPortsButton onClick={this.handleCheckPorts}>
-            Check Ports
-          </CheckPortsButton> */}
-
           <SaveStateButton onClick={this.handleSave}>
             Save
           </SaveStateButton>
@@ -198,6 +205,9 @@ export class SelectedSidebar extends React.Component {
           <LoadStateButton onClick={this.handleLoad}>
             Load
           </LoadStateButton>
+          <SenarioButton onClick={this.handleSenario}>
+            Run senario
+          </SenarioButton>
           <Message>{this.handleCheckPorts()}</Message>
         </Sidebar>
       </Page>
@@ -255,6 +265,61 @@ export class SelectedSidebar extends React.Component {
 
   }
 
+  //------------------------------------------------------------------------------senario
+
+
+  private handleSenario = async () => {
+    const dataUrl = 'http://127.0.0.1:5000/fetch-csv-data';
+    const chart = this.state;
+  
+    try {
+      const response = await fetch(dataUrl);
+      if (response.ok) {
+        const jsonData = await response.json();
+  
+        // Iterate over the array and log each object
+        for (let index = 0; index < jsonData.length; index++) {
+          const dataObject = jsonData[index];
+          const updatedChart = { ...chart };
+          updatedChart.links.First_Stream_id.feed = dataObject;
+          // console.log(`chart for ${index}`, updatedChart);
+  
+          // send request to the backend process-circuit endpoint
+          try {
+            const processCircuitUrl = 'http://127.0.0.1:5000/process-circuit';
+            const updatedChartString = JSON.stringify(updatedChart);
+            console.log(`sent json for ${index}`,updatedChartString);
+            
+  
+            const response = await fetch(processCircuitUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(updatedChartString),
+            });
+  
+            if (response.ok) {
+              const responseData = await response.json();
+              this.setState(responseData);
+              console.log(`Response from the backend for Object ${index}:`, responseData);
+              await new Promise(resolve => setTimeout(resolve, 10000));
+            } else {
+              console.error(`Error occurred: ${response.status}, ${response.statusText}`);
+            }
+          } catch (error) {
+            console.error('Error sending request to process-circuit endpoint:', error);
+          }
+        }
+      } else {
+        console.error(`Error occurred: ${response.status}, ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error handling CSV file:', error);
+      // Handle error if needed
+    }
+  }
+  
 
   //----------------------------------------------
   private handleCheckPorts = () => {
@@ -279,7 +344,7 @@ export class SelectedSidebar extends React.Component {
   
         if (!isLinked) {
           allPortsLinked = false;
-          console.log(`Port ${portId} on node ${nodeId} is not connected to any link.`);
+          // console.log(`Port ${portId} on node ${nodeId} is not connected to any link.`);
           break; // Stop checking other ports if one is already found not linked
         }
       }

@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 import json
 import requests
 from flask_cors import CORS
+import pandas as pd
 
 
 # Assurez-vous d'importer ou de définir ici les classes Node et Link, ainsi que les fonctions nécessaires
@@ -120,10 +121,9 @@ class Node:
 
         # Parcourir tous les liens pour mettre à jour
         for link_id, link in links.items():
-
-                 if link_id == "First_Stream_id":
-                    link.feed = dict.fromkeys(link.feed, 0)
-                    print("  feed a 0 pour fisrt cell", link.feed)
+            if link_id == "First_Stream_id":
+                link.feed = dict.fromkeys(link.feed, 0)
+                print("  feed a 0 pour fisrt cell", link.feed)
 
          # Parcourir tous les liens pour mettre à jour
         for link_id, link in links.items():
@@ -428,15 +428,6 @@ def process_json(parsed_data):
 
 ##################################### Flask API ##########################""
 
-
-
-
-
-
-
-
-
-
 @app.route('/process-circuit', methods=['POST'])
 def process_circuit():
     # Receive JSON data from frontend
@@ -456,6 +447,20 @@ def process_circuit():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/fetch-csv-data', methods=['GET'])
+def fetch_csv_data():
+    try:
+        # Read the CSV file using pandas
+        df = pd.read_csv("senario_input.csv")
+
+        # Convert the DataFrame to JSON and return it
+        return jsonify(df.to_dict(orient='records'))
+    except FileNotFoundError:
+        return "CSV file not found", 404
+    except Exception as e:
+        return str(e), 500
 
 @app.route('/')
 def home():
