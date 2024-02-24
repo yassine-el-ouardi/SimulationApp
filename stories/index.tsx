@@ -5,6 +5,7 @@ import { SelectedSidebar } from './SelectedSidebar'
 import CheckPortsButton from './CheckPortsButton'
 import { chartSimple } from './misc/exampleChartState'
 import { IChart } from '../'
+// import MotherComp from '../src/components/dashboard/MotherComp'
 
 const StoryWrapper = () => {
   const [chart, setChart] = React.useState(chartSimple);
@@ -25,3 +26,4 @@ const StoryWrapper = () => {
 storiesOf('Sidebar', module)
   .add('Flowsheet drawing', () => <StoryWrapper />)
   .add('Simulation and data Analytics', () => <SelectedSidebar />)
+  // .add('dashboard', () => <MotherComp />)

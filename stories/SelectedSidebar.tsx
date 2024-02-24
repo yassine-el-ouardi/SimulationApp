@@ -10,19 +10,6 @@ import { saveState, loadStateFromFile } from '../src/container/actions'
 import '../src/custom.css'
 
 
-// interface DataObject {
-//   cuPercentage: number;
-//   fePercentage: number;
-//   pbPercentage: number;
-//   pulpSG: number;
-//   pulpVolumetricFlow: number;
-//   solidsFraction: number;
-//   solidsSG: number;
-//   totalLiquidFlow: number;
-//   totalSolidFlow: number;
-//   znPercentage: number;
-//  }
-
 const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
 
 const Message = styled.div`
