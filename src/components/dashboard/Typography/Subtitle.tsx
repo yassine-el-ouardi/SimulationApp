@@ -1,4 +1,6 @@
-function Subtitle({styleClass, children}){
+import * as React from 'react'
+
+function Subtitle({styleClass, children}:{styleClass:any, children:any}){
     return(
         <div className={`text-xl font-semibold ${styleClass}`}>{children}</div>
     )

@@ -5,7 +5,10 @@ import { SelectedSidebar } from './SelectedSidebar'
 import CheckPortsButton from './CheckPortsButton'
 import { chartSimple } from './misc/exampleChartState'
 import { IChart } from '../'
-// import MotherComp from '../src/components/dashboard/MotherComp'
+
+import MotherComp from '../src/components/dashboard/MotherComp'
+import Concentrate from '../src/components/dashboard/Concentrate'
+import Tailing from '../src/components/dashboard/Tailing'
 
 const StoryWrapper = () => {
   const [chart, setChart] = React.useState(chartSimple);
@@ -23,7 +26,15 @@ const StoryWrapper = () => {
   );
 }
 
+
+
+
 storiesOf('Sidebar', module)
-  .add('Flowsheet drawing', () => <StoryWrapper />)
-  .add('Simulation and data Analytics', () => <SelectedSidebar />)
-  // .add('dashboard', () => <MotherComp />)
+.add('Flowsheet drawing', () => <StoryWrapper />)
+.add('Simulation and data Analytics', () => <SelectedSidebar />)
+
+
+storiesOf('Dashboard', module)
+  .add('Main Dashboard', () => <MotherComp />)
+  .add('Concentrate', () => <Concentrate />)
+  .add('Tailing', () => <Tailing />)

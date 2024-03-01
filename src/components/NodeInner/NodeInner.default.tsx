@@ -12,7 +12,7 @@ export interface INodeInnerDefaultProps {
 
 export const NodeInnerDefault = ({ node,className }: INodeInnerDefaultProps) => {
   return (
-      <img src='https://cdn.discordapp.com/attachments/1118115066500370525/1160863833515098163/cell.png?ex=653635b1&is=6523c0b1&hm=9f48dc5d6c458eeebf9ba8cc61ac37bbc20b5d1c0b17b4647af3b1b403f89472&' alt="Cell" 
+      <img src='https://cdn.discordapp.com/attachments/1118115066500370525/1160863833515098163/cell.png?ex=65eec7b1&is=65dc52b1&hm=f300c5268ee2d09432065edc640bf8e56bd4f07f43a4679a7ec1fc01a70e5d47&' alt="Cell" 
       style={{width: '75px'}}/>
   )
 }

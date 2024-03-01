@@ -185,6 +185,7 @@ export class SelectedSidebar extends React.Component {
           <SimulateButton onClick={this.handleSimulateClick}>
             Simulate
           </SimulateButton>
+          
           <SaveStateButton onClick={this.handleSave}>
             Save
           </SaveStateButton>
@@ -212,8 +213,6 @@ export class SelectedSidebar extends React.Component {
       this.setState(loadedChart);
     });
   }
-
-
 
   //----------------------------------------------------------------------
 
@@ -251,6 +250,7 @@ export class SelectedSidebar extends React.Component {
 
 
   }
+
 
   //------------------------------------------------------------------------------senario
 

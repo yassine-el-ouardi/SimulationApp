@@ -38,11 +38,17 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
+    "@remix-run/router": "^1.15.2",
+    "@storybook/router": "^7.6.17",
+    "@types/react-chartjs-2": "^2.5.7",
+    "@types/react-router-dom": "^5.3.3",
+    "chart.js": "^4.4.2",
     "file-system-cache": "^2.4.4",
     "find-cache-dir": "^3.3.2",
     "pathfinding": "^0.4.18",
     "react-draggable": "^4.4.3",
     "react-resize-observer": "^1.1.1",
+    "react-router-dom": "^6.22.2",
     "react-zoom-pan-pinch": "^1.6.1",
     "socket.io-client": "^4.7.4",
     "uuid": "^3.3.2"

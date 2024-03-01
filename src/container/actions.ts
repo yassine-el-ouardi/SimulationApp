@@ -29,6 +29,7 @@ import { rotate } from './utils/rotate'
 
 import { ISelectedOrHovered } from './../types/chart';
 
+
 function getOffset (config: any, data: any, zoom?: number) {
   let offset = { x: data.x, y: data.y }
   if (config && config.snapToGrid) {
@@ -255,20 +256,6 @@ export const onDeleteKey: IStateCallback<IOnDeleteKey> = ({ config }: IConfig) =
 export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart: IChart) => {
   //const dashboardUrl = 'http://localhost:3000/app/InternalState'
   //window.open(dashboardUrl, '_blank');
-  // const dataToSend = { type: 'DATA_UPDATE', data: { key1: 'value1', key2: 'value2' } };
-  // const dashboardWindow = window.open('http://localhost:3000/test.html', '_blank');
-
-  // if (dashboardWindow) {
-  //   dashboardWindow.addEventListener('DOMContentLoaded', () => {
-  //     // Send data to the second app
-  //     console.log('Sending data');
-  //     dashboardWindow.postMessage(dataToSend, '*');
-  //   });
-  // } else {
-  //   console.error('Failed to open the dashboard window.');
-  // }
-
-
   //front end will keep sending cell data from moment its dashboard is opened when closed everything is deleted
   //add help with names of devs or teachers fetched from json
   if (chart.selected.id !== nodeId || chart.selected.type !== 'node') {
@@ -297,6 +284,8 @@ export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart:
 }
 
 export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }) => (chart: IChart) => {
+  console.log(chart.selected.id);
+  
   if (chart.selected.id !== nodeId || chart.selected.type !== 'node') {
     chart.selected = {
       type: 'node',
@@ -577,6 +566,8 @@ export const onUpdateNodeProperty = (key: string, value: string | number) => (ch
 
   return chart;
 };
+
+
 
 export const onUpdateLinkProperty = (key: string, value: string | number, linkId: string) => (chart: IChart) => {
   const { selected } = chart;
