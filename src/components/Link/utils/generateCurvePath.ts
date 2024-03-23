@@ -7,7 +7,7 @@ export const getDirectional = (startPos: IPosition, endPos: IPosition) => {
   const height = Math.abs(startPos.y - endPos.y)
   const leftToRight = startPos.x < endPos.x
   const topToBottom = startPos.y < endPos.y
-  const isHorizontal = false
+  const isHorizontal = true
 
   return { width, height,leftToRight,topToBottom,isHorizontal }
 }

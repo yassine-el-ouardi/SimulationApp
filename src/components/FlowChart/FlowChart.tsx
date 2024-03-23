@@ -5,12 +5,15 @@ import {
   IOnDragCanvasStop, IOnDragNode, IOnDragNodeStop, IOnLinkCancel, IOnLinkClick, IOnLinkComplete, IOnLinkMouseEnter,
   IOnLinkMouseLeave, IOnLinkMove, IOnLinkStart, IOnNodeClick, IOnNodeDoubleClick, IOnNodeMouseEnter, IOnNodeMouseLeave, IOnNodeSizeChange,
   IOnPortPositionChange, IOnZoomCanvas, IPortDefaultProps, IPortsDefaultProps, ISelectedOrHovered, LinkDefault, LinkWrapper, NodeDefault, NodeInnerDefault, NodeWrapper, PortDefault, PortsDefault,
+  IOnDragLink, IOnDragLinkStop,
 } from '../../'
 import { getMatrix } from './utils/grid'
 
 export interface IFlowChartCallbacks {
   onDragNode: IOnDragNode
   onDragNodeStop: IOnDragNodeStop
+  onDragLink: IOnDragLink
+  onDragLinkStop: IOnDragLinkStop
   onDragCanvas: IOnDragCanvas
   onCanvasDrop: IOnCanvasDrop
   onDragCanvasStop: IOnDragCanvasStop
@@ -71,6 +74,8 @@ export const FlowChart = (props: IFlowChartProps) => {
     callbacks: {
       onDragNode,
       onDragNodeStop,
+      onDragLink,
+      onDragLinkStop,
       onDragCanvas,
       onDragCanvasStop,
       onCanvasDrop,
@@ -105,7 +110,7 @@ export const FlowChart = (props: IFlowChartProps) => {
   const { links, nodes, selected, hovered, offset, scale } = chart
 
   const canvasCallbacks = { onDragCanvas, onDragCanvasStop, onCanvasClick, onDeleteKey, onCanvasDrop, onZoomCanvas }
-  const linkCallbacks = { onLinkMouseEnter, onLinkMouseLeave, onLinkClick }
+  const linkCallbacks = { onDragLink, onDragLinkStop, onLinkMouseEnter, onLinkMouseLeave, onLinkClick }
   const nodeCallbacks = { onDragNode, onNodeClick, onDragNodeStop, onNodeMouseEnter, onNodeMouseLeave, onNodeSizeChange,onNodeDoubleClick }
   const portCallbacks = { onPortPositionChange, onLinkStart, onLinkMove, onLinkComplete, onLinkCancel }
 
@@ -122,7 +127,7 @@ export const FlowChart = (props: IFlowChartProps) => {
     return !(isTooFarLeft || isTooFarRight || isTooFarUp || isTooFarDown)
   })
 
-  const matrix = config.smartRouting ? getMatrix(chart.offset, Object.values(nodesInView.map((nodeId) => nodes[nodeId]))) : undefined
+  const matrix = getMatrix(chart.offset, Object.values(nodesInView.map((nodeId) => nodes[nodeId])))
 
   const linksInView = Object.keys(links).filter((linkId) => {
     const from = links[linkId].from
@@ -153,6 +158,7 @@ export const FlowChart = (props: IFlowChartProps) => {
 
         return (
           <LinkWrapper
+            //draggable={true}
             config={config}
             key={linkId}
             link={links[linkId]}

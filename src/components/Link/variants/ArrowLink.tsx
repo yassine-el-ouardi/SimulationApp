@@ -33,6 +33,7 @@ export interface IArrowLinkProps {
   onLinkMouseEnter: IOnLinkMouseEnter
   onLinkMouseLeave: IOnLinkMouseLeave
   onLinkClick: IOnLinkClick
+  onWaypointMouseDown?: (event: React.MouseEvent<SVGCircleElement, MouseEvent>, index: number) => void;
 }
 
 export const ArrowLink = ({
@@ -48,6 +49,7 @@ export const ArrowLink = ({
   onLinkMouseEnter,
   onLinkMouseLeave,
   onLinkClick,
+  onWaypointMouseDown,
 }: IArrowLinkProps) => {
   const { leftToRight, topToBottom, isHorizontal } = getDirectional(
     startPos,
@@ -71,6 +73,9 @@ export const ArrowLink = ({
         cursor: 'pointer',
         left: 0,
         right: 0,
+        display:'block',
+        width:'100%',
+        height:'100%',
       }}
       className={className}
     >
@@ -80,7 +85,7 @@ export const ArrowLink = ({
         orient="auto-start-reverse"
         markerWidth="4"  // Doubled from 2 to 4
         markerHeight="8" // Doubled from 4 to 8
-        refX="0.1"
+        refX="8"
         refY="4"         // Adjusted from 2 to 4
       >
           <path d="M0,0 V8 L4,4 Z" fill={linkColor} />
@@ -90,7 +95,7 @@ export const ArrowLink = ({
       <path
         d={points}
         stroke={linkColor}
-        strokeWidth="3"
+        strokeWidth="1.5"
         fill="none"
         {...marker}
       />
@@ -109,6 +114,19 @@ export const ArrowLink = ({
           e.stopPropagation()
         }}
       />
+       {/* Waypoints */}
+       {link.waypoints && link.waypoints.map((waypoint, index) => (
+        <circle
+          key={index}
+          cx={waypoint.x}
+          cy={waypoint.y}
+          r={3} // Radius of the waypoint handle
+          fill="black" // Color of the waypoint handle
+          stroke="none"
+          style={{ cursor: 'move' }} // Cursor indicates the waypoint can be moved
+          onMouseDown={(event) => onWaypointMouseDown && onWaypointMouseDown(event, index)}
+        />
+        ))}
     </svg>
   )
 }

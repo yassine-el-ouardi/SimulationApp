@@ -9,6 +9,8 @@ import {
   IOnDragCanvasStop,
   IOnDragNode,
   IOnDragNodeStop,
+  IOnDragLink,
+  IOnDragLinkStop,
   IOnLinkCancel,
   IOnLinkClick,
   IOnLinkComplete,
@@ -26,6 +28,8 @@ import {
   IStateCallback,
 } from '../'
 import { rotate } from './utils/rotate'
+
+import { getLinkPosition } from './utils/getLinkPosition'
 
 import { ISelectedOrHovered } from './../types/chart';
 
@@ -48,6 +52,49 @@ function getOffset (config: any, data: any, zoom?: number) {
 /**
  * This file contains actions for updating state after each of the required callbacks
  */
+
+//-------------------------------------
+// This function updates the position of a single waypoint or initializes it when dragged
+export const onDragLink: IStateCallback<IOnDragLink> = ({ config, event, data, id }) => (chart: IChart) => {
+  const link = chart.links[id];
+
+  // This variable should be determined when the drag starts and then used throughout the drag operation
+  // For this example, let's assume it's determined elsewhere and passed in with 'data'
+  const draggingWaypointIndex = data.waypointIndex;
+
+  if (link && link.waypoints && draggingWaypointIndex != null && link.waypoints[draggingWaypointIndex]) {
+    // Update only the position of the waypoint being dragged based on the drag delta
+    const updatedWaypoint = {
+      x: link.waypoints[draggingWaypointIndex].x + data.deltaX,
+      y: link.waypoints[draggingWaypointIndex].y + data.deltaY,
+    };
+
+    // Create a new waypoints array with the updated waypoint
+    const updatedWaypoints = [...link.waypoints];
+    updatedWaypoints[draggingWaypointIndex] = updatedWaypoint;
+
+    // Update the chart with the modified link
+    chart.links[id] = {
+      ...link,
+      waypoints: updatedWaypoints,
+    };
+  }
+
+  return chart;
+};
+
+
+
+
+// This function is called when the dragging stops
+export const onDragLinkStop: IStateCallback<IOnDragLinkStop> = ({ config, event, data, id }) => (chart: IChart) => {
+  // The onDragLinkStop function can be used to finalize the link dragging action
+  // For now, it simply returns the chart unchanged.
+  // Add any finalization logic here if necessary
+  return chart;
+};
+
+//-------------------------------------
 
 export const onDragNode: IStateCallback<IOnDragNode> = ({ config, event, data, id }) => (chart: IChart) => {
   const nodechart = chart.nodes[id]
@@ -81,6 +128,20 @@ export const onDragCanvasStop: IStateCallback<IOnDragCanvasStop> = () => identit
 export const onLinkStart: IStateCallback<IOnLinkStart> = ({ linkId, fromNodeId, fromPortId }) => (
   chart: IChart,
 ): IChart => {
+  //---------------------------waypoints
+/*
+  const fromNode = chart.nodes[fromNodeId];
+  //const fromPort = fromNode.ports[fromPortId];
+  const startPos = getLinkPosition(fromNode, fromPortId);
+  // Initialize waypoints extending in an arbitrary direction from the start position
+  // For demonstration, let's extend them horizontally by an arbitrary amount (e.g., 100 units)
+  const waypointOffset = 50; 
+  const waypoints = [
+    { x: startPos.x + waypointOffset, y: startPos.y },
+    { x: startPos.x + 2 * waypointOffset, y: startPos.y }
+  ];
+*/
+  //--------------------------------------
   chart.links[linkId] = {
     id: linkId,
     from: {
@@ -88,6 +149,7 @@ export const onLinkStart: IStateCallback<IOnLinkStart> = ({ linkId, fromNodeId, 
       portId: fromPortId,
     },
     to: {},
+    //waypoints,
     feed: {
       totalSolidFlow: null,
       totalLiquidFlow: null,
@@ -114,7 +176,7 @@ export const onLinkMove: IStateCallback<IOnLinkMove> = ({ linkId, toPosition }) 
 }
 
 export const onLinkComplete: IStateCallback<IOnLinkComplete> = (props) => {
-  const { linkId, fromNodeId, fromPortId, toNodeId, toPortId, config = {} } = props
+  const { linkId, fromNodeId, fromPortId, toNodeId, toPortId, config = {} } = props;
 
   return (chart: IChart): IChart => {
     if (
@@ -122,16 +184,41 @@ export const onLinkComplete: IStateCallback<IOnLinkComplete> = (props) => {
       (config.validateLink ? config.validateLink({ ...props, chart }) : true) &&
       [fromNodeId, fromPortId].join() !== [toNodeId, toPortId].join()
     ) {
-      chart.links[linkId].to = {
-        nodeId: toNodeId,
-        portId: toPortId,
+      const fromNode = chart.nodes[fromNodeId];
+      const toNode = chart.nodes[toNodeId];
+
+      if (fromNode && toNode) {
+        const startPos = getLinkPosition(fromNode, fromPortId);
+        const endPos = getLinkPosition(toNode, toPortId);
+
+        // Generate waypoints using the logic similar to the previous version:
+        // Create a right angle using a midpoint along the x-axis between the start and end positions
+        const midX = (startPos.x + endPos.x) / 2;
+        const waypoints = [
+          { x: midX, y: startPos.y }, // Midpoint along x, but aligned with startY
+          { x: midX, y: endPos.y }   // Midpoint along x, but aligned with endY
+        ];
+
+        // Update the link with the 'to' node/port and calculated waypoints
+        chart.links[linkId] = {
+          ...chart.links[linkId],
+          to: {
+            nodeId: toNodeId,
+            portId: toPortId,
+          },
+          waypoints
+        };
       }
     } else {
-      delete chart.links[linkId]
+      // If the link is not valid, remove it
+      delete chart.links[linkId];
     }
-    return chart
-  }
-}
+
+    return chart;
+  };
+};
+
+
 
 export const onLinkCancel: IStateCallback<IOnLinkCancel> = ({ linkId }) => (chart: IChart) => {
   delete chart.links[linkId]
@@ -337,7 +424,16 @@ export const onPortPositionChange: IStateCallback<IOnPortPositionChange> = ({
     }
     const angle = nodeToUpdate.orientation || 0
     const position = rotate(center, current, angle)
-
+/*
+    if(port.id == "port3"){
+      position.x -= 25;
+      position.y += 30;
+    }
+    if(port.id == "port4"){
+      position.x += 8;
+      position.y -= 38;
+    }
+*/
     const node = chart.nodes[nodeToUpdate.id]
     node.ports[port.id].position = {
       x: position.x,
@@ -397,6 +493,16 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       y: position.y + 50,  // For example, 50 pixels below the new node's position
     };
 
+    const targetPosition1 = {
+      x: position.x - 75,
+      y: position.y + 25,
+    };
+
+    const targetPosition2 = {
+      x: position.x - 50,
+      y: position.y + 10,
+    };
+
     chart.links[newLinkId] = {
       id: newLinkId,
       from: {
@@ -406,6 +512,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         nodeId: id,
         portId: "port1", // Specify the correct port ID
       },
+      waypoints: [targetPosition1,targetPosition2],
       feed: data.feed || {
         totalSolidFlow: null,
         totalLiquidFlow: null,
@@ -614,7 +721,7 @@ export const saveState = (chart: IChart) => {
     const link = document.createElement('a');
 
     link.href = URL.createObjectURL(blob);
-    link.download = 'chart_state.txt';
+    link.download = 'chart_state.json';
 
     document.body.appendChild(link);
     link.click();

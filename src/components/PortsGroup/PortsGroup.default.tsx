@@ -16,8 +16,8 @@ export const PortsGroupDefault = styled.div<IPortsGroupDefaultProps>`
     if (props.side === 'top') {
       return css`
         min-width: 142px;
-        left: 0;
-        top: -12px;
+        left: -20px;
+        top: 17px;
         flex-direction: row;
         > div {
           margin: 0 3px;
@@ -26,8 +26,8 @@ export const PortsGroupDefault = styled.div<IPortsGroupDefaultProps>`
     } else if (props.side === 'bottom') {
       return css`
         min-width: 142px;
-        left: 0;
-        bottom: -12px;
+        left: 10px;
+        bottom: 25px;
         flex-direction: row;
         > div {
           margin: 0 3px;

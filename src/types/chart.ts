@@ -117,6 +117,7 @@ export type ILink<LinkProps = undefined> = {//add way points like achik diagram 
     /** System Temp */
     position?: IPosition;
   },
+  waypoints?: IPosition[]; // An array of positions that act as draggable points along the link
   feed: { //the feed data should actually be displayed when selecting a stream, only first stream feed should be editable by the user 
     totalSolidFlow: number| null
     totalLiquidFlow: number| null

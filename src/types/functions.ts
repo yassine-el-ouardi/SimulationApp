@@ -31,6 +31,35 @@ export interface IOnDragNodeStopInput {
 
 export type IOnDragNodeStop = (input: IOnDragNodeStopInput) => void
 
+//------------------------------------------------------
+
+// Extend DraggableData to include waypointIndex
+export interface IExtendedDraggableData extends DraggableData {
+  waypointIndex?: number; // Make waypointIndex optional
+}
+
+
+export type IOnDragLink = (input: IOnDragLinkInput) => void
+
+export interface IOnDragLinkInput {
+  config?: IConfig
+  event: DraggableEvent
+  data: IExtendedDraggableData
+  id: string
+}
+
+export type IOnDragLinkStop = (input: IOnDragLinkStopInput) => void
+
+export interface IOnDragLinkStopInput {
+  config?: IConfig
+  event: MouseEvent
+  data: DraggableData
+  id: string
+}
+
+
+//------------------------------------------------------
+
 export interface IOnDragCanvasStopInput {
   config?: IConfig
   data: any

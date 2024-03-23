@@ -62,7 +62,8 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
   return(
   <Page>
     <Content>
-      <FlowChartWithState initialValue={chartState} onStateChange={onStateChange}/>
+      <FlowChartWithState initialValue={chartState} onStateChange={onStateChange}
+      config={{ smartRouting: true }}/>
     </Content>
     <Sidebar>
       <Message>
