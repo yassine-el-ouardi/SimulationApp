@@ -1,10 +1,10 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { FlowChartWithState } from '../src'
-import { Content, Page, Sidebar, SidebarItem } from './components'
-import { chartSimple } from './misc/exampleChartState'
-import { IChart } from '../src'
-import { /*saveState,*/ loadStateFromFile } from '../src/container/actions'
+import { FlowChartWithState } from '..'
+import { Content, Page, Sidebar, SidebarItem } from '.'
+import { chartSimple } from '../misc/exampleChartState'
+import { IChart } from '..'
+import { /*saveState,*/ loadStateFromFile } from '../container/actions'
 
 const Message = styled.div`
 margin: 10px;

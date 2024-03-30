@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IChart } from '../src';
+import { IChart } from '..';
 interface Props {
   chart: IChart;
   }
