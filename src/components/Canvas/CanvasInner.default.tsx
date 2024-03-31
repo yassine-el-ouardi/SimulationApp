@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { IConfig, IOnCanvasClick } from '../../'
+import { IConfig, IOnCanvasClick } from '../../types'
 
 export interface ICanvasInnerDefaultProps {
   className?: string

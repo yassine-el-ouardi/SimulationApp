@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { INode, REACT_FLOW_CHART } from '..'
+import { INode } from '../types'
+import { REACT_FLOW_CHART } from '../constants'
 
 const Outer = styled.div`
   padding: 20px 30px;

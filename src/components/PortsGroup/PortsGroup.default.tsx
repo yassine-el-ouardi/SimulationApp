@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { IConfig } from '../../'
+import { IConfig } from '../../types'
 
 export interface IPortsGroupDefaultProps {
   className?: string

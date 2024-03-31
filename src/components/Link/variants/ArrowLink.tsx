@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition } from '../../../'
+import { IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition } from '../../../types'
 import { getDirectional } from '../utils'
 
 export const calculateAdjustedEndPos = (startPos: IPosition, endPos: IPosition): IPosition => {

@@ -1,7 +1,6 @@
 import {
   IChart,
   IConfig,
-  identity,
   IOnCanvasClick,
   IOnCanvasDrop,
   IOnDeleteKey,
@@ -26,7 +25,9 @@ import {
   IOnPortPositionChange,
   IOnZoomCanvas,
   IStateCallback,
-} from '../'
+} from '../types'
+import {  identity,
+} from '../utils'
 import { rotate } from './utils/rotate'
 
 import { getLinkPosition } from './utils/getLinkPosition'

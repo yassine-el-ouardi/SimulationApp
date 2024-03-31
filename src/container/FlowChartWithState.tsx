@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { FlowChart, IChart, IConfig, IFlowChartComponents } from '../'
+import { IChart, IConfig } from '../types'
+import {FlowChart, IFlowChartComponents} from '../components'
 import * as actions from './actions'
 import mapValues from './utils/mapValues'
 

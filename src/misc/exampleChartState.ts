@@ -1,4 +1,4 @@
-import { IChart } from '..'
+import { IChart } from '../types'
 
 export const chartSimple: IChart = {
   offset: {

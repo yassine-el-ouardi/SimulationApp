@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IPort, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition, IOnDragLink } from '../../';
+import { IPort, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition, IOnDragLink } from '../../types';
 import { ArrowLink, IArrowLinkProps } from './variants/ArrowLink';
 
 import { throttle } from 'lodash';

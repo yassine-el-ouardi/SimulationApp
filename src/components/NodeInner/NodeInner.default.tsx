@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IConfig, INode } from '../../'
+import { IConfig, INode } from '../../types'
 //import cellImage from './cell.png'
 
 export interface INodeInnerDefaultProps {

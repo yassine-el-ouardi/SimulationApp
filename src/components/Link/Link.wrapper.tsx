@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IConfig, ILink, INode, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IOnDragLink } from '../../';
+import { IConfig, ILink, INode, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IOnDragLink } from '../../types';
 import { noop } from '../../utils';
 import { ILinkDefaultProps, LinkDefault } from './Link.default';
 import { getLinkPosition } from './utils';

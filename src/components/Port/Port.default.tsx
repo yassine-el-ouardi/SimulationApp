@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { IConfig, IPort } from '../../'
+import { IConfig, IPort } from '../../types'
 
 export interface IPortDefaultProps {
   className?: string

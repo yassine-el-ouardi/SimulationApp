@@ -8,7 +8,7 @@ import { Content, Page, Sidebar } from '.'
 import { chartSimple } from '../misc/exampleChartState'
 import { onUpdateNodeProperty, onUpdateLinkProperty } from '../container/actions'
 import { saveState, loadStateFromFile } from '../container/actions'
-import '../src/custom.css'
+import '../custom.css'
 
 
 const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]

@@ -1,9 +1,9 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { FlowChartWithState } from '..'
+import { FlowChartWithState } from '../container'
 import { Content, Page, Sidebar, SidebarItem } from '.'
 import { chartSimple } from '../misc/exampleChartState'
-import { IChart } from '..'
+import { IChart } from '../types'
 import { /*saveState,*/ loadStateFromFile } from '../container/actions'
 
 const Message = styled.div`
