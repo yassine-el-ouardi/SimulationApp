@@ -12,7 +12,7 @@
                 "y": 193.2941176470588
             },
             "orientation": 0,
-            "type": "First Cell",
+            "type": "Rougher",
             "ports": {
                 "port1": {
                     "id": "port1",

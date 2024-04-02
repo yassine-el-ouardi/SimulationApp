@@ -399,8 +399,8 @@ def process_json(parsed_data):
     links = {link_id: Link.from_json(link_id, link_data) for link_id, link_data in parsed_data["links"].items()}
     print('the beginning 2')
 
-    # Trouver le nœud de type 'First Cell'
-    first_cell_node_id = next((node_id for node_id, node in nodes.items() if node.node_type == "First Cell"), None)
+    # Trouver le nœud de type 'Rougher'
+    first_cell_node_id = next((node_id for node_id, node in nodes.items() if node.node_type == "Rougher"), None)
     print('before trouver')
     # Extraction des successeurs pour tailing et concentrate streams
     tailing_successors = extract_successors(parsed_data, first_cell_node_id, "port4", include_start_node=True)

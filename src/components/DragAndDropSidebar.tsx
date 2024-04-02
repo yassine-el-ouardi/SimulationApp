@@ -89,7 +89,7 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
         }}
       />
       <SidebarItem
-        type="First Cell"
+        type="Rougher"
         ports={ {
           port1: {
             id: 'port1',

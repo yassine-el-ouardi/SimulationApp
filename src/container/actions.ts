@@ -484,7 +484,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     
     properties: data.properties,
   }
-  if (data.type === "First Cell") {
+  if (data.type === "Rougher") {
     // Create a new link
     const newLinkId = "First_Stream_id"; // Generate a unique ID for the new link
 
