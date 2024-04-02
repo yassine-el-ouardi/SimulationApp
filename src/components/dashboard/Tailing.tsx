@@ -24,7 +24,7 @@ const statsData: StatsData[] = [
 const Tailing: React.FC = () => {
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-2">
+      <div style={{marginTop: '0px'}} className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-2">
         {statsData.map((data, index) => (
           <DashboardStats key={index} {...data} />
         ))}

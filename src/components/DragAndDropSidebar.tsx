@@ -4,7 +4,7 @@ import { FlowChartWithState } from '../container'
 import { Content, Page, Sidebar, SidebarItem } from '.'
 import { chartSimple } from '../misc/exampleChartState'
 import { IChart } from '../types'
-import { /*saveState,*/ loadStateFromFile } from '../container/actions'
+import { saveState, loadStateFromFile } from '../container/actions'
 
 const Message = styled.div`
 margin: 10px;
@@ -50,6 +50,34 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
   
   const [chartState, setChartState] = React.useState(chartSimple);
 
+  const handleSave = () => {
+    // Assuming saveState simply returns the current state without serializing it
+    // We need to serialize the chart state to a JSON string
+    const savedState = JSON.stringify(saveState(chartState));
+  
+    // Creating a blob object from the saved state string
+    const blob = new Blob([savedState], { type: 'application/json' });
+  
+    // Creating a URL for the blob object
+    const url = URL.createObjectURL(blob);
+  
+    // Creating a temporary anchor element to initiate the download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'chartState.json'; // Naming the download file
+  
+    // Appending the anchor to the body, clicking it to initiate download, and then removing it
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  
+    // Releasing the created URL
+    URL.revokeObjectURL(url);
+  
+    console.log('Saved Chart State:', savedState); // Log the saved chart state for debugging
+  };
+  
+
   const handleLoad = () => {
     // Call the loadStateFromFile function and provide a callback to handle the loaded state
     loadStateFromFile((loadedChart) => {
@@ -58,7 +86,8 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
       console.log('Loaded Chart State:', loadedChart); // Log the loaded chart state for debugging
     });
   };
-  handleLoad
+  
+  
   return(
   <Page>
     <Content>
@@ -151,6 +180,8 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
           <LoadStateButton onClick={handleLoad}>
             Load
           </LoadStateButton> */}
+          <SaveStateButton onClick={handleSave}>Save</SaveStateButton>
+        <LoadStateButton onClick={handleLoad}>Load</LoadStateButton>
     </Sidebar>
   </Page>
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 import { DragAndDropSidebar } from './components/DragAndDropSidebar';
 //import CheckPortsButton from './components/CheckPortsButton';
 import { chartSimple } from './misc/exampleChartState';
@@ -8,6 +7,11 @@ import { SelectedSidebar } from './components/SelectedSidebar';
 import MotherComp from './components/dashboard/MotherComp';
 import Concentrate from './components/dashboard/Concentrate';
 import Tailing from './components/dashboard/Tailing';
+
+import { createRoot } from 'react-dom/client';
+
+//import { StrictMode } from 'react';
+
 
 import './styles/style.css';
 
@@ -172,4 +176,10 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
+
+<App />
+
+);

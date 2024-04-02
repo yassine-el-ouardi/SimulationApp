@@ -19,7 +19,7 @@ const MotherComp: React.FC = () => {
   ];*/
 
   return (
-    <div className="container mx-auto mt-8">
+    <div style={{marginTop: '0px'}} className="container mx-auto mt-8" >
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <img src="FlotCellBrut.png" alt="" style={{ marginTop: '20px' }} />
