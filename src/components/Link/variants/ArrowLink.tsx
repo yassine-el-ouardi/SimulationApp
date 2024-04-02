@@ -51,19 +51,11 @@ export const ArrowLink = ({
   onLinkClick,
   onWaypointMouseDown,
 }: IArrowLinkProps) => {
-  const { leftToRight, topToBottom, isHorizontal } = getDirectional(
-    startPos,
-    endPos,
-  )
 
-  let markerKey = ''
-  if ((leftToRight && isHorizontal) || (topToBottom && !isHorizontal)) {
-    markerKey = 'markerEnd'
-  } else if ((!leftToRight && isHorizontal) || !isHorizontal) {
-    markerKey = 'markerStart'
-  }
 
-  const marker = { [markerKey]: `url(#arrowHead-${linkColor})` }
+
+
+  const marker = { markerEnd: `url(#arrowHead-${linkColor})` };
 
   return (
     <svg

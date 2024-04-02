@@ -491,18 +491,10 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     // Specify the target position for the link
     const targetPosition = {
       x: position.x - 100, // For example, 100 pixels to the right of the new node's position
-      y: position.y + 50,  // For example, 50 pixels below the new node's position
+      y: position.y + 40,  // For example, 50 pixels below the new node's position
     };
 
-    const targetPosition1 = {
-      x: position.x - 75,
-      y: position.y + 25,
-    };
 
-    const targetPosition2 = {
-      x: position.x - 50,
-      y: position.y + 10,
-    };
 
     chart.links[newLinkId] = {
       id: newLinkId,
@@ -513,7 +505,6 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         nodeId: id,
         portId: "port1", // Specify the correct port ID
       },
-      waypoints: [targetPosition1,targetPosition2],
       feed: data.feed || {
         totalSolidFlow: null,
         totalLiquidFlow: null,
@@ -540,8 +531,8 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       y: position.y,  // For example, 50 pixels below the new node's position
     };*/
     const targetPosition2 = {
-      x: position.x + 50, // For example, 100 pixels to the right of the new node's position
-      y: position.y + 200,  // For example, 50 pixels below the new node's position
+      x: position.x + 200, // For example, 100 pixels to the right of the new node's position
+      y: position.y + 50,  // For example, 50 pixels below the new node's position
     };
 
 
@@ -577,7 +568,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     // Specify the target position for the link
     const targetPosition = {
       x: position.x +200, // For example, 100 pixels to the right of the new node's position
-      y: position.y,  // For example, 50 pixels below the new node's position
+      y: position.y + 20,  // For example, 50 pixels below the new node's position
     };
     /*const targetPosition2 = {
       x: position.x + 50, // For example, 100 pixels to the right of the new node's position
