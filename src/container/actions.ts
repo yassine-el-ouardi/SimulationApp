@@ -8,8 +8,8 @@ import {
   IOnDragCanvasStop,
   IOnDragNode,
   IOnDragNodeStop,
-  IOnDragLink,
-  IOnDragLinkStop,
+  IOnDragLinkWayPoint,
+  IOnDragLinkWayPointStop,
   IOnLinkCancel,
   IOnLinkClick,
   IOnLinkComplete,
@@ -56,44 +56,25 @@ function getOffset (config: any, data: any, zoom?: number) {
 
 //-------------------------------------
 // This function updates the position of a single waypoint or initializes it when dragged
-export const onDragLink: IStateCallback<IOnDragLink> = ({ config, event, data, id }) => (chart: IChart) => {
+export const onDragLinkWayPoint: IStateCallback<IOnDragLinkWayPoint> = ({ config, event, data, id }) => (chart: IChart) => {
   const link = chart.links[id];
-
-  // This variable should be determined when the drag starts and then used throughout the drag operation
-  // For this example, let's assume it's determined elsewhere and passed in with 'data'
   const draggingWaypointIndex = data.waypointIndex;
-
   if (link && link.waypoints && draggingWaypointIndex != null && link.waypoints[draggingWaypointIndex]) {
-    // Update only the position of the waypoint being dragged based on the drag delta
     const updatedWaypoint = {
       x: link.waypoints[draggingWaypointIndex].x + data.deltaX,
       y: link.waypoints[draggingWaypointIndex].y + data.deltaY,
     };
-
-    // Create a new waypoints array with the updated waypoint
     const updatedWaypoints = [...link.waypoints];
     updatedWaypoints[draggingWaypointIndex] = updatedWaypoint;
-
-    // Update the chart with the modified link
     chart.links[id] = {
       ...link,
       waypoints: updatedWaypoints,
     };
   }
-
   return chart;
 };
-
-
-
-
 // This function is called when the dragging stops
-export const onDragLinkStop: IStateCallback<IOnDragLinkStop> = ({ config, event, data, id }) => (chart: IChart) => {
-  // The onDragLinkStop function can be used to finalize the link dragging action
-  // For now, it simply returns the chart unchanged.
-  // Add any finalization logic here if necessary
-  return chart;
-};
+export const onDragLinkWayPointStop: IStateCallback<IOnDragLinkWayPointStop> = () => identity
 
 //-------------------------------------
 

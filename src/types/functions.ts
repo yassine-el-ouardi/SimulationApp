@@ -39,18 +39,18 @@ export interface IExtendedDraggableData extends DraggableData {
 }
 
 
-export type IOnDragLink = (input: IOnDragLinkInput) => void
+export type IOnDragLinkWayPoint = (input: IOnDragLinkWayPointInput) => void
 
-export interface IOnDragLinkInput {
+export interface IOnDragLinkWayPointInput {
   config?: IConfig
   event: DraggableEvent
   data: IExtendedDraggableData
   id: string
 }
 
-export type IOnDragLinkStop = (input: IOnDragLinkStopInput) => void
+export type IOnDragLinkWayPointStop = (input: IOnDragLinkWayPointStopInput) => void
 
-export interface IOnDragLinkStopInput {
+export interface IOnDragLinkWayPointStopInput {
   config?: IConfig
   event: MouseEvent
   data: DraggableData

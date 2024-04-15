@@ -66,8 +66,8 @@ export const ArrowLink = ({
         left: 0,
         right: 0,
         display:'block',
-        width:'100%',
-        height:'100%',
+        //width:'100%',
+        //height:'100%',
       }}
       className={className}
     >

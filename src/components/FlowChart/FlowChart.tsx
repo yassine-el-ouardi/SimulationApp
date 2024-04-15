@@ -4,7 +4,7 @@ import {
   IOnDragCanvasStop, IOnDragNode, IOnDragNodeStop, IOnLinkCancel, IOnLinkClick, IOnLinkComplete, IOnLinkMouseEnter,
   IOnLinkMouseLeave, IOnLinkMove, IOnLinkStart, IOnNodeClick, IOnNodeDoubleClick, IOnNodeMouseEnter, IOnNodeMouseLeave, IOnNodeSizeChange,
   IOnPortPositionChange, IOnZoomCanvas, ISelectedOrHovered,
-  IOnDragLink, IOnDragLinkStop,
+  IOnDragLinkWayPoint, IOnDragLinkWayPointStop,
 } from '../../types'
 import {CanvasInnerDefault, CanvasOuterDefault, CanvasWrapper, ICanvasInnerDefaultProps, ICanvasOuterDefaultProps, ILinkDefaultProps, INodeDefaultProps, INodeInnerDefaultProps, IPortDefaultProps, IPortsDefaultProps, LinkDefault, LinkWrapper, NodeDefault, NodeInnerDefault, NodeWrapper, PortDefault, PortsDefault} from '../../components'
 import { getMatrix } from './utils/grid'
@@ -12,8 +12,8 @@ import { getMatrix } from './utils/grid'
 export interface IFlowChartCallbacks {
   onDragNode: IOnDragNode
   onDragNodeStop: IOnDragNodeStop
-  onDragLink: IOnDragLink
-  onDragLinkStop: IOnDragLinkStop
+  onDragLinkWayPoint: IOnDragLinkWayPoint
+  onDragLinkWayPointStop: IOnDragLinkWayPointStop
   onDragCanvas: IOnDragCanvas
   onCanvasDrop: IOnCanvasDrop
   onDragCanvasStop: IOnDragCanvasStop
@@ -74,8 +74,8 @@ export const FlowChart = (props: IFlowChartProps) => {
     callbacks: {
       onDragNode,
       onDragNodeStop,
-      onDragLink,
-      onDragLinkStop,
+      onDragLinkWayPoint,
+      onDragLinkWayPointStop,
       onDragCanvas,
       onDragCanvasStop,
       onCanvasDrop,
@@ -110,7 +110,7 @@ export const FlowChart = (props: IFlowChartProps) => {
   const { links, nodes, selected, hovered, offset, scale } = chart
 
   const canvasCallbacks = { onDragCanvas, onDragCanvasStop, onCanvasClick, onDeleteKey, onCanvasDrop, onZoomCanvas }
-  const linkCallbacks = { onDragLink, onDragLinkStop, onLinkMouseEnter, onLinkMouseLeave, onLinkClick }
+  const linkCallbacks = { onDragLinkWayPoint, onDragLinkWayPointStop, onLinkMouseEnter, onLinkMouseLeave, onLinkClick }
   const nodeCallbacks = { onDragNode, onNodeClick, onDragNodeStop, onNodeMouseEnter, onNodeMouseLeave, onNodeSizeChange,onNodeDoubleClick }
   const portCallbacks = { onPortPositionChange, onLinkStart, onLinkMove, onLinkComplete, onLinkCancel }
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IPort, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition, IOnDragLink } from '../../types';
+import { IPort, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition, IOnDragLinkWayPoint } from '../../types';
 import { ArrowLink, IArrowLinkProps } from './variants/ArrowLink';
 
 
@@ -20,7 +20,7 @@ export interface ILinkDefaultProps {
   isHovered: boolean;
   isSelected: boolean;
   matrix?: number[][];
-  onDragLink: IOnDragLink;
+  onDragLinkWayPoint: IOnDragLinkWayPoint;
 }
 
 export const LinkDefault = ({
@@ -34,7 +34,7 @@ export const LinkDefault = ({
   onLinkMouseEnter,
   onLinkMouseLeave,
   onLinkClick,
-  onDragLink
+  onDragLinkWayPoint
 }: ILinkDefaultProps) => {
   //const { startPos, endPos, link, onDragLink,config } = props;
 
