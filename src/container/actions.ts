@@ -93,8 +93,33 @@ export const onDragNode: IStateCallback<IOnDragNode> = ({ config, event, data, i
         y: nodechart.position.y + delta.y,
       },
     }
+  
+
+  //-------------------------------
+  if(nodechart.type=="Rougher"){
+    const link = chart.links['First_Stream_id'];
+    link.from.position = {
+      x: link.from.position.x + delta.x,
+      y: link.from.position.y + delta.y,
+    }
+  }
+  else if(nodechart.type=="Scanvenger"){
+    const link = chart.links['Scanvenger_Stream_id'];
+    link.to.position = {
+      x: link.to.position.x + delta.x,
+      y: link.to.position.y + delta.y,
+    }
+  }
+  else if(nodechart.type=="Cleaner"){
+    const link = chart.links['Cleaner_Stream_id'];
+    link.to.position = {
+      x: link.to.position.x + delta.x,
+      y: link.to.position.y + delta.y,
+    }
   }
 
+  //-------------------------------
+  }
   return chart
 }
 
@@ -504,7 +529,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
   } else if(data.type === "Scanvenger") {//scanvenger port 4 --- Cleaner port 3
     // Create a new link
     //const newLinkId = "Scanvanger_Stream_id"; // Generate a unique ID for the new link
-    const newLinkId2 = "Scanvanger_Stream_id"; // Generate a unique ID for the new link
+    const newLinkId2 = "Scanvenger_Stream_id"; // Generate a unique ID for the new link
 
     // Specify the target position for the link
     /*const targetPosition = {
