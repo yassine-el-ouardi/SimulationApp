@@ -111,12 +111,12 @@ export class CanvasWrapper extends React.Component<ICanvasWrapperProps, IState> 
             positionY={position.y}
             scale={scale}
             options={options}
-            zoomIn={zoom && zoom.zoomIn ? zoom.zoomIn : { step: 300 }}
-            zoomOut={zoom && zoom.zoomOut ? zoom.zoomOut : { step: 300 }}
+            zoomIn={{ disabled: true }}
+            zoomOut={{ disabled: true }}
             pan={zoom && zoom.pan ? zoom.pan : { disabled: false }}
-            wheel={zoom && zoom.wheel ? zoom.wheel : { disabled: false, step: 75 }}
+            wheel={{ disabled: true }}
             doubleClick={{ disabled: true, step: 10, mode: doubleClickMode }}
-            pinch={{ disabled: false }}
+            pinch={{ disabled: true }}
             onWheel={(data: any) => onZoomCanvas({ config, data })}
             onWheelStop={(data: any) => onZoomCanvas({ config, data })}
             onPanning={(data: any) => onDragCanvas({ config, data })}
