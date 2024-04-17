@@ -170,11 +170,12 @@ class Node:
 ############################################################ Class Link ####################################################
 
 class Link:
-    def __init__(self, link_id, source, destination, feed):
+    def __init__(self, link_id, source, destination, feed, waypoints):
         self.link_id = link_id
         self.source = source  #from
         self.destination = destination  #to
         self.feed = feed
+        self.waypoints = waypoints
 
     @classmethod
     #Crée une instance de Link à partir de données JSON.
@@ -183,7 +184,8 @@ class Link:
             link_id,
             link_data.get("from"),
             link_data.get("to"),
-            link_data.get("feed")
+            link_data.get("feed"),
+            link_data.get("waypoints")
         )
     
 
@@ -320,7 +322,8 @@ def generate_final_circuit_json(nodes, links,parsed_data):
             "id": link.link_id,
             "from": link.source if link.source else {},
             "to": link.destination if link.destination else {},
-            "feed": link.feed  # This contains the concentrate/tailing data
+            "feed": link.feed , # This contains the concentrate/tailing data
+            "waypoints": link.waypoints if link.waypoints else {}
         }
 
     # Additionally, add links for concentrate and tailing with no destination

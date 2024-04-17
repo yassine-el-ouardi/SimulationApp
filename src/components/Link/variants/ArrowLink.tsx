@@ -107,7 +107,7 @@ export const ArrowLink = ({
         }}
       />
        {/* Waypoints */}
-       {link.waypoints && link.waypoints.map((waypoint, index) => (
+       {Array.isArray(link.waypoints) && link.waypoints.map((waypoint, index) => (
         <circle
           key={index}
           cx={waypoint.x}
