@@ -1,4 +1,4 @@
-import { INode, IPosition } from '../../../'
+import { INode, IPosition } from '../../../types'
 
 export const getLinkPosition = (node: INode, portId: string): IPosition => {
   const port = node.ports[portId]

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { IPort, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition, IOnDragLink } from '../../';
+import { IPort, IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition, IOnDragLinkWayPoint } from '../../types';
 import { ArrowLink, IArrowLinkProps } from './variants/ArrowLink';
 
-import { throttle } from 'lodash';
 
 //import {IExtendedDraggableData} from '../../types/functions'
 
@@ -21,7 +20,7 @@ export interface ILinkDefaultProps {
   isHovered: boolean;
   isSelected: boolean;
   matrix?: number[][];
-  onDragLink: IOnDragLink;
+  onDragLinkWayPoint: IOnDragLinkWayPoint;
 }
 
 export const LinkDefault = ({
@@ -35,7 +34,7 @@ export const LinkDefault = ({
   onLinkMouseEnter,
   onLinkMouseLeave,
   onLinkClick,
-  onDragLink
+  onDragLinkWayPoint
 }: ILinkDefaultProps) => {
   //const { startPos, endPos, link, onDragLink,config } = props;
 
@@ -66,7 +65,7 @@ export const LinkDefault = ({
 
     let start = transformPoint(event.clientX, event.clientY); // 'start' needs to be 'let' since it's updated in 'handleMouseMove'
 
-    const handleMouseMove = throttle((moveEvent: MouseEvent) => {
+    const handleMouseMove = (moveEvent: MouseEvent) => {
         const current = transformPoint(moveEvent.clientX, moveEvent.clientY);
         const deltaX = current.x - start.x;
         const deltaY = current.y - start.y;
@@ -80,7 +79,7 @@ export const LinkDefault = ({
 
         // Update 'start' for the next movement
         start = current;
-    }, 100);
+    };
 
     const handleMouseUp = () => {
         document.removeEventListener('mousemove', handleMouseMove);

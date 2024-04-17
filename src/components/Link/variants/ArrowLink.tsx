@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition } from '../../../'
+import { IConfig, ILink, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IPosition } from '../../../types'
 import { getDirectional } from '../utils'
 
 export const calculateAdjustedEndPos = (startPos: IPosition, endPos: IPosition): IPosition => {
@@ -51,19 +51,11 @@ export const ArrowLink = ({
   onLinkClick,
   onWaypointMouseDown,
 }: IArrowLinkProps) => {
-  const { leftToRight, topToBottom, isHorizontal } = getDirectional(
-    startPos,
-    endPos,
-  )
 
-  let markerKey = ''
-  if ((leftToRight && isHorizontal) || (topToBottom && !isHorizontal)) {
-    markerKey = 'markerEnd'
-  } else if ((!leftToRight && isHorizontal) || !isHorizontal) {
-    markerKey = 'markerStart'
-  }
 
-  const marker = { [markerKey]: `url(#arrowHead-${linkColor})` }
+
+
+  const marker = { markerEnd: `url(#arrowHead-${linkColor})` };
 
   return (
     <svg
@@ -74,8 +66,8 @@ export const ArrowLink = ({
         left: 0,
         right: 0,
         display:'block',
-        width:'100%',
-        height:'100%',
+        //width:'100%',
+        //height:'100%',
       }}
       className={className}
     >
@@ -115,7 +107,7 @@ export const ArrowLink = ({
         }}
       />
        {/* Waypoints */}
-       {link.waypoints && link.waypoints.map((waypoint, index) => (
+       {Array.isArray(link.waypoints) && link.waypoints.map((waypoint, index) => (
         <circle
           key={index}
           cx={waypoint.x}

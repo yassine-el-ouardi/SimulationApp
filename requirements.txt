@@ -1,0 +1,6 @@
+pip install tensorflow==2.15.0
+pip install flask
+pip install joblib
+pip install pandas
+pip install scikit-learn
+pip install flask_cors

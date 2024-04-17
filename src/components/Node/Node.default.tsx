@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { IConfig, INode } from '../../'
+import { IConfig, INode } from '../../types'
 
 export interface INodeDefaultProps {
   className?: string

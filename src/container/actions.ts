@@ -1,7 +1,6 @@
 import {
   IChart,
   IConfig,
-  identity,
   IOnCanvasClick,
   IOnCanvasDrop,
   IOnDeleteKey,
@@ -9,8 +8,8 @@ import {
   IOnDragCanvasStop,
   IOnDragNode,
   IOnDragNodeStop,
-  IOnDragLink,
-  IOnDragLinkStop,
+  IOnDragLinkWayPoint,
+  IOnDragLinkWayPointStop,
   IOnLinkCancel,
   IOnLinkClick,
   IOnLinkComplete,
@@ -26,7 +25,9 @@ import {
   IOnPortPositionChange,
   IOnZoomCanvas,
   IStateCallback,
-} from '../'
+} from '../types'
+import {  identity,
+} from '../utils'
 import { rotate } from './utils/rotate'
 
 import { getLinkPosition } from './utils/getLinkPosition'
@@ -55,44 +56,25 @@ function getOffset (config: any, data: any, zoom?: number) {
 
 //-------------------------------------
 // This function updates the position of a single waypoint or initializes it when dragged
-export const onDragLink: IStateCallback<IOnDragLink> = ({ config, event, data, id }) => (chart: IChart) => {
+export const onDragLinkWayPoint: IStateCallback<IOnDragLinkWayPoint> = ({ config, event, data, id }) => (chart: IChart) => {
   const link = chart.links[id];
-
-  // This variable should be determined when the drag starts and then used throughout the drag operation
-  // For this example, let's assume it's determined elsewhere and passed in with 'data'
   const draggingWaypointIndex = data.waypointIndex;
-
   if (link && link.waypoints && draggingWaypointIndex != null && link.waypoints[draggingWaypointIndex]) {
-    // Update only the position of the waypoint being dragged based on the drag delta
     const updatedWaypoint = {
       x: link.waypoints[draggingWaypointIndex].x + data.deltaX,
       y: link.waypoints[draggingWaypointIndex].y + data.deltaY,
     };
-
-    // Create a new waypoints array with the updated waypoint
     const updatedWaypoints = [...link.waypoints];
     updatedWaypoints[draggingWaypointIndex] = updatedWaypoint;
-
-    // Update the chart with the modified link
     chart.links[id] = {
       ...link,
       waypoints: updatedWaypoints,
     };
   }
-
   return chart;
 };
-
-
-
-
 // This function is called when the dragging stops
-export const onDragLinkStop: IStateCallback<IOnDragLinkStop> = ({ config, event, data, id }) => (chart: IChart) => {
-  // The onDragLinkStop function can be used to finalize the link dragging action
-  // For now, it simply returns the chart unchanged.
-  // Add any finalization logic here if necessary
-  return chart;
-};
+export const onDragLinkWayPointStop: IStateCallback<IOnDragLinkWayPointStop> = () => identity
 
 //-------------------------------------
 
@@ -111,8 +93,33 @@ export const onDragNode: IStateCallback<IOnDragNode> = ({ config, event, data, i
         y: nodechart.position.y + delta.y,
       },
     }
+  
+
+  //-------------------------------
+  if(nodechart.type=="Rougher"){
+    const link = chart.links['First_Stream_id'];
+    link.from.position = {
+      x: link.from.position.x + delta.x,
+      y: link.from.position.y + delta.y,
+    }
+  }
+  else if(nodechart.type=="Scanvenger"){
+    const link = chart.links['Scanvenger_Stream_id'];
+    link.to.position = {
+      x: link.to.position.x + delta.x,
+      y: link.to.position.y + delta.y,
+    }
+  }
+  else if(nodechart.type=="Cleaner"){
+    const link = chart.links['Cleaner_Stream_id'];
+    link.to.position = {
+      x: link.to.position.x + delta.x,
+      y: link.to.position.y + delta.y,
+    }
   }
 
+  //-------------------------------
+  }
   return chart
 }
 
@@ -483,25 +490,17 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     
     properties: data.properties,
   }
-  if (data.type === "First Cell") {
+  if (data.type === "Rougher") {
     // Create a new link
     const newLinkId = "First_Stream_id"; // Generate a unique ID for the new link
 
     // Specify the target position for the link
     const targetPosition = {
       x: position.x - 100, // For example, 100 pixels to the right of the new node's position
-      y: position.y + 50,  // For example, 50 pixels below the new node's position
+      y: position.y + 40,  // For example, 50 pixels below the new node's position
     };
 
-    const targetPosition1 = {
-      x: position.x - 75,
-      y: position.y + 25,
-    };
 
-    const targetPosition2 = {
-      x: position.x - 50,
-      y: position.y + 10,
-    };
 
     chart.links[newLinkId] = {
       id: newLinkId,
@@ -512,7 +511,6 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         nodeId: id,
         portId: "port1", // Specify the correct port ID
       },
-      waypoints: [targetPosition1,targetPosition2],
       feed: data.feed || {
         totalSolidFlow: null,
         totalLiquidFlow: null,
@@ -531,7 +529,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
   } else if(data.type === "Scanvenger") {//scanvenger port 4 --- Cleaner port 3
     // Create a new link
     //const newLinkId = "Scanvanger_Stream_id"; // Generate a unique ID for the new link
-    const newLinkId2 = "Scanvanger_Stream_id"; // Generate a unique ID for the new link
+    const newLinkId2 = "Scanvenger_Stream_id"; // Generate a unique ID for the new link
 
     // Specify the target position for the link
     /*const targetPosition = {
@@ -539,8 +537,8 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       y: position.y,  // For example, 50 pixels below the new node's position
     };*/
     const targetPosition2 = {
-      x: position.x + 50, // For example, 100 pixels to the right of the new node's position
-      y: position.y + 200,  // For example, 50 pixels below the new node's position
+      x: position.x + 200, // For example, 100 pixels to the right of the new node's position
+      y: position.y + 50,  // For example, 50 pixels below the new node's position
     };
 
 
@@ -576,7 +574,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     // Specify the target position for the link
     const targetPosition = {
       x: position.x +200, // For example, 100 pixels to the right of the new node's position
-      y: position.y,  // For example, 50 pixels below the new node's position
+      y: position.y + 20,  // For example, 50 pixels below the new node's position
     };
     /*const targetPosition2 = {
       x: position.x + 50, // For example, 100 pixels to the right of the new node's position

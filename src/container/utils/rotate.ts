@@ -1,4 +1,4 @@
-import { IPosition } from '../../../'
+import { IPosition } from '../../types'
 
 // center = rotation center
 // current = current position

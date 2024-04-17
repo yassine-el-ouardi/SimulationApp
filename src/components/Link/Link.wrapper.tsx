@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IConfig, ILink, INode, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IOnDragLink } from '../../';
+import { IConfig, ILink, INode, IOnLinkClick, IOnLinkMouseEnter, IOnLinkMouseLeave, IOnDragLinkWayPoint } from '../../types';
 import { noop } from '../../utils';
 import { ILinkDefaultProps, LinkDefault } from './Link.default';
 import { getLinkPosition } from './utils';
@@ -16,7 +16,7 @@ export interface ILinkWrapperProps {
   onLinkClick: IOnLinkClick;
   Component?: React.FunctionComponent<ILinkDefaultProps>;
   matrix?: number[][];
-  onDragLink:IOnDragLink;
+  onDragLinkWayPoint:IOnDragLinkWayPoint;
 }
 
 export const LinkWrapper = React.memo(
@@ -32,7 +32,7 @@ export const LinkWrapper = React.memo(
     fromNode,
     toNode,
     matrix,
-    onDragLink,
+    onDragLinkWayPoint,
   }: ILinkWrapperProps) => {
     const startPos = fromNode && link.from.portId ? getLinkPosition(fromNode, link.from.portId) : link.from.position;
     const endPos = toNode && link.to.portId ? getLinkPosition(toNode, link.to.portId) : link.to.position;
@@ -54,7 +54,7 @@ export const LinkWrapper = React.memo(
         onLinkClick={config.readonly && !config.selectable ? noop : onLinkClick}
         isSelected={isSelected}
         isHovered={isHovered}
-        onDragLink={onDragLink}
+        onDragLinkWayPoint={onDragLinkWayPoint}
       />
     );
   }

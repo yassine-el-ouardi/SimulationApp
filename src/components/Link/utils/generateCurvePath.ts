@@ -1,5 +1,5 @@
 import * as PF from 'pathfinding'
-import { IPort, IPosition } from '../../../'
+import { IPort, IPosition } from '../../../types'
 import { MATRIX_PADDING } from '../../FlowChart/utils/grid'
 
 export const getDirectional = (startPos: IPosition, endPos: IPosition) => {

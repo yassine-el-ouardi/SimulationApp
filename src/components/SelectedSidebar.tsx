@@ -1,13 +1,14 @@
-import { cloneDeep, mapValues } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep';
+import mapValues from 'lodash/mapValues';
 import * as React from 'react'
 import styled from 'styled-components'
-import { FlowChart } from '../src'
-import * as actions from '../src/container/actions'
-import { Content, Page, Sidebar } from './components'
-import { chartSimple } from './misc/exampleChartState'
-import { onUpdateNodeProperty, onUpdateLinkProperty } from '../src/container/actions'
-import { saveState, loadStateFromFile } from '../src/container/actions'
-import '../src/custom.css'
+import { FlowChart } from '../components/FlowChart'
+import * as actions from '../container/actions'
+import { Content, Page, Sidebar } from '.'
+import { chartSimple } from '../misc/exampleChartState'
+import { onUpdateNodeProperty, onUpdateLinkProperty } from '../container/actions'
+import { saveState, loadStateFromFile } from '../container/actions'
+import '../custom.css'
 
 
 const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]

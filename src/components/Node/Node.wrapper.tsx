@@ -5,7 +5,6 @@ import {
   IConfig,
   ILink,
   INode,
-  INodeInnerDefaultProps,
   IOnDragNode,
   IOnDragNodeStop,
   IOnLinkCancel,
@@ -18,13 +17,13 @@ import {
   IOnNodeMouseLeave,
   IOnNodeSizeChange,
   IOnPortPositionChange,
-  IPortDefaultProps,
-  IPortsDefaultProps,
   IPosition,
   ISelectedOrHovered,
   ISize,
-  PortWrapper,
-} from '../../'
+} from '../../types'
+
+import {INodeInnerDefaultProps, IPortDefaultProps, IPortsDefaultProps, PortWrapper} from '../../components'
+
 import { noop } from '../../utils'
 import CanvasContext from '../Canvas/CanvasContext'
 import { INodeDefaultProps, NodeDefault } from './Node.default'

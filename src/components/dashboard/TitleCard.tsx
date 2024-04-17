@@ -1,6 +1,8 @@
 import * as React from 'react'
 import './dashstyle.css';
 import Subtitle from './Typography/Subtitle';
+import './style.css'
+
 
 function TitleCard({ title, children}:{ title:any, children:any}) {
   return (

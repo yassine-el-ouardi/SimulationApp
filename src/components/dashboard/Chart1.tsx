@@ -1,4 +1,6 @@
 import * as React from 'react'
+import './style.css'
+
 import {
   Chart as ChartJS,
   CategoryScale,
