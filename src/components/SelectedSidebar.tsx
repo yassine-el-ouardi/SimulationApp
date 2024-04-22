@@ -9,6 +9,7 @@ import { chartSimple } from '../misc/exampleChartState'
 import { onUpdateNodeProperty, onUpdateLinkProperty } from '../container/actions'
 import { saveState, loadStateFromFile } from '../container/actions'
 import '../custom.css'
+import { InfluxDB, Point } from '@influxdata/influxdb-client';
 
 
 const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
@@ -135,15 +136,30 @@ export class SelectedSidebar extends React.Component {
                         <div>ID: {chart.selected.id}</div>
                         <h4>Stream:</h4>
                         {
-                          selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
-                            <div key={key} className='styled-input-container'>
-                              <label>{key}: </label>
-                              <span className="value">{value !== null && value !== undefined ? value.toString() : 'N/A'}</span>
-                            </div>
-                          ))
+                          selectedLink && (
+                            <>
+                              {[
+                                { key: 'totalSolidFlow', label: 'Total Solids Flow (Débit total des solides)' },
+                                { key: 'totalLiquidFlow', label: 'Total Liquid Flow (Débit total du Liquid)' },
+                                { key: 'pulpVolumetricFlow', label: 'Pulp Volumetric Flow (Débit volumétrique de la pulpe)' },
+                                { key: 'solidsSG', label: 'Solids SG (Poids Moléculaire des solides)' },
+                                { key: 'pulpSG', label: 'Pulp SG (Poids Moléculaire de la pulpe)' },
+                                { key: 'solidsFraction', label: 'Solids Fraction (Fraction de solides)' },
+                                { key: 'cuPercentage', label: 'Cu% (Teneur du Cuivre)' },
+                                { key: 'fePercentage', label: 'Fe% (Teneur du Fer)' },
+                                { key: 'pbPercentage', label: 'Pb% (Teneur du Plomb)' },
+                                { key: 'znPercentage', label: 'Zn% (Teneur du Zinc)' }
+                              ].map(({ key, label }) => (
+                                <div key={key} className='styled-input-container'>
+                                  <label>{label}: </label>
+                                  <span className="value">{selectedLink.feed[key] !== null && selectedLink.feed[key] !== undefined ? selectedLink.feed[key].toString() : 'N/A'}</span>
+                                </div>
+                              ))}
+                            </>
+                          )
                         }
-
                       </Message>
+
                     </>
                   )
 
@@ -290,8 +306,29 @@ export class SelectedSidebar extends React.Component {
             if (response.ok) {
               const responseData = await response.json();
               this.setState(responseData);
+              //store it also in data base (influxdb):
+
+// Setup your InfluxDB connection
+              const token = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA==';
+              const org = 'Dev team';
+              const bucket = 'Seconds';
+              const url = 'http://localhost:8086';
+
+              const client = new InfluxDB({ url, token });
+              const writeApi = client.getWriteApi(org, bucket);
+
+              // Create a point and write data to the 'Seconds' bucket
+              const point = new Point('flotationCell')
+                .tag('cell_id', '1')
+                .floatField('feed_rate', 123.45)
+                .floatField('concentration', 67.89);
+
+              writeApi.writePoint(point);
+              writeApi.close().then(() => console.log('Finished writing.'));
+
+
               console.log(`Response from the backend for Object ${index}:`, responseData);
-              await new Promise(resolve => setTimeout(resolve, 10000));
+              await new Promise(resolve => setTimeout(resolve, 1000));
             } else {
               console.error(`Error occurred: ${response.status}, ${response.statusText}`);
             }

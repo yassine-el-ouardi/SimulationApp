@@ -50,6 +50,7 @@ def predict():
 
         # Convert prediction to a list for JSON response
         prediction_list = final_prediction.tolist()[0]
+        prediction_list[11]= prediction_list[9] + prediction_list[10]  /prediction_list[13]
         print(prediction_list)
         return jsonify({'prediction': prediction_list})
 

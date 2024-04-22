@@ -32,28 +32,41 @@ class Node:
         # Récupération des Caractéristiques Dynamiques pour chaque Nœud
         for link_id, link in links.items():
             if link.destination and link.destination.get('nodeId', None) == self.node_id:
-                all_feeds.append(list(link.feed.values()))
+                all_feeds.append(link.feed)
 
         print("all feed is : ", all_feeds)
 
-
-
         # Remplacer les valeurs None par 0
-        filtered_feeds = [[value if value is not None else 0 for value in feed] for feed in all_feeds]
+        filtered_feeds = [{k: (v if v is not None else 0) for k, v in feed.items()} for feed in all_feeds]
 
-        # Vérifier si la deuxième liste existe et est composée uniquement de zéros
+        # Handle different number of feeds
         if len(filtered_feeds) == 1:
-            dynamic_features = filtered_feeds[0]
-        elif all(value == 0 for value in filtered_feeds[0]):
-            dynamic_features = filtered_feeds[1]
-        elif all(value == 0 for value in filtered_feeds[1]):
-            dynamic_features = filtered_feeds[0]
-        else:
-            dynamic_features = [sum(feed) / 2 for feed in zip(*filtered_feeds)]
+            dynamic_features = list(filtered_feeds[0].values())
+        elif len(filtered_feeds) > 1:
+            # Initialize dynamic_features with zeros for all keys
+            dynamic_features = {key: 0 for key in filtered_feeds[0]}
+            # Calculate the sum for flows and weighted averages for other parameters
+            total_solid_flows = sum(feed['totalSolidFlow'] for feed in filtered_feeds)
 
+            for key in dynamic_features:
+                if key in ['totalSolidFlow', 'totalLiquidFlow', 'pulpVolumetricFlow']:
+                    # Sums for specific flow-related values
+                    dynamic_features[key] = sum(feed[key] for feed in filtered_feeds)
+                else:
+                    # Weighted averages for all other percentages and specific gravities
+                    if total_solid_flows > 0:
+                        dynamic_features[key] = sum((feed[key] * feed['totalSolidFlow'] / total_solid_flows) for feed in filtered_feeds)
+                    else:
+                        dynamic_features[key] = 0
+
+            # Convert dictionary to list if necessary
+            dynamic_features = list(dynamic_features.values())
+
+        else:
+            # Handle other cases or raise an error
+            raise ValueError("Unsupported number of feeds")
 
         print(f"Average dynamique value={dynamic_features}")
-
 
         static_feature_keys = [
             "netVolume", "pulpArea", "frothSurfaceArea", "frothThickness", "airFlowRate",
@@ -63,7 +76,6 @@ class Node:
         static_features = [self.cell_characteristics.get(key, None) for key in static_feature_keys]
 
         if dynamic_features is not None:
-            #print(f"Length of provided dynamic_features: {dynamic_features}")
             combined_features = static_features + dynamic_features
             print(f"input finale ={combined_features}")
 
@@ -71,8 +83,8 @@ class Node:
         if len(combined_features) != 24:
             raise ValueError(f"Node {self.node_id} does not have 24 features, it has {len(combined_features)} features.")
 
-
         return combined_features
+
 
     
     def predict(self, links, api_url):
@@ -97,6 +109,7 @@ class Node:
             # Accessing the model output using indices
             # Split model output into concentrate and tailing (based on your logic)
             concentrate = [model_output[i] for i in range(3, 9)] + [model_output[i] for i in range(19, 23)]
+            print(f"model output------------={model_output}")
             print(f"concentrate----------={concentrate}")
             tailing = [model_output[i] for i in range(9, 19)]
             print(f"tailing ----------={tailing}")
