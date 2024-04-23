@@ -12,14 +12,22 @@ import '../custom.css'
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
 
 
-const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
+//const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
 
 const Message = styled.div`
   margin: 10px;
   padding: 10px;
   line-height: 1.4em;
+  font-size: smaller;
 `
+const ButtonContainer = styled.div`
+  display: flex;        /* Establishes this div as a flex container */
+  justify-content: center; /* Centers children along the horizontal axis */
+  align-items: center;  /* Centers children along the vertical axis */
+`;
+
 const SimulateButton = styled.button`
+  width: 160px;
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
@@ -30,10 +38,28 @@ const SimulateButton = styled.button`
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-`
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+  border-radius: 5px; /* Rounded corners */
+
+  &:hover {
+    background-color: #45a049; /* Slightly darker green on hover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  }
+
+  &:focus {
+    outline: none; /* Removes default focus outline */
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5); /* Custom focus style to improve accessibility */
+  }
+
+  &:active {
+    background-color: #3e8e41; /* Even darker green when button is clicked */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3); /* Deeper shadow to simulate pressing */
+  }
+`;
+
 
 const SaveStateButton = styled.button`
-  background-color: #E74C3C; /* red */
+  background-color: #E74C3C; /* Red */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -43,9 +69,28 @@ const SaveStateButton = styled.button`
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-`
+  width: 160px; /* Set the width of the button */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+  border-radius: 5px; /* Rounded corners for aesthetics */
+
+  &:hover {
+    background-color: #D62C1A; /* Slightly darker red on hover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  }
+
+  &:focus {
+    outline: none; /* Removes default focus outline */
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.5); /* Custom focus style to improve accessibility */
+  }
+
+  &:active {
+    background-color: #BF2412; /* Even darker red when button is clicked */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3); /* Deeper shadow to simulate pressing */
+  }
+`;
+
 const LoadStateButton = styled.button`
-  background-color: #B5BAB8; /* gray */
+  background-color: #B5BAB8; /* Gray, but you might opt for a more vibrant color */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -55,7 +100,26 @@ const LoadStateButton = styled.button`
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-`
+  width: 160px; /* Fixed width */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions for interactive feedback */
+  border-radius: 5px; /* Slight rounding of corners */
+
+  &:hover {
+    background-color: #A0A5A8; /* Slightly lighter gray for hover state */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  }
+
+  &:focus {
+    outline: none; /* Removing the default focus outline */
+    box-shadow: 0 0 0 3px rgba(181, 186, 184, 0.5); /* Custom focus style for better visibility */
+  }
+
+  &:active {
+    background-color: #898D90; /* Even lighter gray for active/click state */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); /* Inner shadow for a "pressed" effect */
+  }
+`;
+
 const SenarioButton = styled.button`
   background-color: #f0ad4e; /* Orange */
   border: none;
@@ -67,7 +131,26 @@ const SenarioButton = styled.button`
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-`
+  width: 160px; /* Fixed width */
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions for interactive feedback */
+  border-radius: 5px; /* Slight rounding of corners */
+
+  &:hover {
+    background-color: #e69a45; /* Slightly darker shade of orange for hover state */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  }
+
+  &:focus {
+    outline: none; /* Removing the default focus outline */
+    box-shadow: 0 0 0 3px rgba(240, 173, 78, 0.5); /* Custom focus style for better visibility */
+  }
+
+  &:active {
+    background-color: #cf8c3f; /* Even darker shade of orange for active/click state */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); /* Inner shadow for a "pressed" effect */
+  }
+`;
+
 export class SelectedSidebar extends React.Component {
   public state = cloneDeep(chartSimple)
 
@@ -94,64 +177,102 @@ export class SelectedSidebar extends React.Component {
               ? chart.selected.type === 'node'
                 ? <>
                   <Message>
-                    <div>Type: {chart.selected.type}</div>
-                    <div>ID: {chart.selected.id}</div>
+                    <h4><b>Flotation Cell's Characteristics:</b></h4>
+                    <h4><b>(Caractéristiques de la cellule de flottation):</b></h4>
                     {
-                      selectedNode &&
-                      <>
-                        <h4>Cell Characteristics:</h4>
-                        {
-                          Object.entries(selectedNode.cellCharacteristics || {}).map(([key, value], index) => (
-                            <div key={key} className='styled-input-container'>
-                              <label>{key}: </label>
-                              <div className="input-unit-container">
-                                <input
-                                  className="styled-input"
-                                  type="text"
-                                  value={value !== null && value !== undefined ? value.toString() : ''}
-                                  onChange={(e) => {
-                                    const newValue = e.target.value;
-                                    const propertyKey = key;
-                                
-                                    // Call the action function to update the state
-                                    this.setState(onUpdateNodeProperty(propertyKey, newValue));
-                                  }}
-                                />
-                                <span className="unit">{unitsArray[index]}</span>
-                              </div>
+                      selectedNode && (
+                        <>
+                          {[
+                            { key: 'netVolume', label: 'Net Volume', sublabel: '(Volume Net de la cellule de flottation)', unit: 'm3' },
+                            { key: 'pulpArea', label: 'Pulp Area', sublabel: '(Surface de la zone pulpe)', unit: 'm2' },
+                            { key: 'frothSurfaceArea', label: 'Froth Surface Area', sublabel: '(Surface de la zone de la mousse)', unit: 'm2' },
+                            { key: 'frothThickness', label: 'Froth Thickness', sublabel: '(Niveau de la mousse)', unit: 'mm' },
+                            { key: 'airFlowRate', label: 'Air Flow Rate', sublabel: '(Débit de l\'air injecté dans la cellule)', unit: 'm3/min' },
+                            
+                          ].map(({ key, label, sublabel, unit }) => (
+                            <div key={key} className='styled-input-container-node'>
+                              <label>
+                                {label} <br /> <span className="sublabel">{sublabel}</span>
+                              </label>
+                              <input
+                                className="styled-input"
+                                type="text"
+                                value={selectedNode.cellCharacteristics[key] !== null && selectedNode.cellCharacteristics[key] !== undefined ? selectedNode.cellCharacteristics[key].toString() : 'N/A'}
+                                onChange={(e) => {
+                                  const newValue = e.target.value;
+                                  this.setState(onUpdateNodeProperty(key, newValue));
+                                }}
+                              />
+                              <span className="unit">{unit}</span>
                             </div>
-                          ))
-                        }
+                          ))}
 
-                      </>
+                          {/* Additional headings and values as necessary */}
+                          <h4><br /><b>Mineralogical Composition Kinetics:</b></h4>
+                          {[
+                            { key: 'R_infCcp', label: 'Infinite Recovery Ccp', sublabel: '(Récupération infini Ccp)', unit: '%' },
+                            { key: 'k_maxCcp', label: 'K maximal Ccp', sublabel: '(K maximum Ccp)', unit: '' },
+                            { key: 'R_infGn', label: 'Infinite Recovery Gn', sublabel: '(Récupération infini Gn)', unit: '%' },
+                            { key: 'k_maxGn', label: 'K maximal Gn', sublabel: '(K maximum Gn)', unit: '' },
+                            { key: 'R_infPo', label: 'Infinite Recovery Po', sublabel: '(Récupération infini Po)', unit: '%' },
+                            { key: 'k_maxPo', label: 'K maximal Po', sublabel: '(K maximum Po)', unit: '' },
+                            { key: 'R_infSp', label: 'Infinite Recovery Sph', sublabel: '(Récupération infini Sph)', unit: '%' },
+                            { key: 'k_maxSp', label: 'K maximal Sph', sublabel: '(K maximum Sph)', unit: '' },
+                            { key: 'EntrainementSavassiparameters', label: 'Entrainment Savassi parameters', sublabel: '(Paramètres d\'entraînement Savassi)', unit: '' }
+                          ].map(({ key, label, sublabel, unit }) => (
+                            <div key={key} className='styled-input-container-node'>
+                              <label>
+                                {label} <br /> <span className="sublabel">{sublabel}</span>
+                              </label>
+                              <input
+                                className="styled-input"
+                                type="text"
+                                value={selectedNode.cellCharacteristics[key] !== null && selectedNode.cellCharacteristics[key] !== undefined ? selectedNode.cellCharacteristics[key].toString() : 'N/A'}
+                                onChange={(e) => {
+                                  const newValue = e.target.value;
+                                  this.setState(onUpdateNodeProperty(key, newValue));
+                                }}
+                              />
+                              <span className="unit">{unit}</span>
+                            </div>
+                          ))}
+                        </>
+                      )
                     }
                   </Message>
+
+
+
                 </>
                 : chart.selected.type === 'link' && chart.selected.id !== 'First_Stream_id'
                   ? (
                     // New link type handling
                     <>
                       <Message>
-                        <div>Type: {chart.selected.type}</div>
-                        <div>ID: {chart.selected.id}</div>
-                        <h4>Stream:</h4>
+                        {/*<div>Type: {chart.selected.type}</div>
+                        <div>ID: {chart.selected.id}</div>*/}
+                        <h4><b>Stream:</b></h4>
                         {
                           selectedLink && (
                             <>
                               {[
-                                { key: 'totalSolidFlow', label: 'Total Solids Flow (Débit total des solides)' },
-                                { key: 'totalLiquidFlow', label: 'Total Liquid Flow (Débit total du Liquid)' },
-                                { key: 'pulpVolumetricFlow', label: 'Pulp Volumetric Flow (Débit volumétrique de la pulpe)' },
-                                { key: 'solidsSG', label: 'Solids SG (Poids Moléculaire des solides)' },
-                                { key: 'pulpSG', label: 'Pulp SG (Poids Moléculaire de la pulpe)' },
-                                { key: 'solidsFraction', label: 'Solids Fraction (Fraction de solides)' },
-                                { key: 'cuPercentage', label: 'Cu% (Teneur du Cuivre)' },
-                                { key: 'fePercentage', label: 'Fe% (Teneur du Fer)' },
-                                { key: 'pbPercentage', label: 'Pb% (Teneur du Plomb)' },
-                                { key: 'znPercentage', label: 'Zn% (Teneur du Zinc)' }
-                              ].map(({ key, label }) => (
+                                { key: 'totalSolidFlow', label: 'Total Solids Flow', sublabel: '(Débit total des solides)' },
+                                { key: 'totalLiquidFlow', label: 'Total Liquid Flow', sublabel: '(Débit total du Liquid)' },
+                                { key: 'pulpVolumetricFlow', label: 'Pulp Volumetric Flow', sublabel: '(Débit volumétrique de la pulpe)' },
+                                { key: 'solidsSG', label: 'Solids SG', sublabel: '(Poids Moléculaire des solides)' },
+                                { key: 'pulpSG', label: 'Pulp SG', sublabel: '(Poids Moléculaire de la pulpe)' },
+                                { key: 'solidsFraction', label: 'Solids Fraction', sublabel: '(Fraction de solides)' },
+                                { key: 'cuPercentage', label: 'Cu%', sublabel: '(Teneur du Cuivre)' },
+                                { key: 'fePercentage', label: 'Fe%', sublabel: '(Teneur du Fer)' },
+                                { key: 'pbPercentage', label: 'Pb%', sublabel: '(Teneur du Plomb)' },
+                                { key: 'znPercentage', label: 'Zn%', sublabel: '(Teneur du Zinc)' }
+                              ].map(({ key, label, sublabel }) => (
                                 <div key={key} className='styled-input-container'>
-                                  <label>{label}: </label>
+                                              <label>
+                                                {label}
+                                                <br />
+                                                <span className="sublabel">{sublabel}</span>
+                                              </label>
                                   <span className="value">{selectedLink.feed[key] !== null && selectedLink.feed[key] !== undefined ? selectedLink.feed[key].toString() : 'N/A'}</span>
                                 </div>
                               ))}
@@ -168,28 +289,45 @@ export class SelectedSidebar extends React.Component {
                       // New link type handling
                       <>
                         <Message>
-                          <div>Type: {chart.selected.type}</div>
-                          <div>ID: {chart.selected.id}</div>
-                          <h4>Stream:</h4>
+                          <h4><b>Stream:</b></h4>
                           {
-                            selectedLink && Object.entries(selectedLink.feed || {}).map(([key, value]) => (
-                              <div key={key} className='styled-input-container'>
-                                <label>{key}: </label>
-                                <input type="text" className='styled-input'
-                                  value={value !== null && value !== undefined ? value.toString() : ''} onChange={(e) => {
-                                    const newValue = e.target.value;
-                                    const propertyKey = key; // The property name (e.g., 'netVolume', 'pulpArea', etc.)
-
-                                    // Call the action function to update the state
-                                    this.setState(onUpdateLinkProperty(propertyKey, newValue, selectedLink.id));
-
-
-                                  }} />
-                              </div>
-                            ))
+                            selectedLink && (
+                              <>
+                                {[
+                                  { key: 'totalSolidFlow', label: 'Total Solids Flow', sublabel: '(Débit total des solides)' },
+                                  { key: 'totalLiquidFlow', label: 'Total Liquid Flow', sublabel: '(Débit total du Liquid)' },
+                                  { key: 'pulpVolumetricFlow', label: 'Pulp Volumetric Flow', sublabel: '(Débit volumétrique de la pulpe)' },
+                                  { key: 'solidsSG', label: 'Solids SG', sublabel: '(Poids Moléculaire des solides)' },
+                                  { key: 'pulpSG', label: 'Pulp SG', sublabel: '(Poids Moléculaire de la pulpe)' },
+                                  { key: 'solidsFraction', label: 'Solids Fraction', sublabel: '(Fraction de solides)' },
+                                  { key: 'cuPercentage', label: 'Cu%', sublabel: '(Teneur du Cuivre)' },
+                                  { key: 'fePercentage', label: 'Fe%', sublabel: '(Teneur du Fer)' },
+                                  { key: 'pbPercentage', label: 'Pb%', sublabel: '(Teneur du Plomb)' },
+                                  { key: 'znPercentage', label: 'Zn%', sublabel: '(Teneur du Zinc)' }
+                                ].map(({ key, label, sublabel }) => (
+                                  <div key={key} className='styled-input-container'>
+                                    <label>
+                                      {label}
+                                      <br />
+                                      <span className="sublabel">{sublabel}</span>
+                                    </label>
+                                    <input
+                                      type="text"
+                                      className='styled-input'
+                                      value={selectedLink.feed[key] !== null && selectedLink.feed[key] !== undefined ? selectedLink.feed[key].toString() : ''}
+                                      onChange={(e) => {
+                                        const newValue = e.target.value;
+                                        // Call the action function to update the state
+                                        this.setState(onUpdateLinkProperty(key, newValue, selectedLink.id));
+                                      }}
+                                    />
+                                  </div>
+                                ))}
+                              </>
+                            )
                           }
-
                         </Message>
+
                       </>
                     )
 
@@ -199,21 +337,27 @@ export class SelectedSidebar extends React.Component {
                     </Message>
               : <Message>Click on a Cell, or Stream</Message>
           }
+          <ButtonContainer>
           <SimulateButton onClick={this.handleSimulateClick}>
             Simulate
           </SimulateButton>
-          
+          </ButtonContainer>
+          <ButtonContainer>
           <SaveStateButton onClick={this.handleSave}>
             Save
           </SaveStateButton>
-
+          </ButtonContainer>
+          <ButtonContainer>
           <LoadStateButton onClick={this.handleLoad}>
             Load
           </LoadStateButton>
+          </ButtonContainer>
+          <ButtonContainer>
           <SenarioButton onClick={this.handleSenario}>
             Run senario
           </SenarioButton>
-          <Message>{this.handleCheckPorts()}</Message>
+          </ButtonContainer>
+          {/*<Message>{this.handleCheckPorts()}</Message>*/}
         </Sidebar>
       </Page>
     )
@@ -347,7 +491,7 @@ export class SelectedSidebar extends React.Component {
   
 
   //----------------------------------------------
-  private handleCheckPorts = () => {
+/*  private handleCheckPorts = () => {
     const { nodes, links } = this.state;
     let allPortsLinked = true;
   
@@ -384,6 +528,6 @@ export class SelectedSidebar extends React.Component {
       return 'Some ports are not connected to links.';
     }
   }
-  
+  */
 
 }

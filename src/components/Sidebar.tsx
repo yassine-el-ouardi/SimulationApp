@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 export const Sidebar = styled.div`
-  width: 250px;
+  min-width: fit-content;
+  max-width: 500px;
   background: white;
   display: flex;
   flex-direction: column;
