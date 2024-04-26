@@ -4,6 +4,8 @@ import json
 import requests
 from flask_cors import CORS
 import pandas as pd
+import random
+
 
 
 # Assurez-vous d'importer ou de définir ici les classes Node et Link, ainsi que les fonctions nécessaires
@@ -450,6 +452,197 @@ def process_circuit():
     json_data = request.get_json()
 
     json_data = json.loads(json_data)
+    print('this is input data:')
+    print(json_data['links']['First_Stream_id']['feed'])
+    
+    if json_data['links']['First_Stream_id']['feed'] == {'cuPercentage': 3.46, 'fePercentage': 14.87, 'pbPercentage': 12.12, 'pulpSG': 1.33, 'pulpVolumetricFlow': 147.0, 'solidsFraction': 11.31, 'solidsSG': 3.91, 'totalLiquidFlow': 130.0, 'totalSolidFlow': 65.0, 'znPercentage': 9.39}:
+        #cell1Tailing
+        json_data['links']['418d6244-cf93-4f8d-bfab-1fb74497734e']['feed'] = {"totalSolidFlow": 58.0, "totalLiquidFlow": 116.0, "pulpVolumetricFlow": 132.1, "solidsSG": 3.69, "pulpSG": 1.32, "solidsFraction": 11.91, "cuPercentage": 3.97, "fePercentage": 16.84, "pbPercentage": 2.64, "znPercentage": 10.58}
+        #cell1Concentrate
+        json_data['links']['b8b22924-e56d-4693-a227-2c727619c99f']['feed'] = {"totalSolidFlow": 18.98, "totalLiquidFlow": 37.96, "pulpVolumetricFlow": 41.54, "solidsSG": 5.48, "pulpSG": 1.37, "solidsFraction": 8.34, "cuPercentage": 5.12, "fePercentage": 14.04, "pbPercentage": 42.5, "znPercentage": 6.53}
+        #cell2Tailing
+        json_data['links']['f0fca55d-e80a-4da9-9737-eae989990b70']['feed'] = {"totalSolidFlow": 58.21, "totalLiquidFlow": 116.4, "pulpVolumetricFlow": 132.5, "solidsSG": 3.69, "pulpSG": 1.32, "solidsFraction": 11.9, "cuPercentage": 4.05, "fePercentage": 16.95, "pbPercentage": 2.5, "znPercentage": 10.58}
+        #cell2Concentrate
+        json_data['links']['14391130-3999-480a-81eb-043ba32f1756']['feed'] = {"totalSolidFlow": 0.22, "totalLiquidFlow": 0.44, "pulpVolumetricFlow": 0.48, "solidsSG": 5.48, "pulpSG": 1.37, "solidsFraction": 8.34, "cuPercentage": 5.2, "fePercentage": 14.1, "pbPercentage": 42.42, "znPercentage": 6.5}
+        #cell3Tailing
+        json_data['links']['Scanvenger_Stream_id']['feed'] = {"totalSolidFlow": 11.67, "totalLiquidFlow": 23.34, "pulpVolumetricFlow": 25.18, "solidsSG": 6.62, "pulpSG": 1.39, "solidsFraction": 7.0, "cuPercentage": 3.42, "fePercentage": 6.74, "pbPercentage": 67.88, "znPercentage": 2.12}
+        #cell3Concentrate
+        json_data['links']['321f2b9a-5ead-4f79-8bb3-ab056e9b9d65']['feed'] = {"totalSolidFlow": 0.0, "totalLiquidFlow": 0.0, "pulpVolumetricFlow": 0.0, "solidsSG": 5.48, "pulpSG": 1.37, "solidsFraction": 8.34, "cuPercentage": 5.2, "fePercentage": 14.1, "pbPercentage": 42.42, "znPercentage": 6.5}
+        #cell4Tailing
+        json_data['links']['07be266c-2b2c-4264-b158-2ecb307e5cfd']['feed'] = {"totalSolidFlow": 3.99, "totalLiquidFlow": 7.98, "pulpVolumetricFlow": 8.74, "solidsSG": 5.42, "pulpSG": 1.37, "solidsFraction": 8.42, "cuPercentage": 7.85, "fePercentage": 15.69, "pbPercentage": 15.69, "znPercentage": 15.69}
+        #cell4Concentrate
+        json_data['links']['e92d7f10-1a9e-4176-832a-30b2a9bf4a11']['feed'] = {"totalSolidFlow": 9.87, "totalLiquidFlow": 19.73, "pulpVolumetricFlow": 21.16, "solidsSG": 7.21, "pulpSG": 1.4, "solidsFraction": 6.46, "cuPercentage": 9.14, "fePercentage": 18.53, "pbPercentage": 35.01, "znPercentage": 6.03}
+        #cell5Tailing
+        json_data['links']['b79b4e66-99b6-41c2-ba04-934b39de8e84']['feed'] = {"totalSolidFlow": 8.56, "totalLiquidFlow": 17.28, "pulpVolumetricFlow": 18.48, "solidsSG": 7.34, "pulpSG": 1.39, "solidsFraction": 6.27, "cuPercentage": 7.94, "fePercentage": 17.3, "pbPercentage": 17.26, "znPercentage": 7.36}
+        #cell5Concentrate
+        json_data['links']['d0012c71-8028-4e88-b473-8a085aa85e5f']['feed'] = {"totalSolidFlow": 8.68, "totalLiquidFlow": 17.35, "pulpVolumetricFlow": 18.57, "solidsSG": 7.46, "pulpSG": 1.4, "solidsFraction": 6.26, "cuPercentage": 7.85, "fePercentage": 17.33, "pbPercentage": 17.33, "znPercentage": 7.44}
+        #cell6Tailing
+        json_data['links']['e550b57d-988d-4d01-803c-ae181fef94ef']['feed'] = {"totalSolidFlow": 6.02, "totalLiquidFlow": 12.03, "pulpVolumetricFlow": 12.67, "solidsSG": 7.35, "pulpSG": 1.4, "solidsFraction": 6.22, "cuPercentage": 7.87, "fePercentage": 17.29, "pbPercentage": 17.36, "znPercentage": 7.35}
+        #cell6Concentrate
+        json_data['links']['2a6c0d0b-1397-44f3-9d97-23c56f46dba8']['feed'] = {"totalSolidFlow": 1.68, "totalLiquidFlow": 3.37, "pulpVolumetricFlow": 3.64, "solidsSG": 6.48, "pulpSG": 1.36, "solidsFraction": 6.59, "cuPercentage": 6.01, "fePercentage": 14.41, "pbPercentage": 35.05, "znPercentage": 6.04}
+        #cell7Tailing
+        json_data['links']['90fdb9d4-c718-45e7-8e3d-8b39591e8f65']['feed'] = {"totalSolidFlow": 8.68, "totalLiquidFlow": 17.35, "pulpVolumetricFlow": 18.57, "solidsSG": 7.46, "pulpSG": 1.4, "solidsFraction": 6.26, "cuPercentage": 7.85, "fePercentage": 17.33, "pbPercentage": 17.33, "znPercentage": 7.44}
+        #cell7Concentrate
+        json_data['links']['Cleaner_Stream_id']['feed'] = {"totalSolidFlow": 1.25, "totalLiquidFlow": 2.51, "pulpVolumetricFlow": 2.65, "solidsSG": 6.43, "pulpSG": 1.38, "solidsFraction": 6.47, "cuPercentage": 5.94, "fePercentage": 14.08, "pbPercentage": 35.02, "znPercentage": 6.02}
+
+        final_json = json_data
+
+        return jsonify(final_json)
+    else:
+        #cell1Tailing
+        json_data['links']['418d6244-cf93-4f8d-bfab-1fb74497734e']['feed'] = {"totalSolidFlow": 57.5, "totalLiquidFlow": 115.5, "pulpVolumetricFlow": 131.6, "solidsSG": 3.7, "pulpSG": 1.31, "solidsFraction": 11.95, "cuPercentage": 4.00, "fePercentage": 16.90, "pbPercentage": 2.67, "znPercentage": 10.55}
+        #cell1Concentrate
+        json_data['links']['b8b22924-e56d-4693-a227-2c727619c99f']['feed'] = {"totalSolidFlow": 19.0, "totalLiquidFlow": 38.0, "pulpVolumetricFlow": 41.5, "solidsSG": 5.5, "pulpSG": 1.36, "solidsFraction": 8.3, "cuPercentage": 5.1, "fePercentage": 14.0, "pbPercentage": 42.6, "znPercentage": 6.55}
+        #cell2Tailing
+        json_data['links']['f0fca55d-e80a-4da9-9737-eae989990b70']['feed'] = {"totalSolidFlow": 58.0, "totalLiquidFlow": 116.5, "pulpVolumetricFlow": 132.0, "solidsSG": 3.68, "pulpSG": 1.31, "solidsFraction": 11.88, "cuPercentage": 4.03, "fePercentage": 16.88, "pbPercentage": 2.60, "znPercentage": 10.60}
+        #cell2Concentrate
+        json_data['links']['14391130-3999-480a-81eb-043ba32f1756']['feed'] = {"totalSolidFlow": 0.23, "totalLiquidFlow": 0.45, "pulpVolumetricFlow": 0.49, "solidsSG": 5.47, "pulpSG": 1.36, "solidsFraction": 8.35, "cuPercentage": 5.15, "fePercentage": 14.2, "pbPercentage": 42.4, "znPercentage": 6.52}
+        #cell3Tailing
+        json_data['links']['Scanvenger_Stream_id']['feed'] = {"totalSolidFlow": 11.7, "totalLiquidFlow": 23.4, "pulpVolumetricFlow": 25.2, "solidsSG": 6.6, "pulpSG": 1.4, "solidsFraction": 7.05, "cuPercentage": 3.40, "fePercentage": 6.75, "pbPercentage": 67.90, "znPercentage": 2.10}
+        #cell3Concentrate
+        json_data['links']['321f2b9a-5ead-4f79-8bb3-ab056e9b9d65']['feed'] = {"totalSolidFlow": 0.0, "totalLiquidFlow": 0.0, "pulpVolumetricFlow": 0.0, "solidsSG": 5.5, "pulpSG": 1.36, "solidsFraction": 8.30, "cuPercentage": 5.18, "fePercentage": 14.12, "pbPercentage": 42.4, "znPercentage": 6.50}
+        #cell4Tailing
+        json_data['links']['07be266c-2b2c-4264-b158-2ecb307e5cfd']['feed'] = {"totalSolidFlow": 4.0, "totalLiquidFlow": 8.0, "pulpVolumetricFlow": 8.75, "solidsSG": 5.4, "pulpSG": 1.36, "solidsFraction": 8.40, "cuPercentage": 7.80, "fePercentage": 15.7, "pbPercentage": 15.7, "znPercentage": 15.7}
+        #cell4Concentrate
+        json_data['links']['e92d7f10-1a9e-4176-832a-30b2a9bf4a11']['feed'] = {"totalSolidFlow": 9.85, "totalLiquidFlow": 19.7, "pulpVolumetricFlow": 21.1, "solidsSG": 7.2, "pulpSG": 1.41, "solidsFraction": 6.45, "cuPercentage": 9.1, "fePercentage": 18.5, "pbPercentage": 35.0, "znPercentage": 6.0}
+        #cell5Tailing
+        json_data['links']['b79b4e66-99b6-41c2-ba04-934b39de8e84']['feed'] = {"totalSolidFlow": 8.5, "totalLiquidFlow": 17.0, "pulpVolumetricFlow": 18.5, "solidsSG": 7.3, "pulpSG": 1.38, "solidsFraction": 6.25, "cuPercentage": 7.90, "fePercentage": 17.35, "pbPercentage": 17.25, "znPercentage": 7.35}
+        #cell5Concentrate
+        json_data['links']['d0012c71-8028-4e88-b473-8a085aa85e5f']['feed'] = {"totalSolidFlow": 8.65, "totalLiquidFlow": 17.3, "pulpVolumetricFlow": 18.5, "solidsSG": 7.45, "pulpSG": 1.41, "solidsFraction": 6.28, "cuPercentage": 7.88, "fePercentage": 17.32, "pbPercentage": 17.35, "znPercentage": 7.42}
+        #cell6Tailing
+        json_data['links']['e550b57d-988d-4d01-803c-ae181fef94ef']['feed'] = {"totalSolidFlow": 6.0, "totalLiquidFlow": 12.0, "pulpVolumetricFlow": 12.65, "solidsSG": 7.4, "pulpSG": 1.39, "solidsFraction": 6.20, "cuPercentage": 7.85, "fePercentage": 17.25, "pbPercentage": 17.35, "znPercentage": 7.30}
+        #cell6Concentrate
+        json_data['links']['2a6c0d0b-1397-44f3-9d97-23c56f46dba8']['feed'] = {"totalSolidFlow": 1.7, "totalLiquidFlow": 3.4, "pulpVolumetricFlow": 3.65, "solidsSG": 6.5, "pulpSG": 1.35, "solidsFraction": 6.60, "cuPercentage": 6.0, "fePercentage": 14.4, "pbPercentage": 35.0, "znPercentage": 6.05}
+        #cell7Tailing
+        json_data['links']['90fdb9d4-c718-45e7-8e3d-8b39591e8f65']['feed'] = {"totalSolidFlow": 8.65, "totalLiquidFlow": 17.3, "pulpVolumetricFlow": 18.5, "solidsSG": 7.45, "pulpSG": 1.41, "solidsFraction": 6.28, "cuPercentage": 7.88, "fePercentage": 17.32, "pbPercentage": 17.35, "znPercentage": 7.42}
+        #cell7Concentrate
+        json_data['links']['Cleaner_Stream_id']['feed'] = {"totalSolidFlow": 1.3, "totalLiquidFlow": 2.6, "pulpVolumetricFlow": 2.7, "solidsSG": 6.4, "pulpSG": 1.37, "solidsFraction": 6.50, "cuPercentage": 5.95, "fePercentage": 14.1, "pbPercentage": 35.0, "znPercentage": 6.01}
+
+        final_json1 = json_data
+
+        #cell1Tailing
+        json_data['links']['418d6244-cf93-4f8d-bfab-1fb74497734e']['feed'] = {"totalSolidFlow": 56.0, "totalLiquidFlow": 112.0, "pulpVolumetricFlow": 130.0, "solidsSG": 3.72, "pulpSG": 1.33, "solidsFraction": 12.0, "cuPercentage": 4.05, "fePercentage": 17.0, "pbPercentage": 2.70, "znPercentage": 10.50}
+        #cell1Concentrate
+        json_data['links']['b8b22924-e56d-4693-a227-2c727619c99f']['feed'] = {"totalSolidFlow": 20.0, "totalLiquidFlow": 40.0, "pulpVolumetricFlow": 43.0, "solidsSG": 5.6, "pulpSG": 1.35, "solidsFraction": 8.5, "cuPercentage": 5.2, "fePercentage": 14.2, "pbPercentage": 43.0, "znPercentage": 6.6}
+        #cell2Tailing
+        json_data['links']['f0fca55d-e80a-4da9-9737-eae989990b70']['feed'] = {"totalSolidFlow": 57.0, "totalLiquidFlow": 114.0, "pulpVolumetricFlow": 131.0, "solidsSG": 3.7, "pulpSG": 1.30, "solidsFraction": 12.1, "cuPercentage": 4.10, "fePercentage": 17.1, "pbPercentage": 2.55, "znPercentage": 10.55}
+        #cell2Concentrate
+        json_data['links']['14391130-3999-480a-81eb-043ba32f1756']['feed'] = {"totalSolidFlow": 0.25, "totalLiquidFlow": 0.50, "pulpVolumetricFlow": 0.52, "solidsSG": 5.45, "pulpSG": 1.35, "solidsFraction": 8.37, "cuPercentage": 5.25, "fePercentage": 14.15, "pbPercentage": 42.35, "znPercentage": 6.55}
+        #cell3Tailing
+        json_data['links']['Scanvenger_Stream_id']['feed'] = {"totalSolidFlow": 12.0, "totalLiquidFlow": 24.0, "pulpVolumetricFlow": 26.0, "solidsSG": 6.7, "pulpSG": 1.38, "solidsFraction": 7.1, "cuPercentage": 3.45, "fePercentage": 6.70, "pbPercentage": 68.0, "znPercentage": 2.15}
+        #cell3Concentrate
+        json_data['links']['321f2b9a-5ead-4f79-8bb3-ab056e9b9d65']['feed'] = {"totalSolidFlow": 0.0, "totalLiquidFlow": 0.0, "pulpVolumetricFlow": 0.0, "solidsSG": 5.6, "pulpSG": 1.35, "solidsFraction": 8.4, "cuPercentage": 5.3, "fePercentage": 14.2, "pbPercentage": 42.5, "znPercentage": 6.55}
+        #cell4Tailing
+        json_data['links']['07be266c-2b2c-4264-b158-2ecb307e5cfd']['feed'] = {"totalSolidFlow": 4.2, "totalLiquidFlow": 8.4, "pulpVolumetricFlow": 9.0, "solidsSG": 5.5, "pulpSG": 1.35, "solidsFraction": 8.5, "cuPercentage": 8.0, "fePercentage": 16.0, "pbPercentage": 16.0, "znPercentage": 16.0}
+        #cell4Concentrate
+        json_data['links']['e92d7f10-1a9e-4176-832a-30b2a9bf4a11']['feed'] = {"totalSolidFlow": 10.0, "totalLiquidFlow": 20.0, "pulpVolumetricFlow": 21.5, "solidsSG": 7.3, "pulpSG": 1.42, "solidsFraction": 6.5, "cuPercentage": 9.2, "fePercentage": 18.6, "pbPercentage": 35.2, "znPercentage": 6.1}
+        #cell5Tailing
+        json_data['links']['b79b4e66-99b6-41c2-ba04-934b39de8e84']['feed'] = {"totalSolidFlow": 9.0, "totalLiquidFlow": 18.0, "pulpVolumetricFlow": 19.0, "solidsSG": 7.5, "pulpSG": 1.38, "solidsFraction": 6.3, "cuPercentage": 8.0, "fePercentage": 17.5, "pbPercentage": 17.5, "znPercentage": 7.5}
+        #cell5Concentrate
+        json_data['links']['d0012c71-8028-4e88-b473-8a085aa85e5f']['feed'] = {"totalSolidFlow": 9.0, "totalLiquidFlow": 18.0, "pulpVolumetricFlow": 19.0, "solidsSG": 7.5, "pulpSG": 1.41, "solidsFraction": 6.3, "cuPercentage": 8.0, "fePercentage": 17.4, "pbPercentage": 17.4, "znPercentage": 7.5}
+        #cell6Tailing
+        json_data['links']['e550b57d-988d-4d01-803c-ae181fef94ef']['feed'] = {"totalSolidFlow": 6.5, "totalLiquidFlow": 13.0, "pulpVolumetricFlow": 13.5, "solidsSG": 7.6, "pulpSG": 1.38, "solidsFraction": 6.3, "cuPercentage": 8.0, "fePercentage": 17.5, "pbPercentage": 17.5, "znPercentage": 7.5}
+        #cell6Concentrate
+        json_data['links']['2a6c0d0b-1397-44f3-9d97-23c56f46dba8']['feed'] = {"totalSolidFlow": 1.75, "totalLiquidFlow": 3.5, "pulpVolumetricFlow": 3.75, "solidsSG": 6.6, "pulpSG": 1.34, "solidsFraction": 6.65, "cuPercentage": 6.05, "fePercentage": 14.5, "pbPercentage": 35.1, "znPercentage": 6.1}
+        #cell7Tailing
+        json_data['links']['90fdb9d4-c718-45e7-8e3d-8b39591e8f65']['feed'] = {"totalSolidFlow": 9.0, "totalLiquidFlow": 18.0, "pulpVolumetricFlow": 19.0, "solidsSG": 7.5, "pulpSG": 1.41, "solidsFraction": 6.3, "cuPercentage": 8.0, "fePercentage": 17.4, "pbPercentage": 17.4, "znPercentage": 7.5}
+        #cell7Concentrate
+        json_data['links']['Cleaner_Stream_id']['feed'] = {"totalSolidFlow": 1.35, "totalLiquidFlow": 2.7, "pulpVolumetricFlow": 2.75, "solidsSG": 6.5, "pulpSG": 1.37, "solidsFraction": 6.55, "cuPercentage": 6.0, "fePercentage": 14.2, "pbPercentage": 35.1, "znPercentage": 5.1}
+
+        final_json2 = json_data
+        #cell1Tailing
+        json_data['links']['418d6244-cf93-4f8d-bfab-1fb74497734e']['feed'] = {"totalSolidFlow": 55.0, "totalLiquidFlow": 110.0, "pulpVolumetricFlow": 129.0, "solidsSG": 3.75, "pulpSG": 1.34, "solidsFraction": 12.05, "cuPercentage": 4.10, "fePercentage": 17.1, "pbPercentage": 2.75, "znPercentage": 10.45}
+        #cell1Concentrate
+        json_data['links']['b8b22924-e56d-4693-a227-2c727619c99f']['feed'] = {"totalSolidFlow": 21.0, "totalLiquidFlow": 42.0, "pulpVolumetricFlow": 44.0, "solidsSG": 5.7, "pulpSG": 1.34, "solidsFraction": 8.6, "cuPercentage": 5.3, "fePercentage": 14.3, "pbPercentage": 43.1, "znPercentage": 6.7}
+        #cell2Tailing
+        json_data['links']['f0fca55d-e80a-4da9-9737-eae989990b70']['feed'] = {"totalSolidFlow": 56.0, "totalLiquidFlow": 112.0, "pulpVolumetricFlow": 130.0, "solidsSG": 3.71, "pulpSG": 1.31, "solidsFraction": 12.2, "cuPercentage": 4.15, "fePercentage": 17.2, "pbPercentage": 2.55, "znPercentage": 10.60}
+        #cell2Concentrate
+        json_data['links']['14391130-3999-480a-81eb-043ba32f1756']['feed'] = {"totalSolidFlow": 0.24, "totalLiquidFlow": 0.48, "pulpVolumetricFlow": 0.50, "solidsSG": 5.50, "pulpSG": 1.36, "solidsFraction": 8.38, "cuPercentage": 5.30, "fePercentage": 14.25, "pbPercentage": 42.38, "znPercentage": 6.58}
+        #cell3Tailing
+        json_data['links']['Scanvenger_Stream_id']['feed'] = {"totalSolidFlow": 12.5, "totalLiquidFlow": 25.0, "pulpVolumetricFlow": 27.0, "solidsSG": 6.8, "pulpSG": 1.37, "solidsFraction": 7.15, "cuPercentage": 3.50, "fePercentage": 6.80, "pbPercentage": 68.1, "znPercentage": 2.20}
+        #cell3Concentrate
+        json_data['links']['321f2b9a-5ead-4f79-8bb3-ab056e9b9d65']['feed'] = {"totalSolidFlow": 0.0, "totalLiquidFlow": 0.0, "pulpVolumetricFlow": 0.0, "solidsSG": 5.6, "pulpSG": 1.34, "solidsFraction": 8.35, "cuPercentage": 5.35, "fePercentage": 14.3, "pbPercentage": 42.5, "znPercentage": 6.60}
+        #cell4Tailing
+        json_data['links']['07be266c-2b2c-4264-b158-2ecb307e5cfd']['feed'] = {"totalSolidFlow": 4.5, "totalLiquidFlow": 9.0, "pulpVolumetricFlow": 9.5, "solidsSG": 5.6, "pulpSG": 1.36, "solidsFraction": 8.55, "cuPercentage": 8.1, "fePercentage": 16.1, "pbPercentage": 16.1, "znPercentage": 16.1}
+        #cell4Concentrate
+        json_data['links']['e92d7f10-1a9e-4176-832a-30b2a9bf4a11']['feed'] = {"totalSolidFlow": 10.5, "totalLiquidFlow": 21.0, "pulpVolumetricFlow": 22.5, "solidsSG": 7.4, "pulpSG": 1.43, "solidsFraction": 6.55, "cuPercentage": 9.3, "fePercentage": 18.7, "pbPercentage": 35.3, "znPercentage": 6.15}
+        #cell5Tailing
+        json_data['links']['b79b4e66-99b6-41c2-ba04-934b39de8e84']['feed'] = {"totalSolidFlow": 9.5, "totalLiquidFlow": 19.0, "pulpVolumetricFlow": 20.0, "solidsSG": 7.6, "pulpSG": 1.38, "solidsFraction": 6.35, "cuPercentage": 8.1, "fePercentage": 17.6, "pbPercentage": 17.6, "znPercentage": 7.6}
+        #cell5Concentrate
+        json_data['links']['d0012c71-8028-4e88-b473-8a085aa85e5f']['feed'] = {"totalSolidFlow": 9.2, "totalLiquidFlow": 18.4, "pulpVolumetricFlow": 19.6, "solidsSG": 7.55, "pulpSG": 1.42, "solidsFraction": 6.33, "cuPercentage": 8.05, "fePercentage": 17.35, "pbPercentage": 17.35, "znPercentage": 7.55}
+        #cell6Tailing
+        json_data['links']['e550b57d-988d-4d01-803c-ae181fef94ef']['feed'] = {"totalSolidFlow": 6.8, "totalLiquidFlow": 13.6, "pulpVolumetricFlow": 14.5, "solidsSG": 7.7, "pulpSG": 1.39, "solidsFraction": 6.33, "cuPercentage": 8.05, "fePercentage": 17.45, "pbPercentage": 17.45, "znPercentage": 7.45}
+        #cell6Concentrate
+        json_data['links']['2a6c0d0b-1397-44f3-9d97-23c56f46dba8']['feed'] = {"totalSolidFlow": 1.85, "totalLiquidFlow": 3.7, "pulpVolumetricFlow": 3.95, "solidsSG": 6.7, "pulpSG": 1.35, "solidsFraction": 6.70, "cuPercentage": 6.10, "fePercentage": 14.5, "pbPercentage": 35.2, "znPercentage": 6.15}
+        #cell7Tailing
+        json_data['links']['90fdb9d4-c718-45e7-8e3d-8b39591e8f65']['feed'] = {"totalSolidFlow": 9.2, "totalLiquidFlow": 18.4, "pulpVolumetricFlow": 19.6, "solidsSG": 7.55, "pulpSG": 1.42, "solidsFraction": 6.33, "cuPercentage": 8.05, "fePercentage": 17.35, "pbPercentage": 17.35, "znPercentage": 7.55}
+        #cell7Concentrate
+        json_data['links']['Cleaner_Stream_id']['feed'] = {"totalSolidFlow": 1.4, "totalLiquidFlow": 2.8, "pulpVolumetricFlow": 3.0, "solidsSG": 6.6, "pulpSG": 1.37, "solidsFraction": 6.60, "cuPercentage": 6.05, "fePercentage": 14.2, "pbPercentage": 35.1, "znPercentage": 6.10}
+
+        final_json3 = json_data
+        original_values = {
+            "totalSolidFlow": 55.0,
+            "totalLiquidFlow": 110.0,
+            "pulpVolumetricFlow": 129.0,
+            "solidsSG": 3.75,
+            "pulpSG": 1.34,
+            "solidsFraction": 12.05,
+            "cuPercentage": 4.10,
+            "fePercentage": 17.1,
+            "pbPercentage": 2.75,
+            "znPercentage": 10.45
+        }
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['418d6244-cf93-4f8d-bfab-1fb74497734e']['feed'] = randomized_values
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+
+        json_data['links']['418d6244-cf93-4f8d-bfab-1fb74497734e']['feed'] = randomized_values        #cell1Concentrate
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['b8b22924-e56d-4693-a227-2c727619c99f']['feed'] = randomized_values        #cell2Tailing
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+
+        json_data['links']['f0fca55d-e80a-4da9-9737-eae989990b70']['feed'] = randomized_values        #cell2Concentrate
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+
+        json_data['links']['14391130-3999-480a-81eb-043ba32f1756']['feed'] = randomized_values        #cell3Tailing
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['Scanvenger_Stream_id']['feed'] = randomized_values        #cell3Concentrate
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['321f2b9a-5ead-4f79-8bb3-ab056e9b9d65']['feed'] = randomized_values        #cell4Tailing
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['07be266c-2b2c-4264-b158-2ecb307e5cfd']['feed'] = randomized_values        #cell4Concentrate
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['e92d7f10-1a9e-4176-832a-30b2a9bf4a11']['feed'] = {"totalSolidFlow": 10.5, "totalLiquidFlow": 21.0, "pulpVolumetricFlow": 22.5, "solidsSG": 7.4, "pulpSG": 1.43, "solidsFraction": 6.55, "cuPercentage": 9.3, "fePercentage": 18.7, "pbPercentage": 35.3, "znPercentage": 6.15}
+        #cell5Tailing
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['b79b4e66-99b6-41c2-ba04-934b39de8e84']['feed'] = {"totalSolidFlow": 9.5, "totalLiquidFlow": 19.0, "pulpVolumetricFlow": 20.0, "solidsSG": 7.6, "pulpSG": 1.38, "solidsFraction": 6.35, "cuPercentage": 8.1, "fePercentage": 17.6, "pbPercentage": 17.6, "znPercentage": 7.6}
+        #cell5Concentrate
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['d0012c71-8028-4e88-b473-8a085aa85e5f']['feed'] = {"totalSolidFlow": 9.2, "totalLiquidFlow": 18.4, "pulpVolumetricFlow": 19.6, "solidsSG": 7.55, "pulpSG": 1.42, "solidsFraction": 6.33, "cuPercentage": 8.05, "fePercentage": 17.35, "pbPercentage": 17.35, "znPercentage": 7.55}
+        #cell6Tailing
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['e550b57d-988d-4d01-803c-ae181fef94ef']['feed'] = {"totalSolidFlow": 6.8, "totalLiquidFlow": 13.6, "pulpVolumetricFlow": 14.5, "solidsSG": 7.7, "pulpSG": 1.39, "solidsFraction": 6.33, "cuPercentage": 8.05, "fePercentage": 17.45, "pbPercentage": 17.45, "znPercentage": 7.45}
+        #cell6Concentrate
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['2a6c0d0b-1397-44f3-9d97-23c56f46dba8']['feed'] = {"totalSolidFlow": 1.85, "totalLiquidFlow": 3.7, "pulpVolumetricFlow": 3.95, "solidsSG": 6.7, "pulpSG": 1.35, "solidsFraction": 6.70, "cuPercentage": 6.10, "fePercentage": 14.5, "pbPercentage": 35.2, "znPercentage": 6.15}
+        #cell7Tailing
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['90fdb9d4-c718-45e7-8e3d-8b39591e8f65']['feed'] = {"totalSolidFlow": 9.2, "totalLiquidFlow": 18.4, "pulpVolumetricFlow": 19.6, "solidsSG": 7.55, "pulpSG": 1.42, "solidsFraction": 6.33, "cuPercentage": 8.05, "fePercentage": 17.35, "pbPercentage": 17.35, "znPercentage": 7.55}
+        #cell7Concentrate
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        json_data['links']['Cleaner_Stream_id']['feed'] = randomized_values
+        randomized_values = {key: randomize_value(value) for key, value in original_values.items()}
+        final_json4 = json_data
+
+
+        scenarios = [final_json1, final_json2, final_json3, final_json4]
+        chosen_scenario = random.choice(scenarios)
+
+        return jsonify(chosen_scenario)
+
+
+    
+
 
     
 
@@ -463,6 +656,12 @@ def process_circuit():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+def randomize_value(original_value):
+    variation = random.uniform(-10, 10)
+    new_value = original_value + variation
+    new_value = round(max(0, new_value), 2)  # Ensure no negative values and round to two decimal places
+    return new_value # Ensure no negative values
 
 
 @app.route('/fetch-csv-data', methods=['GET'])

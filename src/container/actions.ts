@@ -379,6 +379,7 @@ export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart:
 
 export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }) => (chart: IChart) => {
   console.log(chart.selected.id);
+  window.open(`/Dashboard/${nodeId}`, '_blank');
   
   if (chart.selected.id !== nodeId || chart.selected.type !== 'node') {
     chart.selected = {

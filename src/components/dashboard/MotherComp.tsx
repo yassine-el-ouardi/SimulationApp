@@ -3,6 +3,7 @@ import Chart1 from './Chart1';
 import Chart2 from './Chart2';
 //import DashboardStats from './DashboardStats';
 import AmountStats from './AmountStats';
+import { useParams } from 'react-router-dom';
 
 /*
 interface StatsData {
@@ -12,6 +13,10 @@ interface StatsData {
 }
 */
 const MotherComp: React.FC = () => {
+  const { cellId } = useParams();
+
+  // You can now use cellId to fetch or display specific data
+  console.log("Displaying data for cell:", cellId);
   /*const statsData: StatsData[] = [
     { title: "Air efficiency Of the cell", value: "522.4", description: "Kg/m3" },
     { title: "Flotation rate Of the cell", value: "0.59", description: "1/min" },
@@ -22,7 +27,7 @@ const MotherComp: React.FC = () => {
     <div style={{marginTop: '0px'}} className="container mx-auto mt-8" >
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <img src="FlotCellBrut.png" alt="" style={{ marginTop: '20px' }} />
+          <img src="/FlotCellBrut.png" alt="" style={{ marginTop: '20px' }} />
           <div className="bg-gray-200 rounded p-2 mt-2">
             <p className="text-center">Cell name: FB</p>
           </div>

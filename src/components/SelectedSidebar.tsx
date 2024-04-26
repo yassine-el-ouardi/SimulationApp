@@ -453,6 +453,7 @@ export class SelectedSidebar extends React.Component {
               //store it also in data base (influxdb):
 
 // Setup your InfluxDB connection
+/*
               const token = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA==';
               const org = 'Dev team';
               const bucket = 'Seconds';
@@ -471,7 +472,7 @@ export class SelectedSidebar extends React.Component {
               writeApi.close().then(() => console.log('Finished writing.'));
 
 
-              console.log(`Response from the backend for Object ${index}:`, responseData);
+              console.log(`Response from the backend for Object ${index}:`, responseData);*/
               await new Promise(resolve => setTimeout(resolve, 1000));
             } else {
               console.error(`Error occurred: ${response.status}, ${response.statusText}`);

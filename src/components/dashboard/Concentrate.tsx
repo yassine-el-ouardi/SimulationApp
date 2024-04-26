@@ -2,6 +2,10 @@ import React from 'react';
 import Chart1 from './Chart1';
 import Chart2 from './Chart2';
 import DashboardStats from './DashboardStats';
+import { IChart } from '../../types/chart';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 //import DashboardStatsProps from './DashboardStats';
 
 interface Stat {
@@ -10,17 +14,39 @@ interface Stat {
   description: string;
 }
 
-const Concentrate: React.FC = () => {
-  const statsData: Stat[] = [
-    { title: "Total Solids Flow", value: "343.4", description: "t/h" },
-    { title: "Total Liquid Flow", value: "637.7", description: "t/h" },
-    { title: "Pulp Mass Flow", value: "981.2", description: "t/h" },
-    { title: "Pulp Volumetric Flow", value: "707.3", description: "m3/h" },
-    { title: "Solids SG", value: "5.08", description: "g/cm3" },
-    { title: "Pulp SG", value: "1.39", description: "g/cm3" },
-    { title: "% Solids", value: "35", description: "%" },
-    { title: "Solids Fraction", value: "9.56", description: "%" },
-  ];
+interface ConcentrateProps {
+  chart: IChart; // Assuming this prop passes the entire chart data including links
+}
+
+const Concentrate: React.FC<ConcentrateProps> = ({ chart }) => {
+
+  const { cellId } = useParams<{ cellId: string }>();
+  const [statsData, setStatsData] = useState<Stat[]>([]);
+  console.log("Received chart:", chart);
+  console.log("Cell ID:", cellId);
+
+  useEffect(() => {
+    // This example assumes 'chart.links' is an object where each key is a link ID and each value is a link object.
+    const relevantLink = Object.values(chart.links).find(
+      link => link.from.nodeId === cellId && link.from.portId === 'port3'
+    );
+
+    if (relevantLink) {
+      const newStatsData = [
+        { title: "Total Solids Flow", value: relevantLink.feed.totalSolidFlow.toString(), description: "t/h" },
+        { title: "Total Liquid Flow", value: relevantLink.feed.totalLiquidFlow.toString(), description: "t/h" },
+        { title: "Pulp Volumetric Flow", value: relevantLink.feed.pulpVolumetricFlow.toString(), description: "m³/h" },
+        { title: "Solids SG", value: relevantLink.feed.solidsSG.toString(), description: "g/cm³" },
+        { title: "Pulp SG", value: relevantLink.feed.pulpSG.toString(), description: "g/cm³" },
+        { title: "Solids Fraction", value: relevantLink.feed.solidsFraction.toString(), description: "%" },
+        { title: "Copper Percentage", value: relevantLink.feed.cuPercentage.toString(), description: "%" },
+        { title: "Iron Percentage", value: relevantLink.feed.fePercentage.toString(), description: "%" },
+        { title: "Zinc Percentage", value: relevantLink.feed.znPercentage.toString(), description: "%" },
+        { title: "Lead Percentage", value: relevantLink.feed.pbPercentage.toString(), description: "%" },
+      ];
+      setStatsData(newStatsData);
+    }
+  }, [cellId, chart.links]);
 
   return (
     <div>
