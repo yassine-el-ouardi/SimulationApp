@@ -10,6 +10,8 @@ import { onUpdateNodeProperty, onUpdateLinkProperty } from '../container/actions
 import { saveState, loadStateFromFile } from '../container/actions'
 import '../custom.css'
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
+import { useAppContext } from '../AppContext';
+
 
 
 //const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
@@ -151,17 +153,22 @@ const SenarioButton = styled.button`
   }
 `;
 
-export class SelectedSidebar extends React.Component {
-  public state = cloneDeep(chartSimple)
+const SelectedSidebar = () => {
+  //public state = cloneDeep(chartSimple)
+  const { chart, setChart } = useAppContext();
 
 
-  public render() {
-    const chart = this.state
+  //public render() {
+    //const chart = this.state
     // console.log('selected item', chart);
     const selectedNode = chart.selected.id ? chart.nodes[chart.selected.id] : null;
     const selectedLink = chart.selected.id ? chart.links[chart.selected.id] : null;
     const stateActions = mapValues(actions, (func: any) =>
-      (...args: any) => this.setState(func(...args))) as typeof actions
+      (...args: any) => {
+        const newState = func(...args, chart);
+        setChart(newState);
+      }
+    );
 
     return (
       <Page>
@@ -208,7 +215,7 @@ export class SelectedSidebar extends React.Component {
                           ))}
 
                           {/* Additional headings and values as necessary */}
-                          <h4><br /><b>Mineralogical Composition Kinetics:</b></h4>
+                          <h4><br /><b>Mineralogical Composition Kx inetics:</b></h4>
                           {[
                             { key: 'R_infCcp', label: 'Infinite Recovery Ccp', sublabel: '(Récupération infini Ccp)', unit: '%' },
                             { key: 'k_maxCcp', label: 'K maximal Ccp', sublabel: '(K maximum Ccp)', unit: '' },
@@ -268,16 +275,12 @@ export class SelectedSidebar extends React.Component {
                                 { key: 'znPercentage', label: 'Zn%', sublabel: '(Teneur du Zinc)' }
                               ].map(({ key, label, sublabel }) => (
                                 <div key={key} className='styled-input-container'>
-                                  <label>
-                                    {label}
-                                    <br />
-                                    <span className="sublabel">{sublabel}</span>
-                                  </label>
-                                  <span className="value">
-                                    {selectedLink.feed[key] !== null && selectedLink.feed[key] !== undefined
-                                      ? Number(selectedLink.feed[key]).toFixed(2)
-                                      : 'N/A'}
-                                  </span>
+                                              <label>
+                                                {label}
+                                                <br />
+                                                <span className="sublabel">{sublabel}</span>
+                                              </label>
+                                  <span className="value">{selectedLink.feed[key] !== null && selectedLink.feed[key] !== undefined ? selectedLink.feed[key].toString() : 'N/A'}</span>
                                 </div>
                               ))}
                             </>
@@ -390,7 +393,6 @@ export class SelectedSidebar extends React.Component {
     const chart = this.state;
     const chartString = JSON.stringify(chart);
     const parsedData = chartString;
-    console.log("sent json file:",parsedData);
   
     try {
       const response = await fetch(url, {

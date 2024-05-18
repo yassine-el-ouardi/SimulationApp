@@ -6,10 +6,14 @@ import { SelectedSidebar } from './components/SelectedSidebar';
 import MotherComp from './components/dashboard/MotherComp';
 import Concentrate from './components/dashboard/Concentrate';
 import Tailing from './components/dashboard/Tailing';
-import { createRoot } from 'react-dom/client';
+//import { createRoot } from 'react-dom/client';
 import './styles/style.css';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components'
+import ReactDOM from 'react-dom/client'; // Import for React 18's client API
+import { AppProvider } from './AppContext'; // Make sure the path is correct
+
+
 
 const MenuStyle = styled.div`
   width: 200px;
@@ -149,5 +153,9 @@ const App = () => {
 };
 
 const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<App />);
+const root = ReactDOM.createRoot(container);
+root.render(
+    <AppProvider>
+      <App />
+    </AppProvider>
+);

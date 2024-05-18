@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Chart1 from './Chart1';
 import Chart2 from './Chart2';
 //import DashboardStats from './DashboardStats';
 import AmountStats from './AmountStats';
 import { useParams } from 'react-router-dom';
+import { useAppContext } from '../../AppContext';
+
 
 /*
 interface StatsData {
@@ -13,6 +15,13 @@ interface StatsData {
 }
 */
 const MotherComp: React.FC = () => {
+  const { chart } = useAppContext();
+
+  useEffect(() => {
+    console.log("chart updated in MotherComp:", chart);
+  }, [chart]);
+
+  console.log("chart in dashboard:", chart)
   const { cellId } = useParams();
 
   // You can now use cellId to fetch or display specific data

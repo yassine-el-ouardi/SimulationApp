@@ -4,3 +4,5 @@ pip install joblib
 pip install pandas
 pip install scikit-learn
 pip install flask_cors
+pip install nbconvert jupyter
+pip install openpyxl

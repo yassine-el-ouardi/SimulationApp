@@ -4,7 +4,7 @@ import { FlowChartWithState } from '../container'
 import { Content, Page, Sidebar, SidebarItem } from '.'
 import { chartSimple } from '../misc/exampleChartState'
 import { IChart } from '../types'
-//import { saveState, loadStateFromFile } from '../container/actions'
+import { saveState, loadStateFromFile } from '../container/actions'
 
 const Message = styled.div`
 margin: 10px;
@@ -48,9 +48,9 @@ interface DragAndDropSidebarProps {
 
 export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateChange }) =>{ 
   
-  const [chartState, /*setChartState*/] = React.useState(chartSimple);
+  const [chartState, setChartState] = React.useState(chartSimple);
 
-  /*const handleSave = () => {
+  const handleSave = () => {
     // Assuming saveState simply returns the current state without serializing it
     // We need to serialize the chart state to a JSON string
     const savedState = JSON.stringify(saveState(chartState));
@@ -86,7 +86,7 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
       console.log('Loaded Chart State:', loadedChart); // Log the loaded chart state for debugging
     });
   };
-  */
+
   
   return(
   <Page>
@@ -174,14 +174,11 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
           },
         }}
       />
-          {/* <SaveStateButton /*onClick={this.handleSave}>
-            Save
-          </SaveStateButton>
+
           <LoadStateButton onClick={handleLoad}>
             Load
           </LoadStateButton>
           <SaveStateButton onClick={handleSave}>Save</SaveStateButton>
-        <LoadStateButton onClick={handleLoad}>Load</LoadStateButton> */}
     </Sidebar>
   </Page>
 
