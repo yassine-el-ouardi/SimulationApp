@@ -10,6 +10,4 @@ export const chartSimple: IChart = {
   },
   links: {
   },
-  selected: {},
-  hovered: {},
 }

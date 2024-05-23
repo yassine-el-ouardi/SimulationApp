@@ -2,9 +2,10 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { FlowChartWithState } from '../container'
 import { Content, Page, Sidebar, SidebarItem } from '.'
-import { chartSimple } from '../misc/exampleChartState'
+//import { chartSimple } from '../misc/exampleChartState'
 import { IChart } from '../types'
 import { saveState, loadStateFromFile } from '../container/actions'
+import { useAppContext } from '../AppContext' 
 
 const Message = styled.div`
 margin: 10px;
@@ -43,12 +44,11 @@ console.log(LoadStateButton, SaveStateButton);
 
 interface DragAndDropSidebarProps {
   onStateChange: (chart: IChart) => void;
-
 }
 
 export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateChange }) =>{ 
   
-  const [chartState, setChartState] = React.useState(chartSimple);
+  const { chartState, setChartState, selection/*, setSelection*/ } = useAppContext();
 
   const handleSave = () => {
     // Assuming saveState simply returns the current state without serializing it
@@ -92,7 +92,7 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
   <Page>
     <Content>
       <FlowChartWithState initialValue={chartState} onStateChange={onStateChange}
-      config={{ smartRouting: true }}/>
+      config={{ smartRouting: true }} selection={selection}/>
     </Content>
     <Sidebar>
       <Message>

@@ -15,13 +15,17 @@ interface StatsData {
 }
 */
 const MotherComp: React.FC = () => {
-  const { chart } = useAppContext();
+  const { chartState, setChartState } = useAppContext();
 
   useEffect(() => {
-    console.log("chart updated in MotherComp:", chart);
-  }, [chart]);
+    // Retrieve the chart state from local storage
+    const storedChartState = localStorage.getItem('chartState');
+    if (storedChartState) {
+        setChartState(JSON.parse(storedChartState));
+    }
+  }, [setChartState]);
 
-  console.log("chart in dashboard:", chart)
+  console.log("chart in dashboard:", chartState)
   const { cellId } = useParams();
 
   // You can now use cellId to fetch or display specific data

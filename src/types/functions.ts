@@ -1,10 +1,10 @@
 import { DraggableData, DraggableEvent } from 'react-draggable'
-import { IChart, INode, IPort } from './chart'
+import { IChart, INode, IPort, ISelection } from './chart'
 import { IConfig } from './config'
 import { IOffset, IPosition, ISize } from './generics'
 
 /** Callback functions will be evaluated inside of a setState so they can always manipulate the chart state */
-export type IStateCallback<T extends (...args: any) => any> = (...params: Parameters<T>) => (chart: IChart) => IChart
+export type IStateCallback<T extends (...args: any) => any> = (...params: Parameters<T>) => (chart: IChart, selection: ISelection) => { chart: IChart, selection: ISelection }
 
 export interface IOnDragNodeInput {
   config?: IConfig

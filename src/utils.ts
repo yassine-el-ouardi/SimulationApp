@@ -1,3 +1,7 @@
+import { IChart, ISelection } from './types';
+
 export const noop = () => null
 
-export const identity = <T extends any>(val: T) => val
+export const identity = (chart: IChart, selection: ISelection) => {
+  return { chart, selection };
+};

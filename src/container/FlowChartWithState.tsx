@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { IChart, IConfig } from '../types';
+import { IChart, IConfig, ISelection } from '../types';
 import { FlowChart, IFlowChartComponents } from '../components';
 import * as actions from './actions';
 import mapValues from './utils/mapValues';
 
 export interface IFlowChartWithStateProps {
   initialValue: IChart;
+  selection: ISelection;
   Components?: IFlowChartComponents;
   config?: IConfig;
   onStateChange?: (chart: IChart) => void;
@@ -40,11 +41,13 @@ export class FlowChartWithState extends React.Component<IFlowChartWithStateProps
   }
 
   public render() {
+    const { selection, /*setSelection*/ } = this.props;
     const { Components, config } = this.props;
-
+    console.log("selected:",selection.selected)
     return (
       <FlowChart
         chart={this.state}
+        selection={selection}
         callbacks={this.stateActions}
         Components={Components}
         config={config}

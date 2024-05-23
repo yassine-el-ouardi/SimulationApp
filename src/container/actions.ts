@@ -1,5 +1,6 @@
 import {
   IChart,
+  ISelection,
   IConfig,
   IOnCanvasClick,
   IOnCanvasDrop,
@@ -56,7 +57,7 @@ function getOffset (config: any, data: any, zoom?: number) {
 
 //-------------------------------------
 // This function updates the position of a single waypoint or initializes it when dragged
-export const onDragLinkWayPoint: IStateCallback<IOnDragLinkWayPoint> = ({ config, event, data, id }) => (chart: IChart) => {
+export const onDragLinkWayPoint: IStateCallback<IOnDragLinkWayPoint> = ({ config, event, data, id }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
   const link = chart.links[id];
   const draggingWaypointIndex = data.waypointIndex;
   if (link && link.waypoints && draggingWaypointIndex != null && link.waypoints[draggingWaypointIndex]) {
@@ -71,57 +72,58 @@ export const onDragLinkWayPoint: IStateCallback<IOnDragLinkWayPoint> = ({ config
       waypoints: updatedWaypoints,
     };
   }
-  return chart;
+  return { chart, selection };
 };
 // This function is called when the dragging stops
 export const onDragLinkWayPointStop: IStateCallback<IOnDragLinkWayPointStop> = () => identity
 
 //-------------------------------------
 
-export const onDragNode: IStateCallback<IOnDragNode> = ({ config, event, data, id }) => (chart: IChart) => {
-  const nodechart = chart.nodes[id]
+export const onDragNode: IStateCallback<IOnDragNode> = ({ config, event, data, id }) => (chart: IChart, selection: ISelection) => {
+  const node = chart.nodes[id];
 
-  if (nodechart) {
+  if (node) {
     const delta = {
       x: data.deltaX,
       y: data.deltaY,
-    }
+    };
     chart.nodes[id] = {
-      ...nodechart,
+      ...node,
       position: {
-        x: nodechart.position.x + delta.x,
-        y: nodechart.position.y + delta.y,
+        x: node.position.x + delta.x,
+        y: node.position.y + delta.y,
       },
-    }
-  
+    };
 
-  //-------------------------------
-  if(nodechart.type=="Rougher"){
-    const link = chart.links['First_Stream_id'];
-    link.from.position = {
-      x: link.from.position.x + delta.x,
-      y: link.from.position.y + delta.y,
-    }
-  }
-  else if(nodechart.type=="Scanvenger"){
-    const link = chart.links['Scanvenger_Stream_id'];
-    link.to.position = {
-      x: link.to.position.x + delta.x,
-      y: link.to.position.y + delta.y,
-    }
-  }
-  else if(nodechart.type=="Cleaner"){
-    const link = chart.links['Cleaner_Stream_id'];
-    link.to.position = {
-      x: link.to.position.x + delta.x,
-      y: link.to.position.y + delta.y,
+    if (node.type === "Rougher") {
+      const link = chart.links['First_Stream_id'];
+      if (link && link.from.position) {
+        link.from.position = {
+          x: link.from.position.x + delta.x,
+          y: link.from.position.y + delta.y,
+        };
+      }
+    } else if (node.type === "Scanvenger") {
+      const link = chart.links['Scanvenger_Stream_id'];
+      if (link && link.to.position) {
+        link.to.position = {
+          x: link.to.position.x + delta.x,
+          y: link.to.position.y + delta.y,
+        };
+      }
+    } else if (node.type === "Cleaner") {
+      const link = chart.links['Cleaner_Stream_id'];
+      if (link && link.to.position) {
+        link.to.position = {
+          x: link.to.position.x + delta.x,
+          y: link.to.position.y + delta.y,
+        };
+      }
     }
   }
 
-  //-------------------------------
-  }
-  return chart
-}
+  return { chart, selection };
+};
 
 export const onDragNodeStop: IStateCallback<IOnDragNodeStop> = () => identity
 
@@ -134,21 +136,8 @@ export const onDragCanvasStop: IStateCallback<IOnDragCanvasStop> = () => identit
 
 export const onLinkStart: IStateCallback<IOnLinkStart> = ({ linkId, fromNodeId, fromPortId }) => (
   chart: IChart,
-): IChart => {
-  //---------------------------waypoints
-/*
-  const fromNode = chart.nodes[fromNodeId];
-  //const fromPort = fromNode.ports[fromPortId];
-  const startPos = getLinkPosition(fromNode, fromPortId);
-  // Initialize waypoints extending in an arbitrary direction from the start position
-  // For demonstration, let's extend them horizontally by an arbitrary amount (e.g., 100 units)
-  const waypointOffset = 50; 
-  const waypoints = [
-    { x: startPos.x + waypointOffset, y: startPos.y },
-    { x: startPos.x + 2 * waypointOffset, y: startPos.y }
-  ];
-*/
-  //--------------------------------------
+  selection: ISelection,
+): { chart: IChart; selection: ISelection } => {
   chart.links[linkId] = {
     id: linkId,
     from: {
@@ -156,36 +145,36 @@ export const onLinkStart: IStateCallback<IOnLinkStart> = ({ linkId, fromNodeId, 
       portId: fromPortId,
     },
     to: {},
-    //waypoints,
     feed: {
       totalSolidFlow: null,
       totalLiquidFlow: null,
-      //pulpMassFlow: null,
       pulpVolumetricFlow: null,
       solidsSG: null,
       pulpSG: null,
-      //percentSolids: null,
       solidsFraction: null,
       cuPercentage: null,
       fePercentage: null,
       pbPercentage: null,
       znPercentage: null,
     }
-  }
-  return chart
+  };
+  return { chart, selection };
 }
 
-export const onLinkMove: IStateCallback<IOnLinkMove> = ({ linkId, toPosition }) => (chart: IChart): IChart => {
-  const link = chart.links[linkId]
-  link.to.position = toPosition
-  chart.links[linkId] = { ...link }
-  return chart
+export const onLinkMove: IStateCallback<IOnLinkMove> = ({ linkId, toPosition }) => (
+  chart: IChart,
+  selection: ISelection
+): { chart: IChart; selection: ISelection } => {
+  const link = chart.links[linkId];
+  link.to.position = toPosition;
+  chart.links[linkId] = { ...link };
+  return { chart, selection };
 }
 
 export const onLinkComplete: IStateCallback<IOnLinkComplete> = (props) => {
   const { linkId, fromNodeId, fromPortId, toNodeId, toPortId, config = {} } = props;
 
-  return (chart: IChart): IChart => {
+  return (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
     if (
       !config.readonly &&
       (config.validateLink ? config.validateLink({ ...props, chart }) : true) &&
@@ -221,139 +210,151 @@ export const onLinkComplete: IStateCallback<IOnLinkComplete> = (props) => {
       delete chart.links[linkId];
     }
 
-    return chart;
+    return { chart, selection };
   };
 };
 
-
-
-export const onLinkCancel: IStateCallback<IOnLinkCancel> = ({ linkId }) => (chart: IChart) => {
-  delete chart.links[linkId]
-  return chart
+export const onLinkCancel: IStateCallback<IOnLinkCancel> = ({ linkId }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  delete chart.links[linkId];
+  return { chart, selection };
 }
 
-export const onLinkMouseEnter: IStateCallback<IOnLinkMouseEnter> = ({ linkId }) => (chart: IChart) => {
-  // Set the link to hover
-  const link = chart.links[linkId]
-  // Set the connected ports to hover
+export const onLinkMouseEnter: IStateCallback<IOnLinkMouseEnter> = ({ linkId }) => (chart: IChart, selection: ISelection) => {
+  const link = chart.links[linkId];
+
+  let updatedSelection = { ...selection };
+
   if (link.to.nodeId && link.to.portId) {
-    if (chart.hovered.type !== 'link' || chart.hovered.id !== linkId) {
-      chart.hovered = {
-        type: 'link',
-        id: linkId,
-      }
+    if (selection.hovered?.type !== 'link' || selection.hovered?.id !== linkId) {
+      updatedSelection = {
+        ...selection,
+        hovered: {
+          type: 'link',
+          id: linkId,
+        },
+      };
     }
   }
-  return chart
-}
 
-export const onLinkMouseLeave: IStateCallback<IOnLinkMouseLeave> = ({ linkId }) => (chart: IChart) => {
-  const link = chart.links[linkId]
-  // Set the connected ports to hover
+  return { chart, selection: updatedSelection };
+};
+
+export const onLinkMouseLeave: IStateCallback<IOnLinkMouseLeave> = ({ linkId }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  const link = chart.links[linkId];
+  let updatedSelection = { ...selection };
+
   if (link.to.nodeId && link.to.portId) {
-    chart.hovered = {}
+    updatedSelection.hovered = {};
   }
-  return chart
+
+  return { chart, selection: updatedSelection };
 }
 
-export const onLinkClick: IStateCallback<IOnLinkClick> = ({ linkId }) => (chart: IChart) => {
-  if (chart.selected.id !== linkId || chart.selected.type !== 'link') {
-    chart.selected = {
+export const onLinkClick: IStateCallback<IOnLinkClick> = ({ linkId }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  let updatedSelection = { ...selection };
+
+  if (updatedSelection.selected?.id !== linkId || updatedSelection.selected?.type !== 'link') {
+    updatedSelection.selected = {
       type: 'link',
       id: linkId,
       feed: {
         totalSolidFlow: null,
         totalLiquidFlow: null,
-        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
         pbPercentage: null,
         znPercentage: null,
       }
+    };
+  }
+
+  return { chart, selection: updatedSelection };
+}
+
+export const onCanvasClick: IStateCallback<IOnCanvasClick> = () => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  let updatedSelection = { ...selection };
+
+  if (updatedSelection.selected?.id) {
+    updatedSelection.selected = {};
+  }
+
+  return { chart, selection: updatedSelection };
+}
+
+export const onNodeMouseEnter: IStateCallback<IOnNodeMouseEnter> = ({ nodeId }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  let updatedSelection = { ...selection };
+
+  updatedSelection.hovered = {
+    type: 'node',
+    id: nodeId,
+    cellCharacteristics: {
+      netVolume: 100,
+      pulpArea: 28.3,
+      frothSurfaceArea: 20,
+      frothThickness: 250,
+      airFlowRate: 18,
+      R_infCcp: 28.83,
+      R_infGn: 80.38,
+      R_infPo: 21.07,
+      R_infSp: 14.32,
+      k_maxCcp: 1.92,
+      k_maxGn: 0.73,
+      k_maxPo: 2.07,
+      k_maxSp: 1.94,
+      EntrainementSavassiparameters: 65.59,
     }
-  }
-  return chart
+  };
+
+  return { chart, selection: updatedSelection };
 }
 
-export const onCanvasClick: IStateCallback<IOnCanvasClick> = () => (chart: IChart) => {
-  if (chart.selected.id) {
-    chart.selected = {}
+export const onNodeMouseLeave: IStateCallback<IOnNodeMouseLeave> = ({ nodeId }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  let updatedSelection = { ...selection };
+
+  if (updatedSelection.hovered?.type === 'node' && updatedSelection.hovered?.id === nodeId) {
+    updatedSelection.hovered = {};
   }
-  return chart
+
+  return { chart, selection: updatedSelection };
 }
 
-export const onNodeMouseEnter: IStateCallback<IOnNodeMouseEnter> = ({ nodeId }) => (chart: IChart) => {
-  return {
-    ...chart,
-    hovered: {
-      type: 'node',
-      id: nodeId,
-      cellCharacteristics: {
-        netVolume: 100,
-        pulpArea: 28.3,
-        frothSurfaceArea: 20,
-        frothThickness: 250,
-        airFlowRate: 18,
-        R_infCcp: 28.83,
-        R_infGn: 80.38,
-        R_infPo: 21.07,
-        R_infSp: 14.32,
-        k_maxCcp: 1.92,
-        k_maxGn: 0.73,
-        k_maxPo: 2.07,
-        k_maxSp: 1.94,
-        EntrainementSavassiparameters: 65.59,
-      }
-    } as ISelectedOrHovered,
-  }
-}
-
-export const onNodeMouseLeave: IStateCallback<IOnNodeMouseLeave> = ({ nodeId }) => (chart: IChart) => {
-  if (chart.hovered.type === 'node' && chart.hovered.id === nodeId) {
-    return { ...chart, hovered: {} }
-  }
-  return chart
-}
-
-export const onDeleteKey: IStateCallback<IOnDeleteKey> = ({ config }: IConfig) => (chart: IChart) => {
+export const onDeleteKey: IStateCallback<IOnDeleteKey> = ({ config }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
   if (config.readonly) {
-    return chart
+    return { chart, selection };
   }
-  if (chart.selected.type === 'node' && chart.selected.id) {
-    const node = chart.nodes[chart.selected.id]
+  if (selection.selected?.type === 'node' && selection.selected?.id) {
+    const node = chart.nodes[selection.selected?.id];
     if (node.readonly) {
-      return chart
+      return { chart, selection };
     }
     // Delete the connected links
     Object.keys(chart.links).forEach((linkId) => {
-      const link = chart.links[linkId]
+      const link = chart.links[linkId];
       if (link.from.nodeId === node.id || link.to.nodeId === node.id) {
-        delete chart.links[link.id]
+        delete chart.links[link.id];
       }
-    })
+    });
     // Delete the node
-    delete chart.nodes[chart.selected.id]
-  } else if (chart.selected.type === 'link' && chart.selected.id) {
-    delete chart.links[chart.selected.id]
+    delete chart.nodes[selection.selected?.id];
+  } else if (selection.selected?.type === 'link' && selection.selected?.id) {
+    delete chart.links[selection.selected?.id];
   }
-  if (chart.selected) {
-    chart.selected = {}
+  if (selection.selected) {
+    selection.selected = {};
   }
-  return chart
+  return { chart, selection };
 }
 
-export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart: IChart) => {
-  //const dashboardUrl = 'http://localhost:3000/app/InternalState'
-  //window.open(dashboardUrl, '_blank');
-  //front end will keep sending cell data from moment its dashboard is opened when closed everything is deleted
-  //add help with names of devs or teachers fetched from json
-  if (chart.selected.id !== nodeId || chart.selected.type !== 'node') {
-    chart.selected = {
+export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  console.log("Before update:", selection);
+
+  const updatedSelection: ISelection = {
+    ...selection,
+    selected: {
       type: 'node',
       id: nodeId,
       cellCharacteristics: {
@@ -372,17 +373,20 @@ export const onNodeClick: IStateCallback<IOnNodeClick> = ({ nodeId }) => (chart:
         k_maxSp: 1.94,
         EntrainementSavassiparameters: 65.59,
       },
-    } as ISelectedOrHovered;
-  }
-  return chart
-}
+    },
+  };
 
-export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }) => (chart: IChart) => {
-  console.log(chart.selected.id);
+  console.log("After update:", updatedSelection);
+
+  return { chart, selection: updatedSelection };
+};
+
+export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  console.log(selection.selected?.id);
   window.open(`/Dashboard/${nodeId}`, '_blank');
   
-  if (chart.selected.id !== nodeId || chart.selected.type !== 'node') {
-    chart.selected = {
+  if (selection.selected?.id !== nodeId || selection.selected?.type !== 'node') {
+    selection.selected = {
       type: 'node',
       id: nodeId,
       cellCharacteristics: {
@@ -403,15 +407,18 @@ export const onNodeDoubleClick: IStateCallback<IOnNodeDoubleClick> = ({ nodeId }
       }
     } as ISelectedOrHovered;
   }
-  return chart
+  // Store the chart state in local storage
+  localStorage.setItem('chartState', JSON.stringify(chart));
+
+  return { chart, selection };
 }
 
-export const onNodeSizeChange: IStateCallback<IOnNodeSizeChange> = ({ nodeId, size }) => (chart: IChart) => {
+export const onNodeSizeChange: IStateCallback<IOnNodeSizeChange> = ({ nodeId, size }) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
   chart.nodes[nodeId] = {
     ...chart.nodes[nodeId],
     size,
-  }
-  return chart
+  };
+  return { chart, selection };
 }
 
 export const onPortPositionChange: IStateCallback<IOnPortPositionChange> = ({
@@ -419,7 +426,7 @@ export const onPortPositionChange: IStateCallback<IOnPortPositionChange> = ({
   port,
   el,
   nodesEl,
-}) => (chart: IChart): IChart => {
+}) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
   if (nodeToUpdate.size) {
     // rotate the port's position based on the node's orientation prop (angle)
     const center = {
@@ -432,16 +439,6 @@ export const onPortPositionChange: IStateCallback<IOnPortPositionChange> = ({
     }
     const angle = nodeToUpdate.orientation || 0
     const position = rotate(center, current, angle)
-/*
-    if(port.id == "port3"){
-      position.x -= 25;
-      position.y += 30;
-    }
-    if(port.id == "port4"){
-      position.x += 8;
-      position.y -= 38;
-    }
-*/
     const node = chart.nodes[nodeToUpdate.id]
     node.ports[port.id].position = {
       x: position.x,
@@ -451,7 +448,7 @@ export const onPortPositionChange: IStateCallback<IOnPortPositionChange> = ({
     chart.nodes[nodeToUpdate.id] = { ...node }
   }
 
-  return chart
+  return { chart, selection };
 }
 
 export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
@@ -459,8 +456,7 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
   data,
   position,
   id,
-}) => (chart: IChart): IChart => {
-  //console.log('onCanvasDrop data:', data);
+}) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
   chart.nodes[id] = {
     id,
     position:
@@ -473,22 +469,22 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
     orientation: data.orientation || 0,
     type: data.type,
     ports: data.ports,
-    cellCharacteristics: data.cellCharacteristics || {netVolume: 100,
-    pulpArea: 28.3,
-    frothSurfaceArea: 20,
-    frothThickness: 250,
-    airFlowRate: 18,
-    R_infCcp: 28.83,
-    R_infGn: 80.38,
-    R_infPo: 21.07,
-    R_infSp: 14.32,
-    k_maxCcp: 1.92,
-    k_maxGn: 0.73,
-    k_maxPo: 2.07,
-    k_maxSp: 1.94,
-    EntrainementSavassiparameters: 65.59,
+    cellCharacteristics: data.cellCharacteristics || {
+      netVolume: 100,
+      pulpArea: 28.3,
+      frothSurfaceArea: 20,
+      frothThickness: 250,
+      airFlowRate: 18,
+      R_infCcp: 28.83,
+      R_infGn: 80.38,
+      R_infPo: 21.07,
+      R_infSp: 14.32,
+      k_maxCcp: 1.92,
+      k_maxGn: 0.73,
+      k_maxPo: 2.07,
+      k_maxSp: 1.94,
+      EntrainementSavassiparameters: 65.59,
     },
-    
     properties: data.properties,
   }
   if (data.type === "Rougher") {
@@ -500,9 +496,6 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       x: position.x - 100, // For example, 100 pixels to the right of the new node's position
       y: position.y + 40,  // For example, 50 pixels below the new node's position
     };
-
-
-
     chart.links[newLinkId] = {
       id: newLinkId,
       from: {
@@ -515,11 +508,9 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       feed: data.feed || {
         totalSolidFlow: null,
         totalLiquidFlow: null,
-        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
@@ -527,22 +518,12 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         znPercentage: null,
       },
     };
-  } else if(data.type === "Scanvenger") {//scanvenger port 4 --- Cleaner port 3
-    // Create a new link
-    //const newLinkId = "Scanvanger_Stream_id"; // Generate a unique ID for the new link
+  } else if (data.type === "Scanvenger") {
     const newLinkId2 = "Scanvenger_Stream_id"; // Generate a unique ID for the new link
-
-    // Specify the target position for the link
-    /*const targetPosition = {
-      x: position.x +200, // For example, 100 pixels to the right of the new node's position
-      y: position.y,  // For example, 50 pixels below the new node's position
-    };*/
     const targetPosition2 = {
       x: position.x + 200, // For example, 100 pixels to the right of the new node's position
       y: position.y + 50,  // For example, 50 pixels below the new node's position
     };
-
-
     chart.links[newLinkId2] = {
       id: newLinkId2,
       from: {
@@ -555,11 +536,9 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       feed: data.feed || {
         totalSolidFlow: null,
         totalLiquidFlow: null,
-        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
@@ -567,21 +546,14 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         znPercentage: null,
       },
     };
-  } else if(data.type === "Cleaner") {//scanvenger port 4 --- Cleaner port 3
+  } else if (data.type === "Cleaner") {
     // Create a new link
     const newLinkId = "Cleaner_Stream_id"; // Generate a unique ID for the new link
-    //const newLinkId2 = "Last_Stream_id2"; // Generate a unique ID for the new link
-
     // Specify the target position for the link
     const targetPosition = {
-      x: position.x +200, // For example, 100 pixels to the right of the new node's position
+      x: position.x + 200, // For example, 100 pixels to the right of the new node's position
       y: position.y + 20,  // For example, 50 pixels below the new node's position
     };
-    /*const targetPosition2 = {
-      x: position.x + 50, // For example, 100 pixels to the right of the new node's position
-      y: position.y + 200,  // For example, 50 pixels below the new node's position
-    };*/
-
     chart.links[newLinkId] = {
       id: newLinkId,
       from: {
@@ -594,11 +566,9 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       feed: data.feed || {
         totalSolidFlow: null,
         totalLiquidFlow: null,
-        //pulpMassFlow: null,
         pulpVolumetricFlow: null,
         solidsSG: null,
         pulpSG: null,
-        //percentSolids: null,
         solidsFraction: null,
         cuPercentage: null,
         fePercentage: null,
@@ -606,31 +576,8 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
         znPercentage: null,
       },
     };
-    /*chart.links[newLinkId2] = {
-      id: newLinkId2,
-      from: {
-        nodeId: id,
-        portId: "port4", // Specify the correct port ID
-      },
-      to: {
-        position: targetPosition2,
-      },
-      feed: data.feed || {totalSolidFlow: null,
-        totalLiquidFlow: null,
-        pulpMassFlow: null,
-        pulpVolumetricFlow: null,
-        solidsSG: null,
-        pulpSG: null,
-        percentSolids: null,
-        solidsFraction: null,
-        cuPercentage: null,
-        fePercentage: null,
-        znPercentage: null,
-        pbPercentage: null,
-      },
-    };*/
   }
-  return chart
+  return { chart, selection };
 }
 
 export const onZoomCanvas: IOnZoomCanvas = ({ config, data }) => (chart: IChart): IChart => {
@@ -639,11 +586,10 @@ export const onZoomCanvas: IOnZoomCanvas = ({ config, data }) => (chart: IChart)
   return chart
 }
 
-export const onUpdateNodeProperty = (key: string, value: string | number) => (chart: IChart) => {
-
-  const { selected } = chart;
-  if (selected.type === 'node' && selected.id) {
-    const selectedNode = chart.nodes[selected.id];
+export const onUpdateNodeProperty = (key: string, value: string | number) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  const { selected } = selection;
+  if (selected?.type === 'node' && selected?.id) {
+    const selectedNode = chart.nodes[selected?.id];
     if (selectedNode) {
       if (!selectedNode.cellCharacteristics) {
         selectedNode.cellCharacteristics = {
@@ -670,15 +616,15 @@ export const onUpdateNodeProperty = (key: string, value: string | number) => (ch
     }
   }
 
-  return chart;
+  return { chart, selection };
 };
 
 
 
-export const onUpdateLinkProperty = (key: string, value: string | number, linkId: string) => (chart: IChart) => {
-  const { selected } = chart;
+export const onUpdateLinkProperty = (key: string, value: string | number, linkId: string) => (chart: IChart, selection: ISelection): { chart: IChart; selection: ISelection } => {
+  const { selected } = selection;
 
-  if (selected.type === 'link' && selected.id === linkId) {
+  if (selected?.type === 'link' && selected?.id === linkId) {
     const selectedLink = chart.links[linkId];
 
     if (selectedLink) {
@@ -686,11 +632,9 @@ export const onUpdateLinkProperty = (key: string, value: string | number, linkId
         selectedLink.feed = {
           totalSolidFlow: null,
           totalLiquidFlow: null,
-          //pulpMassFlow: null,
           pulpVolumetricFlow: null,
           solidsSG: null,
           pulpSG: null,
-          //percentSolids: null,
           solidsFraction: null,
           cuPercentage: null,
           fePercentage: null,
@@ -706,7 +650,7 @@ export const onUpdateLinkProperty = (key: string, value: string | number, linkId
     }
   }
 
-  return chart;
+  return { chart, selection };
 };
 
 export const saveState = (chart: IChart) => {

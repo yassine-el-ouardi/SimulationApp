@@ -9,6 +9,7 @@ import { chartSimple } from '../misc/exampleChartState'
 import { onUpdateNodeProperty, onUpdateLinkProperty } from '../container/actions'
 import { saveState, loadStateFromFile } from '../container/actions'
 import '../custom.css'
+import {IChart, ISelection} from '../types/chart'
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
 
 
@@ -151,15 +152,24 @@ const SenarioButton = styled.button`
   }
 `;
 
-export class SelectedSidebar extends React.Component {
+interface SelectedSidebarProps {
+  chartState: IChart;
+  setChartState: (chart: IChart) => void;
+  selection: ISelection;
+  setSelection: (selection: ISelection) => void;
+}
+
+class SelectedSidebar extends React.Component<SelectedSidebarProps> {
   public state = cloneDeep(chartSimple)
 
 
   public render() {
     const chart = this.state
-    // console.log('selected item', chart);
-    const selectedNode = chart.selected.id ? chart.nodes[chart.selected.id] : null;
-    const selectedLink = chart.selected.id ? chart.links[chart.selected.id] : null;
+    const { selection, /*setSelection*/ } = this.props;
+    const { selected } = selection
+    console.log('selected item', selected);
+    const selectedNode = selected.id ? chart.nodes[selected.id] : null;
+    const selectedLink = selected.id ? chart.links[selected.id] : null;
     const stateActions = mapValues(actions, (func: any) =>
       (...args: any) => this.setState(func(...args))) as typeof actions
 
@@ -167,14 +177,15 @@ export class SelectedSidebar extends React.Component {
       <Page>
         <Content>
           <FlowChart
+            selection={selection}
             chart={chart}
             callbacks={stateActions}
           />
         </Content>
         <Sidebar>
           {
-            chart.selected.type
-              ? chart.selected.type === 'node'
+            selected.type
+              ? selected.type === 'node'
                 ? <>
                   <Message>
                     <h4><b>Flotation Cell's Characteristics:</b></h4>
@@ -244,13 +255,13 @@ export class SelectedSidebar extends React.Component {
 
 
                 </>
-                : chart.selected.type === 'link' && chart.selected.id !== 'First_Stream_id'
+                : selected.type === 'link' && selected.id !== 'First_Stream_id'
                   ? (
                     // New link type handling
                     <>
                       <Message>
-                        {/*<div>Type: {chart.selected.type}</div>
-                        <div>ID: {chart.selected.id}</div>*/}
+                        {/*<div>Type: {selected.type}</div>
+                        <div>ID: {selected.id}</div>*/}
                         <h4><b>Stream:</b></h4>
                         {
                           selectedLink && (
@@ -288,7 +299,7 @@ export class SelectedSidebar extends React.Component {
                     </>
                   )
 
-                  : chart.selected.type === 'link' && chart.selected.id === 'First_Stream_id'
+                  : selected.type === 'link' && selected.id === 'First_Stream_id'
                     ? (
                       // New link type handling
                       <>
@@ -336,8 +347,8 @@ export class SelectedSidebar extends React.Component {
                     )
 
                     : <Message>
-                      <div>Type: {chart.selected.type}</div>
-                      <div>ID: {chart.selected.id}</div>
+                      <div>Type: {selected.type}</div>
+                      <div>ID: {selected.id}</div>
                     </Message>
               : <Message>Click on a Cell, or Stream</Message>
           }
@@ -381,12 +392,10 @@ export class SelectedSidebar extends React.Component {
 
   //----------------------------------------------------------------------
 
+
   private handleSimulateClick = async () => {
 
     const url = 'http://127.0.0.1:5000/process-circuit';
-
-    // Assuming you have the data available as a JavaScript object
-    // If you need to read from a file, you'll have to handle that differently in a browser context
     const chart = this.state;
     const chartString = JSON.stringify(chart);
     const parsedData = chartString;
@@ -442,8 +451,8 @@ export class SelectedSidebar extends React.Component {
             const processCircuitUrl = 'http://127.0.0.1:5000/process-circuit';
             const updatedChartString = JSON.stringify(updatedChart);
             console.log(`sent json for ${index}`,updatedChartString);
-            
-  
+
+              
             const response = await fetch(processCircuitUrl, {
               method: 'POST',
               headers: {
@@ -537,3 +546,5 @@ export class SelectedSidebar extends React.Component {
   */
 
 }
+
+export default SelectedSidebar;

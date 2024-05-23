@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {
-  IChart, IConfig, ILink, IOnCanvasClick, IOnCanvasDrop, IOnDeleteKey, IOnDragCanvas,
+  IChart, ISelection, IConfig, ILink, IOnCanvasClick, IOnCanvasDrop, IOnDeleteKey, IOnDragCanvas,
   IOnDragCanvasStop, IOnDragNode, IOnDragNodeStop, IOnLinkCancel, IOnLinkClick, IOnLinkComplete, IOnLinkMouseEnter,
   IOnLinkMouseLeave, IOnLinkMove, IOnLinkStart, IOnNodeClick, IOnNodeDoubleClick, IOnNodeMouseEnter, IOnNodeMouseLeave, IOnNodeSizeChange,
   IOnPortPositionChange, IOnZoomCanvas, ISelectedOrHovered,
@@ -50,6 +50,7 @@ export interface IFlowChartProps {
    * The current chart state
    */
   chart: IChart
+  selection: ISelection
   /**
    * Callbacks for updating chart state.
    * See container/actions.ts for example state mutations
@@ -71,6 +72,7 @@ export const FlowChart = (props: IFlowChartProps) => {
 
   const {
     chart,
+    selection,
     callbacks: {
       onDragNode,
       onDragNodeStop,
@@ -107,7 +109,9 @@ export const FlowChart = (props: IFlowChartProps) => {
     } = {},
     config = {},
   } = props
-  const { links, nodes, selected, hovered, offset, scale } = chart
+  const { links, nodes, offset, scale } = chart
+  const { selected, hovered } = selection
+  console.log("selection in flowchart:", selection);
 
   const canvasCallbacks = { onDragCanvas, onDragCanvasStop, onCanvasClick, onDeleteKey, onCanvasDrop, onZoomCanvas }
   const linkCallbacks = { onDragLinkWayPoint, onDragLinkWayPointStop, onLinkMouseEnter, onLinkMouseLeave, onLinkClick }
@@ -151,8 +155,8 @@ export const FlowChart = (props: IFlowChartProps) => {
       {...canvasCallbacks}
     >
       { linksInView.map((linkId) => {
-        const isSelected = !config.readonly && selected.type === 'link' && selected.id === linkId
-        const isHovered = !config.readonly && hovered.type === 'link' && hovered.id === linkId
+        const isSelected = !config.readonly && selected?.type === 'link' && selected?.id === linkId
+        const isHovered = !config.readonly && hovered?.type === 'link' && hovered?.id === linkId
         const fromNodeId = links[linkId].from.nodeId
         const toNodeId = links[linkId].to.nodeId
 
@@ -173,7 +177,7 @@ export const FlowChart = (props: IFlowChartProps) => {
         )
       })}
       { nodesInView.map((nodeId) => {
-        const isSelected = selected.type === 'node' && selected.id === nodeId
+        const isSelected = selected?.type === 'node' && selected?.id === nodeId
         const selectedLink = getSelectedLinkForNode(selected, nodeId, links)
         const hoveredLink = getSelectedLinkForNode(hovered, nodeId, links)
 
@@ -207,7 +211,7 @@ const getSelectedLinkForNode = (
   nodeId: string,
   links: IChart['links'],
 ): ILink | undefined => {
-  const link = selected.type === 'link' && selected.id ? links[selected.id] : undefined
+  const link = selected?.type === 'link' && selected?.id ? links[selected?.id] : undefined
 
   if (link && (link.from.nodeId === nodeId || link.to.nodeId === nodeId)) {
     return link

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { DragAndDropSidebar } from './components/DragAndDropSidebar';
-import { chartSimple } from './misc/exampleChartState';
-import { IChart } from './types/chart';
-import { SelectedSidebar } from './components/SelectedSidebar';
+//import { chartSimple } from './misc/exampleChartState';
+//import { IChart } from './types/chart';
+import SelectedSidebarWrapper from './components/SelectedSidebarWrapper';
 import MotherComp from './components/dashboard/MotherComp';
 import Concentrate from './components/dashboard/Concentrate';
 import Tailing from './components/dashboard/Tailing';
@@ -12,6 +12,8 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import styled from 'styled-components'
 import ReactDOM from 'react-dom/client'; // Import for React 18's client API
 import { AppProvider } from './AppContext'; // Make sure the path is correct
+import { useAppContext } from './AppContext';
+import { StrictMode } from 'react';
 
 
 
@@ -71,23 +73,6 @@ background-color: #3B4C5A;
 padding-left: 20px;
 `;
 
-/*const SubMenuItem = styled(MenuLink)`
-  padding-left: 20px;
-`;
-
-const ThreeDotMenu = styled.div`
-  cursor: pointer;
-  font-size: 24px;
-  text-align: center;
-`;
-
-const DeveloperOptions = styled.div`
-  background-color: #444;
-  padding: 10px;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-`;*/
-
 const SidebarMenu = () => {
   const location = useLocation();
   const [showFlotationSubMenu, setShowFlotationSubMenu] = useState(false);
@@ -134,17 +119,20 @@ const SidebarMenu = () => {
 };
 
 const App = () => {
-  const [chart, setChart] = useState<IChart>(chartSimple);
+  //const [chart, setChart] = useState<IChart>(chartSimple);
+  const { chartState, setChartState, selection, setSelection } = useAppContext();
 
   return (
     <BrowserRouter>
       <SidebarMenu />
       <div style={{ marginLeft: 200 }}>
         <Routes>
-          <Route path="/" element={<DragAndDropSidebar onStateChange={(newChart) => setChart(newChart)} />} />
-          <Route path="/simulation" element={<SelectedSidebar />} />
+          <Route path="/" element={<DragAndDropSidebar
+              onStateChange={setChartState}
+            />} />
+          <Route path="/simulation" element={<SelectedSidebarWrapper />} />
           <Route path="/dashboard/:cellId" element={<MotherComp />} />
-          <Route path="/concentra/:cellId" element={<Concentrate chart={chart}/>} />
+          <Route path="/concentra/:cellId" element={<Concentrate chart={chartState}/>} />
           <Route path="/tailingte/:cellId" element={<Tailing />} />
         </Routes>
       </div>
@@ -155,7 +143,9 @@ const App = () => {
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 root.render(
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <StrictMode>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </StrictMode>
 );

@@ -6,22 +6,19 @@ export type IChart<
   LinkProps = undefined,
   PortProps = undefined
   > = {
-    offset: IPosition
-    nodes: {//aka cell
+    offset: IPosition;
+    nodes: { // aka cell
       [id: string]: INode<NodeProps, PortProps>;
-    }
-    links: {// aka arrows or stream
+    };
+    links: { // aka arrows or stream
       [id: string]: ILink<LinkProps>;
-    }
-    scale: number
-    /** System Temp */
-    selected: ISelectedOrHovered
-    hovered: ISelectedOrHovered,
+    };
+    scale: number;
   } & (ChartProps extends undefined ? {
     properties?: any,
   } : {
     properties: ChartProps,
-  })
+  });
 
 export interface ISelectedOrHovered {
   type?: 'link' | 'node' | 'port'
@@ -137,3 +134,9 @@ export type ILink<LinkProps = undefined> = {//add way points like achik diagram 
 } : {
   properties: LinkProps,
 })
+
+// New type that includes selected and hovered properties
+export type ISelection = {
+  selected: ISelectedOrHovered;
+  hovered: ISelectedOrHovered;
+};

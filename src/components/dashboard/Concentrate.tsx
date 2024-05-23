@@ -5,6 +5,8 @@ import DashboardStats from './DashboardStats';
 import { IChart } from '../../types/chart';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useAppContext } from '../../AppContext';
+
 
 //import DashboardStatsProps from './DashboardStats';
 
@@ -19,6 +21,9 @@ interface ConcentrateProps {
 }
 
 const Concentrate: React.FC<ConcentrateProps> = ({ chart }) => {
+  const { chartState } = useAppContext();
+  console.log("chart in concentrate:", chartState)
+
 
   const { cellId } = useParams<{ cellId: string }>();
   const [statsData, setStatsData] = useState<Stat[]>([]);
@@ -33,20 +38,21 @@ const Concentrate: React.FC<ConcentrateProps> = ({ chart }) => {
 
     if (relevantLink) {
       const newStatsData = [
-        { title: "Total Solids Flow", value: relevantLink.feed.totalSolidFlow.toString(), description: "t/h" },
-        { title: "Total Liquid Flow", value: relevantLink.feed.totalLiquidFlow.toString(), description: "t/h" },
-        { title: "Pulp Volumetric Flow", value: relevantLink.feed.pulpVolumetricFlow.toString(), description: "m³/h" },
-        { title: "Solids SG", value: relevantLink.feed.solidsSG.toString(), description: "g/cm³" },
-        { title: "Pulp SG", value: relevantLink.feed.pulpSG.toString(), description: "g/cm³" },
-        { title: "Solids Fraction", value: relevantLink.feed.solidsFraction.toString(), description: "%" },
-        { title: "Copper Percentage", value: relevantLink.feed.cuPercentage.toString(), description: "%" },
-        { title: "Iron Percentage", value: relevantLink.feed.fePercentage.toString(), description: "%" },
-        { title: "Zinc Percentage", value: relevantLink.feed.znPercentage.toString(), description: "%" },
-        { title: "Lead Percentage", value: relevantLink.feed.pbPercentage.toString(), description: "%" },
+        { title: "Total Solids Flow", value: relevantLink.feed.totalSolidFlow.toFixed(2), description: "t/h" },
+        { title: "Total Liquid Flow", value: relevantLink.feed.totalLiquidFlow.toFixed(2), description: "t/h" },
+        { title: "Pulp Volumetric Flow", value: relevantLink.feed.pulpVolumetricFlow.toFixed(2), description: "m³/h" },
+        { title: "Solids SG", value: relevantLink.feed.solidsSG.toFixed(2), description: "g/cm³" },
+        { title: "Pulp SG", value: relevantLink.feed.pulpSG.toFixed(2), description: "g/cm³" },
+        { title: "Solids Fraction", value: relevantLink.feed.solidsFraction.toFixed(2), description: "%" },
+        { title: "Copper Percentage", value: relevantLink.feed.cuPercentage.toFixed(2), description: "%" },
+        { title: "Iron Percentage", value: relevantLink.feed.fePercentage.toFixed(2), description: "%" },
+        { title: "Zinc Percentage", value: relevantLink.feed.znPercentage.toFixed(2), description: "%" },
+        { title: "Lead Percentage", value: relevantLink.feed.pbPercentage.toFixed(2), description: "%" },
       ];
       setStatsData(newStatsData);
     }
   }, [cellId, chart.links]);
+    
 
   return (
     <div>
