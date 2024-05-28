@@ -28,6 +28,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-json-view": "^1.19.1",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.22.3",
     "style-loader": "^3.3.4",
     "styled-components": "^5.1.0",

@@ -5,6 +5,7 @@ import { Content, Page, Sidebar, SidebarItem } from '.'
 import { chartSimple } from '../misc/exampleChartState'
 import { IChart } from '../types'
 import { saveState, loadStateFromFile } from '../container/actions'
+import { useAppContext } from '../AppContext'
 
 const Message = styled.div`
 margin: 10px;
@@ -48,7 +49,7 @@ interface DragAndDropSidebarProps {
 
 export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateChange }) =>{ 
   
-  const [chartState, setChartState] = React.useState(chartSimple);
+  const { chartState, setChartState} = useAppContext();
 
   const handleSave = () => {
     // Assuming saveState simply returns the current state without serializing it

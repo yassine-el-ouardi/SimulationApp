@@ -15,13 +15,13 @@ interface StatsData {
 }
 */
 const MotherComp: React.FC = () => {
-  const { chart } = useAppContext();
+  const { chartState } = useAppContext();
 
   useEffect(() => {
-    console.log("chart updated in MotherComp:", chart);
-  }, [chart]);
+    console.log("chart updated in MotherComp:", chartState);
+  }, [chartState]);
 
-  console.log("chart in dashboard:", chart)
+  console.log("chart in dashboard:", chartState)
   const { cellId } = useParams();
 
   // You can now use cellId to fetch or display specific data

@@ -6,20 +6,35 @@ import { SelectedSidebar } from './components/SelectedSidebar';
 import MotherComp from './components/dashboard/MotherComp';
 import Concentrate from './components/dashboard/Concentrate';
 import Tailing from './components/dashboard/Tailing';
-//import { createRoot } from 'react-dom/client';
 import './styles/style.css';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components'
-import ReactDOM from 'react-dom/client'; // Import for React 18's client API
-import { AppProvider } from './AppContext'; // Make sure the path is correct
+import ReactDOM from 'react-dom/client';
+import { AppProvider } from './AppContext';
+import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    width: '700px',  // Adjust width to accommodate side-by-side layout
+    borderRadius: '10px',
+    padding: '20px',
+  },
+};
 
 
 const MenuStyle = styled.div`
   width: 200px;
   height: 100vh;
   position: fixed;
-  background-color: #2C3E50;
+  background-color: #484B53;
   color: white;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 `;
@@ -71,6 +86,40 @@ background-color: #3B4C5A;
 padding-left: 20px;
 `;
 
+const ModalHeader = styled.h2`
+  font-weight: bold;
+  text-align: center;
+  font-size: 25px;
+  margin-bottom: 10px;
+`;
+
+const ModalSectionTitle = styled.p`
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+`;
+
+const ModalList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+`;
+
+const ModalListItem = styled.li`
+  margin: 0 0 5px 0;
+`;
+
+const CloseButton = styled.button`
+  background-color: #2C3E50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+  float: right;
+`;
+
 /*const SubMenuItem = styled(MenuLink)`
   padding-left: 20px;
 `;
@@ -87,10 +136,26 @@ const DeveloperOptions = styled.div`
   margin-top: 10px;
   transition: all 0.3s ease;
 `;*/
+const ModalContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ModalSection = styled.div`
+  width: 45%;
+`;
 
 const SidebarMenu = () => {
   const location = useLocation();
-  const [showFlotationSubMenu, setShowFlotationSubMenu] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  function openModal() {
+    setModalIsOpen(true);
+  }
+
+  function closeModal() {
+    setModalIsOpen(false);
+  }
 
   return (
     <MenuStyle>
@@ -117,15 +182,49 @@ const SidebarMenu = () => {
           <MenuItem>
             <MenuLink to="/simulation">Simulation and Data Analytics</MenuLink>
           </MenuItem>
-          <MenuItem onClick={() => setShowFlotationSubMenu(!showFlotationSubMenu)}>
-            <MenuLink to="#">Flotation cells Dashboards</MenuLink>
-            {showFlotationSubMenu && (
-              <SubMenu show={showFlotationSubMenu}>
-                <MenuItem>
-                  <MenuLink to="/dashboard/1">Rougher Dashboard</MenuLink>
-                </MenuItem>
-              </SubMenu>
-            )}
+          <MenuItem>
+            <button style={linkStyle} onClick={openModal}>Show Info</button>
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              style={customStyles}
+              contentLabel="Example Modal"
+            >
+              <ModalHeader>Simulation Twin</ModalHeader>
+              <ModalContent>
+                <ModalSection>
+                <ModalSectionTitle>Professors:</ModalSectionTitle>
+                <ModalList>
+                  <ModalListItem>Prof. El Hassan ABDELWAHED</ModalListItem>
+                  <ModalListItem>Prof. Aimad QAZDAR</ModalListItem>
+                </ModalList>
+                <ModalSectionTitle>Researchers:</ModalSectionTitle>
+                <ModalList>
+                  <ModalListItem>Oussama HASIDI, PhD</ModalListItem>
+                </ModalList>
+                <ModalSectionTitle>Software Developers:</ModalSectionTitle>
+                <ModalList>
+                  <ModalListItem>Yassine El-Ouardi</ModalListItem>
+                  <ModalListItem>Achik Aznag</ModalListItem>
+                  <ModalListItem>Oualid Charaf</ModalListItem>
+                  <ModalListItem>Bouchra Boufous</ModalListItem>
+                </ModalList>
+                </ModalSection>
+                <ModalSection>
+                <ModalSectionTitle>Industrials Experts:</ModalSectionTitle>
+                <ModalList>
+                  <ModalListItem>Mme. Intissar BENZAKOUR</ModalListItem>
+                  <ModalListItem>M. Moulay Abdellah EL ALAOUI-CHRIFI</ModalListItem>
+                  <ModalListItem>M. Abdelmalek BOUSSETTA</ModalListItem>
+                  <ModalListItem>Mme. Rachida CHAHID</ModalListItem>
+                  <ModalListItem>M. Mohamed Achraf AMADDAH</ModalListItem>
+                  <ModalListItem>M. Halim ABDELLATIF</ModalListItem>
+                  <ModalListItem>M. Driss ASKOUR</ModalListItem>
+                </ModalList>
+                </ModalSection>
+              </ModalContent>
+              <CloseButton onClick={closeModal}>Close</CloseButton>
+            </Modal>
           </MenuItem>
         </MenuList>
       )}
@@ -145,7 +244,7 @@ const App = () => {
           <Route path="/simulation" element={<SelectedSidebar />} />
           <Route path="/dashboard/:cellId" element={<MotherComp />} />
           <Route path="/concentra/:cellId" element={<Concentrate chart={chart}/>} />
-          <Route path="/tailingte/:cellId" element={<Tailing />} />
+          <Route path="/tailingte/:cellId" element={<Tailing chart={chart}/>} />
         </Routes>
       </div>
     </BrowserRouter>
