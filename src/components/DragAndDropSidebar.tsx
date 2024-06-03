@@ -50,7 +50,7 @@ interface DragAndDropSidebarProps {
 export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateChange }) =>{ 
   
   const { chartState, setChartState} = useAppContext();
-
+/*
   const handleSave = () => {
     // Assuming saveState simply returns the current state without serializing it
     // We need to serialize the chart state to a JSON string
@@ -87,7 +87,7 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
       console.log('Loaded Chart State:', loadedChart); // Log the loaded chart state for debugging
     });
   };
-
+*/
   
   return(
   <Page>
@@ -175,11 +175,11 @@ export const DragAndDropSidebar: React.FC<DragAndDropSidebarProps> = ({ onStateC
           },
         }}
       />
-
+{/*
           <LoadStateButton onClick={handleLoad}>
             Load
           </LoadStateButton>
-          <SaveStateButton onClick={handleSave}>Save</SaveStateButton>
+          <SaveStateButton onClick={handleSave}>Save</SaveStateButton>*/ }
     </Sidebar>
   </Page>
 

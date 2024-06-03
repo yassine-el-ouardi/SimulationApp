@@ -9,6 +9,8 @@ import { chartSimple } from '../misc/exampleChartState'
 import { onUpdateNodeProperty, onUpdateLinkProperty } from '../container/actions'
 import { saveState, loadStateFromFile } from '../container/actions'
 import '../custom.css'
+import { useAppContext } from '../AppContext'
+import { IChart } from '../types'
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
 
 
@@ -151,26 +153,178 @@ const SenarioButton = styled.button`
   }
 `;
 
-export class SelectedSidebar extends React.Component {
-  public state = cloneDeep(chartSimple)
+interface SelectedSidebarProps {
+  onStateChange: (chart: IChart) => void;
+}
+
+export const SelectedSidebar: React.FC<SelectedSidebarProps> = ({ onStateChange }) => {
+  const { chartState, setChartState } = useAppContext();
+  const chart = chartState;
+
+  const handleSave = () => {
+    // Assuming saveState simply returns the current state without serializing it
+    // We need to serialize the chart state to a JSON string
+    const savedState = JSON.stringify(saveState(chartState));
+  
+    // Creating a blob object from the saved state string
+    const blob = new Blob([savedState], { type: 'application/json' });
+  
+    // Creating a URL for the blob object
+    const url = URL.createObjectURL(blob);
+  
+    // Creating a temporary anchor element to initiate the download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'chartState.json'; // Naming the download file
+  
+    // Appending the anchor to the body, clicking it to initiate download, and then removing it
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  
+    // Releasing the created URL
+    URL.revokeObjectURL(url);
+  
+    console.log('Saved Chart State:', savedState); // Log the saved chart state for debugging
+  };
+  
+
+  const handleLoad = () => {
+    // Call the loadStateFromFile function and provide a callback to handle the loaded state
+    loadStateFromFile((loadedChart) => {
+      setChartState(loadedChart);
+      onStateChange(loadedChart); // Ensure onStateChange is called with the loaded state
+      console.log('Loaded Chart State:', loadedChart); // Log the loaded chart state for debugging
+    });
+  };
+
+  //----------------------------------------------------------------------
+
+  const handleSimulateClick = async () => {
+
+    const url = 'http://127.0.0.1:5000/process-circuit';
+
+    // Assuming you have the data available as a JavaScript object
+    // If you need to read from a file, you'll have to handle that differently in a browser context
+    const chart = chartState;
+    const chartString = JSON.stringify(chart);
+    const parsedData = chartString;
+    console.log("sent json file:",parsedData);
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(parsedData),
+      });
+  
+      if (response.ok) {
+        const responseData = await response.json();
+
+        setChartState(responseData);
+
+        console.log("Response from the Flask app:", responseData);
+      } else {
+        console.error(`Error occurred: ${response.status}, ${response.statusText}`);
+      }
+    } catch (error) {
+      console.error('Error sending request:', error);
+    }
+  }
+
+    //------------------------------------------------------------------------------senario
 
 
-  public render() {
-    const chart = this.state
-    // console.log('selected item', chart);
-    const selectedNode = chart.selected.id ? chart.nodes[chart.selected.id] : null;
-    const selectedLink = chart.selected.id ? chart.links[chart.selected.id] : null;
-    const stateActions = mapValues(actions, (func: any) =>
-      (...args: any) => this.setState(func(...args))) as typeof actions
+    const handleSenario = async () => {
+      const dataUrl = 'http://127.0.0.1:5000/fetch-csv-data';
+      const chart = chartState;
+    
+      try {
+        const response = await fetch(dataUrl);
+        if (response.ok) {
+          const jsonData = await response.json();
+    
+          // Iterate over the array and log each object
+          for (let index = 0; index < jsonData.length; index++) {
+            const dataObject = jsonData[index];
+            const updatedChart = { ...chart };
+            updatedChart.links.First_Stream_id.feed = dataObject;
+            // console.log(`chart for ${index}`, updatedChart);
+    
+            // send request to the backend process-circuit endpoint
+            try {
+              const processCircuitUrl = 'http://127.0.0.1:5000/process-circuit';
+              const updatedChartString = JSON.stringify(updatedChart);
+              console.log(`sent json for ${index}`,updatedChartString);
+              
+    
+              const response = await fetch(processCircuitUrl, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedChartString),
+              });
+    
+              if (response.ok) {
+                const responseData = await response.json();
+                setChartState(responseData);
+                //store it also in data base (influxdb):
+  
+  // Setup your InfluxDB connection
+  /*
+                const token = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA==';
+                const org = 'Dev team';
+                const bucket = 'Seconds';
+                const url = 'http://localhost:8086';
+  
+                const client = new InfluxDB({ url, token });
+                const writeApi = client.getWriteApi(org, bucket);
+  
+                // Create a point and write data to the 'Seconds' bucket
+                const point = new Point('flotationCell')
+                  .tag('cell_id', '1')
+                  .floatField('feed_rate', 123.45)
+                  .floatField('concentration', 67.89);
+  
+                writeApi.writePoint(point);
+                writeApi.close().then(() => console.log('Finished writing.'));
+  
+  
+                console.log(`Response from the backend for Object ${index}:`, responseData);*/
+                await new Promise(resolve => setTimeout(resolve, 1000));
+              } else {
+                console.error(`Error occurred: ${response.status}, ${response.statusText}`);
+              }
+            } catch (error) {
+              console.error('Error sending request to process-circuit endpoint:', error);
+            }
+          }
+        } else {
+          console.error(`Error occurred: ${response.status}, ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error('Error handling CSV file:', error);
+        // Handle error if needed
+      }
+    }
+  
+  const selectedNode = chart.selected.id ? chart.nodes[chart.selected.id] : null;
+  const selectedLink = chart.selected.id ? chart.links[chart.selected.id] : null;
+  
+  const stateActions = mapValues(actions, (func: any) =>
+    (...args: any) => setChartState(func(...args))) as typeof actions;
 
-    return (
-      <Page>
-        <Content>
-          <FlowChart
-            chart={chart}
-            callbacks={stateActions}
-          />
-        </Content>
+  return (
+    <Page>
+      <Content>
+      <FlowChart
+          chart={chart}
+          callbacks={stateActions}
+        />
+      </Content>
         <Sidebar>
           {
             chart.selected.type
@@ -200,7 +354,8 @@ export class SelectedSidebar extends React.Component {
                                 value={selectedNode.cellCharacteristics[key] !== null && selectedNode.cellCharacteristics[key] !== undefined ? selectedNode.cellCharacteristics[key].toString() : 'N/A'}
                                 onChange={(e) => {
                                   const newValue = e.target.value;
-                                  this.setState(onUpdateNodeProperty(key, newValue));
+                                  const updatedChart = onUpdateNodeProperty(key, newValue)(chart);
+                                  setChartState(updatedChart);
                                 }}
                               />
                               <span className="unit">{unit}</span>
@@ -230,7 +385,8 @@ export class SelectedSidebar extends React.Component {
                                 value={selectedNode.cellCharacteristics[key] !== null && selectedNode.cellCharacteristics[key] !== undefined ? selectedNode.cellCharacteristics[key].toString() : 'N/A'}
                                 onChange={(e) => {
                                   const newValue = e.target.value;
-                                  this.setState(onUpdateNodeProperty(key, newValue));
+                                  const updatedChart = onUpdateNodeProperty(key, newValue)(chart);
+                                  setChartState(updatedChart);
                                 }}
                               />
                               <span className="unit">{unit}</span>
@@ -322,7 +478,8 @@ export class SelectedSidebar extends React.Component {
                                       onChange={(e) => {
                                         const newValue = e.target.value;
                                         // Call the action function to update the state
-                                        this.setState(onUpdateLinkProperty(key, newValue, selectedLink.id));
+                                        const updatedChart = onUpdateLinkProperty(key, newValue, selectedLink.id)(chart);
+                                        setChartState(updatedChart);
                                       }}
                                     />
                                   </div>
@@ -342,22 +499,22 @@ export class SelectedSidebar extends React.Component {
               : <Message>Click on a Cell, or Stream</Message>
           }
           <ButtonContainer>
-          <SimulateButton onClick={this.handleSimulateClick}>
+          <SimulateButton onClick={handleSimulateClick}>
             Simulate
           </SimulateButton>
           </ButtonContainer>
           <ButtonContainer>
-          <SaveStateButton onClick={this.handleSave}>
+          <SaveStateButton onClick={handleSave}>
             Save
           </SaveStateButton>
           </ButtonContainer>
           <ButtonContainer>
-          <LoadStateButton onClick={this.handleLoad}>
+          <LoadStateButton onClick={handleLoad}>
             Load
           </LoadStateButton>
           </ButtonContainer>
           <ButtonContainer>
-          <SenarioButton onClick={this.handleSenario}>
+          <SenarioButton onClick={handleSenario}>
             Run senario
           </SenarioButton>
           </ButtonContainer>
@@ -366,174 +523,3 @@ export class SelectedSidebar extends React.Component {
       </Page>
     )
   }
-
-  handleSave = () => {
-
-    this.setState(saveState(this.state));
-  }
-
-  handleLoad = () => {
-    // Call the loadStateFromFile function and provide a callback to handle the loaded state
-    loadStateFromFile((loadedChart) => {
-      this.setState(loadedChart);
-    });
-  }
-
-  //----------------------------------------------------------------------
-
-  private handleSimulateClick = async () => {
-
-    const url = 'http://127.0.0.1:5000/process-circuit';
-
-    // Assuming you have the data available as a JavaScript object
-    // If you need to read from a file, you'll have to handle that differently in a browser context
-    const chart = this.state;
-    const chartString = JSON.stringify(chart);
-    const parsedData = chartString;
-    console.log("sent json file:",parsedData);
-  
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(parsedData),
-      });
-  
-      if (response.ok) {
-        const responseData = await response.json();
-
-        this.setState(responseData);
-
-        console.log("Response from the Flask app:", responseData);
-      } else {
-        console.error(`Error occurred: ${response.status}, ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error('Error sending request:', error);
-    }
-
-
-  }
-
-
-  //------------------------------------------------------------------------------senario
-
-
-  private handleSenario = async () => {
-    const dataUrl = 'http://127.0.0.1:5000/fetch-csv-data';
-    const chart = this.state;
-  
-    try {
-      const response = await fetch(dataUrl);
-      if (response.ok) {
-        const jsonData = await response.json();
-  
-        // Iterate over the array and log each object
-        for (let index = 0; index < jsonData.length; index++) {
-          const dataObject = jsonData[index];
-          const updatedChart = { ...chart };
-          updatedChart.links.First_Stream_id.feed = dataObject;
-          // console.log(`chart for ${index}`, updatedChart);
-  
-          // send request to the backend process-circuit endpoint
-          try {
-            const processCircuitUrl = 'http://127.0.0.1:5000/process-circuit';
-            const updatedChartString = JSON.stringify(updatedChart);
-            console.log(`sent json for ${index}`,updatedChartString);
-            
-  
-            const response = await fetch(processCircuitUrl, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(updatedChartString),
-            });
-  
-            if (response.ok) {
-              const responseData = await response.json();
-              this.setState(responseData);
-              //store it also in data base (influxdb):
-
-// Setup your InfluxDB connection
-/*
-              const token = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA==';
-              const org = 'Dev team';
-              const bucket = 'Seconds';
-              const url = 'http://localhost:8086';
-
-              const client = new InfluxDB({ url, token });
-              const writeApi = client.getWriteApi(org, bucket);
-
-              // Create a point and write data to the 'Seconds' bucket
-              const point = new Point('flotationCell')
-                .tag('cell_id', '1')
-                .floatField('feed_rate', 123.45)
-                .floatField('concentration', 67.89);
-
-              writeApi.writePoint(point);
-              writeApi.close().then(() => console.log('Finished writing.'));
-
-
-              console.log(`Response from the backend for Object ${index}:`, responseData);*/
-              await new Promise(resolve => setTimeout(resolve, 1000));
-            } else {
-              console.error(`Error occurred: ${response.status}, ${response.statusText}`);
-            }
-          } catch (error) {
-            console.error('Error sending request to process-circuit endpoint:', error);
-          }
-        }
-      } else {
-        console.error(`Error occurred: ${response.status}, ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error('Error handling CSV file:', error);
-      // Handle error if needed
-    }
-  }
-  
-
-  //----------------------------------------------
-/*  private handleCheckPorts = () => {
-    const { nodes, links } = this.state;
-    let allPortsLinked = true;
-  
-    for (const nodeId in nodes) {
-      const node = nodes[nodeId];
-      for (const portId in node.ports) {
-        // Initialize as not linked
-        let isLinked = false;
-        
-        // Check if the portId is found in any 'from' or 'to' of the links
-        for (const linkId in links) {
-          const link = links[linkId];
-          if ((link.from.nodeId === nodeId && link.from.portId === portId) ||
-              (link.to.nodeId === nodeId && link.to.portId === portId)) {
-            isLinked = true;
-            break; // Stop checking if we found a link
-          }
-        }
-  
-        if (!isLinked) {
-          allPortsLinked = false;
-          // console.log(`Port ${portId} on node ${nodeId} is not connected to any link.`);
-          break; // Stop checking other ports if one is already found not linked
-        }
-      }
-      if (!allPortsLinked) {
-        break; // Stop checking other nodes if one port is already found not linked
-      }
-    }
-  
-    if (allPortsLinked) {
-      return 'All ports are connected to links.';
-    } else {
-      return 'Some ports are not connected to links.';
-    }
-  }
-  */
-
-}

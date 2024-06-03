@@ -1,19 +1,11 @@
 import React, { useEffect } from 'react';
 import Chart1 from './Chart1';
 import Chart2 from './Chart2';
-//import DashboardStats from './DashboardStats';
 import AmountStats from './AmountStats';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../../AppContext';
 
 
-/*
-interface StatsData {
-  title: string;
-  value: string;
-  description: string;
-}
-*/
 const MotherComp: React.FC = () => {
   const { chartState } = useAppContext();
 
@@ -26,11 +18,7 @@ const MotherComp: React.FC = () => {
 
   // You can now use cellId to fetch or display specific data
   console.log("Displaying data for cell:", cellId);
-  /*const statsData: StatsData[] = [
-    { title: "Air efficiency Of the cell", value: "522.4", description: "Kg/m3" },
-    { title: "Flotation rate Of the cell", value: "0.59", description: "1/min" },
-    { title: "Entrainment of the cell", value: "0.11", description: "µm" },
-  ];*/
+
 
   return (
     <div style={{marginTop: '0px'}} className="container mx-auto mt-8" >

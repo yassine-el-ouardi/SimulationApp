@@ -241,10 +241,10 @@ const App = () => {
       <div style={{ marginLeft: 200 }}>
         <Routes>
           <Route path="/" element={<DragAndDropSidebar onStateChange={(newChart) => setChart(newChart)} />} />
-          <Route path="/simulation" element={<SelectedSidebar />} />
+          <Route path="/simulation" element={<SelectedSidebar onStateChange={(newChart) => setChart(newChart)}/>} />
           <Route path="/dashboard/:cellId" element={<MotherComp />} />
-          <Route path="/concentra/:cellId" element={<Concentrate chart={chart}/>} />
-          <Route path="/tailingte/:cellId" element={<Tailing chart={chart}/>} />
+          <Route path="/concentra/:cellId" element={<Concentrate/>} />
+          <Route path="/tailingte/:cellId" element={<Tailing/>} />
         </Routes>
       </div>
     </BrowserRouter>

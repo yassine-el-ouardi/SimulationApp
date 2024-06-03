@@ -28,7 +28,7 @@
   width: 45px;
   padding: 3px; /* Adjust padding for a tighter input */
   font-size: 14px;
-  /*border: 1px solid #ccc;*/
+  border-bottom: 1px solid;
   border-radius: 4px;
   margin-right: 5px; /* Add margin between input and unit */
 }
