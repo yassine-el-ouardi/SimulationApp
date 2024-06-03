@@ -34,16 +34,16 @@ const Tailing: React.FC = () => {
 
     if (relevantLink) {
       const newStatsData = [
-        { title: "Total Solids Flow", value: relevantLink.feed.totalSolidFlow.toFixed(2), description: "t/h" },
-        { title: "Total Liquid Flow", value: relevantLink.feed.totalLiquidFlow.toFixed(2), description: "t/h" },
-        { title: "Pulp Volumetric Flow", value: relevantLink.feed.pulpVolumetricFlow.toFixed(2), description: "m³/h" },
-        { title: "Solids SG", value: relevantLink.feed.solidsSG.toFixed(2), description: "g/cm³" },
-        { title: "Pulp SG", value: relevantLink.feed.pulpSG.toFixed(2), description: "g/cm³" },
-        { title: "Solids Fraction", value: relevantLink.feed.solidsFraction.toFixed(2), description: "%" },
-        { title: "Copper Percentage", value: relevantLink.feed.cuPercentage.toFixed(2), description: "%" },
-        { title: "Iron Percentage", value: relevantLink.feed.fePercentage.toFixed(2), description: "%" },
-        { title: "Zinc Percentage", value: relevantLink.feed.znPercentage.toFixed(2), description: "%" },
-        { title: "Lead Percentage", value: relevantLink.feed.pbPercentage.toFixed(2), description: "%" },
+        { title: "Total Solids Flow", value: relevantLink.feed.totalSolidFlow?.toFixed(2), description: "t/h" },
+        { title: "Total Liquid Flow", value: relevantLink.feed.totalLiquidFlow?.toFixed(2), description: "t/h" },
+        { title: "Pulp Volumetric Flow", value: relevantLink.feed.pulpVolumetricFlow?.toFixed(2), description: "m³/h" },
+        { title: "Solids SG", value: relevantLink.feed.solidsSG?.toFixed(2), description: "g/cm³" },
+        { title: "Pulp SG", value: relevantLink.feed.pulpSG?.toFixed(2), description: "g/cm³" },
+        { title: "Solids Fraction", value: relevantLink.feed.solidsFraction?.toFixed(2), description: "%" },
+        { title: "Copper Percentage", value: relevantLink.feed.cuPercentage?.toFixed(2), description: "%" },
+        { title: "Iron Percentage", value: relevantLink.feed.fePercentage?.toFixed(2), description: "%" },
+        { title: "Zinc Percentage", value: relevantLink.feed.znPercentage?.toFixed(2), description: "%" },
+        { title: "Lead Percentage", value: relevantLink.feed.pbPercentage?.toFixed(2), description: "%" },
       ];
       
       setStatsData(newStatsData);
