@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import TitleCard from './TitleCard';
-import {useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -26,7 +26,7 @@ ChartJS.register(
   Filler,
   Legend
 );
-function Chart2() {
+function Chart4() {
   const [dataPoints, setDataPoints] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
 
@@ -56,6 +56,10 @@ function Chart2() {
     const options = {
       day: '2-digit',
       month: '2-digit',
+      // year: 'numeric',
+      // hour: '2-digit',
+      // minute: '2-digit',
+      // second: '2-digit',
     };
     return date.toLocaleDateString(undefined, options);
   };
@@ -83,10 +87,12 @@ function Chart2() {
   };
 
   return (
-    <TitleCard title="% of Cu">
-      <Line data={data} /*options={options} */ />
+    <TitleCard title="% of Zn">
+      <Line data={data} /*options={options}*/ />
     </TitleCard>
   );
 }
 
-export default Chart2;
+export default Chart4;
+
+  

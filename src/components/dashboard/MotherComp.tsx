@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import Chart1 from './Chart1';
 import Chart2 from './Chart2';
+import Chart3 from './Chart3';
+import Chart4 from './Chart4';
 import AmountStats from './AmountStats';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../../AppContext';
@@ -36,9 +38,9 @@ const MotherComp: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <Chart1 />
-        <Chart1 />
-        <Chart1 />
         <Chart2 />
+        <Chart3 />
+        <Chart4 />
       </div>
     </div>
   );
