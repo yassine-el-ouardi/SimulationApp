@@ -241,7 +241,7 @@ const App = () => {
       <div style={{ marginLeft: 200 }}>
         <Routes>
           <Route path="/" element={<DragAndDropSidebar onStateChange={(newChart) => setChart(newChart)} />} />
-          <Route path="/simulation" element={<SelectedSidebar onStateChange={(newChart) => setChart(newChart)}/>} />
+          <Route path="/simulation" element={<SelectedSidebar />} />
           <Route path="/dashboard/:cellId" element={<MotherComp />} />
           <Route path="/concentra/:cellId" element={<Concentrate/>} />
           <Route path="/tailingte/:cellId" element={<Tailing/>} />
