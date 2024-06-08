@@ -14,9 +14,6 @@ import { IChart } from '../types'
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
 import debounce from 'lodash/debounce';
 
-
-//const unitsArray = ["m3", "m2", "m2","mm", "m3/min", "%","%", "%", "%","%", "%", "%","%", "%"]
-
 const Message = styled.div`
   margin: 10px;
   padding: 10px;
@@ -59,7 +56,6 @@ const SimulateButton = styled.button`
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3); /* Deeper shadow to simulate pressing */
   }
 `;
-
 
 const SaveStateButton = styled.button`
   background-color: #E74C3C; /* Red */
@@ -155,17 +151,25 @@ const SenarioButton = styled.button`
 `;
 
 
-
 export const SelectedSidebar: React.FC = () => {
   const { chartState, setChartState } = useAppContext();
   const chart = chartState;
 
-  const stateActions = useMemo(() => 
-    mapValues(actions, (func: any) =>
-      (...args: any) => setChartState(func(...args))) as typeof actions,
-    [setChartState]
-  );
+  //const allowedActions = ['onNodeClick', 'onLinkClick', 'onCanvasClick','onNodeDoubleClick','onDragCanvas','onDragCanvasStop'];
 
+  const stateActions = useMemo(() =>
+    mapValues(actions, (func: any, key: string) =>
+      (...args: any) => {
+        const newState = func(...args)(chart);
+        setChartState({
+          ...chart,
+          ...newState,
+        });
+      }
+    ) as typeof actions,
+    [chart, setChartState]
+  );
+  
   const debouncedUpdateNodeProperty = useCallback(
     debounce((key, value) => {
       const updatedChart = onUpdateNodeProperty(key, value)(chart);
