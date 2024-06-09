@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import tensorflow as tf
 import joblib
 import pandas as pd
+from influxdb_client import InfluxDBClient, Point
 
 app = Flask(__name__)
 
@@ -28,6 +29,14 @@ def load_model_and_scalers():
 
 model, scalerX, scalerY = load_model_and_scalers()
 
+# InfluxDB configuration
+INFLUXDB_URL = 'http://localhost:8086'
+INFLUXDB_TOKEN = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA=='
+INFLUXDB_ORG = 'Dev team'
+INFLUXDB_BUCKET = 'Seconds'
+
+client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN)
+write_api = client.write_api()
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -35,6 +44,7 @@ def predict():
         # Extract and prepare data from the POST request
         json_request = request.get_json()
         features = json_request['features']
+        node_id = json_request['node_id']  # Retrieve node_id from the request
 
         # Create a DataFrame from the received data
         input_df = pd.DataFrame([features], columns=scalerX.feature_names_in_)
@@ -50,25 +60,35 @@ def predict():
 
         # Convert prediction to a list for JSON response
         prediction_list = final_prediction.tolist()[0]
-        prediction_list[11]= prediction_list[9] + prediction_list[10]  /prediction_list[13]
+        prediction_list[11] = prediction_list[9] + prediction_list[10] / prediction_list[13]
         print(prediction_list)
+
+        # Field names in the specified order
+        field_names = [
+            'Air Efficiency', 'Flotation Rate: Cell', 'Entrainment: Cell',
+            'Total Solids Flow_Concentrate', 'Total Liquid Flow_Concentrate', 'Pulp Volumetric Flow_Concentrate',
+            'Solids SG_Concentrate', 'Pulp SG_Concentrate', 'Solids Fraction_Concentrate',
+            'Total Solids Flow_Tailings', 'Total Liquid Flow_Tailings', 'Pulp Volumetric Flow_Tailings',
+            'Solids SG_Tailings', 'Pulp SG_Tailings', 'Solids Fraction_Tailings',
+            'Cu_Tails', 'Fe_Tails', 'Pb_Tails', 'Zn_Tails',
+            'Cu_Concentrate', 'Fe_Concentrate', 'Pb_Concentrate', 'Zn_Concentrate'
+        ]
+
+        # Write prediction data to InfluxDB
+        point = Point("flotationCell").tag("node_id", node_id)
+        for name, value in zip(field_names, prediction_list):
+            point.field(name, value)
+
+        write_api.write(INFLUXDB_BUCKET, INFLUXDB_ORG, point)
+        
         return jsonify({'prediction': prediction_list})
 
     except Exception as e:
         return jsonify({'error': str(e)})
+
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1', port=8000)  # Replace 8000 with your desired port number
+
 @app.route('/')
 def home():
     return "Flask app is running!"
-
-
-
-
-
-
-
-
- 
-#      cd c:/Users/dell/ProjetBigData/ & venv\Scripts\activate
-

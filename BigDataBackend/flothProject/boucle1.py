@@ -105,7 +105,7 @@ class Node:
         logger.info("Prediction started for node %s.", self.node_id)
         features = self.input_features(links)
 
-        response = requests.post(api_url, json={"features": features})
+        response = requests.post(api_url, json={"features": features, "node_id": self.node_id})  # Include node_id
         if response.status_code == 200:
             response_data = response.json()
             logger.info("Response from Flask API: %s", response_data)
