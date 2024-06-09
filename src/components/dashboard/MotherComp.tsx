@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import Chart1 from './Chart1';
-import Chart2 from './Chart2';
-import Chart3 from './Chart3';
-import Chart4 from './Chart4';
+import PbLineChart from './PbLineChart'
+import CuLineChart from './CuLineChart'
+import ZnLineChart from './ZnLineChart'
+import FeLineChart from './FeLineChart'
 import AmountStats from './AmountStats';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../../AppContext';
@@ -23,6 +23,8 @@ const MotherComp: React.FC = () => {
 
 
   return (
+    <div className="flex-1 overflow-y-auto pt-8 px-6  bg-base-200" style={{padding: 30 }}>
+
     <div style={{marginTop: '0px'}} className="container mx-auto mt-8" >
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -37,11 +39,12 @@ const MotherComp: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <Chart1 />
-        <Chart2 />
-        <Chart3 />
-        <Chart4 />
+        <CuLineChart />
+        <FeLineChart />
+        <PbLineChart />
+        <ZnLineChart />
       </div>
+    </div>
     </div>
   );
 }

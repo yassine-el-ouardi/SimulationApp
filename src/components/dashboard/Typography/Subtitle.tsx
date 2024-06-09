@@ -1,9 +1,16 @@
-import * as React from 'react'
+import React from 'react';
 
-function Subtitle({styleClass, children}:{styleClass:any, children:any}){
-    return(
-        <div className={`text-xl font-semibold ${styleClass}`}>{children}</div>
-    )
+interface SubtitleProps {
+  styleClass?: string;
+  children: React.ReactNode;
 }
 
-export default Subtitle
+const Subtitle: React.FC<SubtitleProps> = ({ styleClass, children }) => {
+  return (
+    <div className={`text-xl font-semibold ${styleClass}`}>
+      {children}
+    </div>
+  );
+}
+
+export default Subtitle;

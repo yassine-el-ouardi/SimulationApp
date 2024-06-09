@@ -6,12 +6,14 @@ import { SelectedSidebar } from './components/SelectedSidebar';
 import MotherComp from './components/dashboard/MotherComp';
 import Concentrate from './components/dashboard/Concentrate';
 import Tailing from './components/dashboard/Tailing';
-import './styles/style.css';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components'
 import ReactDOM from 'react-dom/client';
 import { AppProvider } from './AppContext';
 import Modal from 'react-modal';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import './index.css'
 
 Modal.setAppElement('#root');
 
@@ -238,7 +240,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <SidebarMenu />
-      <div style={{ marginLeft: 200 }}>
+      <div style={{ marginLeft: 200}}>
         <Routes>
           <Route path="/" element={<DragAndDropSidebar onStateChange={(newChart) => setChart(newChart)} />} />
           <Route path="/simulation" element={<SelectedSidebar />} />
@@ -254,7 +256,9 @@ const App = () => {
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 root.render(
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <Provider store={store}>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </Provider>
 );

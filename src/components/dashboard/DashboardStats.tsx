@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface DashboardStatsProps {
   title: string;
-  icon?: React.ReactNode; // Assuming icon could be a React component
   value: string;
   description: string;
   colorIndex: number;
+  icon?: ReactNode; // Make icon optional
 }
 
-const DashboardStats: React.FC<DashboardStatsProps> = ({ title, icon, value, description, colorIndex }) => {
-  const COLORS = ["primary", "secondary"]; // Updated to include a second color for example
+const DashboardStats: React.FC<DashboardStatsProps> = ({ title, value, description, colorIndex, icon }) => {
+  const COLORS = ["primary", "primary"];
 
   const getDescStyle = () => {
     if (description.includes("↗︎")) return "font-bold text-green-700 dark:text-green-300";
@@ -20,6 +20,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ title, icon, value, des
   return (
     <div className="stats shadow">
       <div className="stat">
+        <div className={`stat-figure dark:text-slate-300 text-${COLORS[colorIndex % 2]}`}>{icon}</div>
         <div className="stat-title dark:text-slate-300">{title}</div>
         <div className={`stat-value dark:text-slate-300 text-${COLORS[colorIndex % 2]}`}>{value}</div>
         <div className={"stat-desc " + getDescStyle()}>{description}</div>
