@@ -155,16 +155,18 @@ export const SelectedSidebar: React.FC = () => {
   const { chartState, setChartState } = useAppContext();
   const chart = chartState;
 
-  //const allowedActions = ['onNodeClick', 'onLinkClick', 'onCanvasClick','onNodeDoubleClick','onDragCanvas','onDragCanvasStop'];
+  const allowedActions = ['onNodeClick', 'onLinkClick', 'onCanvasClick','onNodeDoubleClick','onDragCanvas','onDragCanvasStop'];
 
   const stateActions = useMemo(() =>
     mapValues(actions, (func: any, key: string) =>
       (...args: any) => {
-        const newState = func(...args)(chart);
-        setChartState({
-          ...chart,
-          ...newState,
-        });
+        if (allowedActions.includes(key)) {
+          const newState = func(...args)(chart);
+          setChartState({
+            ...chart,
+            ...newState,
+          });
+        }
       }
     ) as typeof actions,
     [chart, setChartState]

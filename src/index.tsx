@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragAndDropSidebar } from './components/DragAndDropSidebar';
 import { chartSimple } from './misc/exampleChartState';
 import { IChart } from './types/chart';
@@ -9,7 +9,7 @@ import Tailing from './components/dashboard/Tailing';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components'
 import ReactDOM from 'react-dom/client';
-import { AppProvider } from './AppContext';
+import { AppProvider, useAppContext } from './AppContext';
 import Modal from 'react-modal';
 import { Provider } from 'react-redux';
 import { store } from './store';
@@ -25,7 +25,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    width: '700px',  // Adjust width to accommodate side-by-side layout
+    width: '700px',
     borderRadius: '10px',
     padding: '20px',
   },
@@ -83,9 +83,9 @@ interface SubMenuProps {
 }
 
 const SubMenu = styled.div<SubMenuProps>`
-display: ${props => props.show ? 'block' : 'none'};
-background-color: #3B4C5A;
-padding-left: 20px;
+  display: ${props => props.show ? 'block' : 'none'};
+  background-color: #3B4C5A;
+  padding-left: 20px;
 `;
 
 const ModalHeader = styled.h2`
@@ -122,22 +122,6 @@ const CloseButton = styled.button`
   float: right;
 `;
 
-/*const SubMenuItem = styled(MenuLink)`
-  padding-left: 20px;
-`;
-
-const ThreeDotMenu = styled.div`
-  cursor: pointer;
-  font-size: 24px;
-  text-align: center;
-`;
-
-const DeveloperOptions = styled.div`
-  background-color: #444;
-  padding: 10px;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-`;*/
 const ModalContent = styled.div`
   display: flex;
   justify-content: space-between;
@@ -147,9 +131,11 @@ const ModalSection = styled.div`
   width: 45%;
 `;
 
-const SidebarMenu = () => {
+const SidebarMenu: React.FC = () => {
   const location = useLocation();
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { chartState } = useAppContext();
+  const [showSubMenu, setShowSubMenu] = useState(false);
 
   function openModal() {
     setModalIsOpen(true);
@@ -159,15 +145,17 @@ const SidebarMenu = () => {
     setModalIsOpen(false);
   }
 
+  const cellIds = Object.keys(chartState.nodes);
+
   return (
     <MenuStyle>
       <LogoContainer>
         <LogoImg src="/logo.png" alt="Logo" />
       </LogoContainer>
-      {location.pathname.startsWith('/Dashboard') || location.pathname.startsWith('/concentra') || location.pathname.startsWith('/tailingte') ? (
+      {location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/concentra') || location.pathname.startsWith('/tailingte') ? (
         <MenuList>
           <MenuItem>
-            <MenuLink to={`/Dashboard${location.pathname.slice(10)}`}>Dashboard</MenuLink>
+            <MenuLink to={`/dashboard${location.pathname.slice(10)}`}>Dashboard</MenuLink>
           </MenuItem>
           <MenuItem>
             <MenuLink to={`/concentra${location.pathname.slice(10)}`}>Concentrate</MenuLink>
@@ -185,6 +173,16 @@ const SidebarMenu = () => {
             <MenuLink to="/simulation">Simulation and Data Analytics</MenuLink>
           </MenuItem>
           <MenuItem>
+            <button style={linkStyle} onClick={() => setShowSubMenu(!showSubMenu)}>Cells Dashboard</button>
+            <SubMenu show={showSubMenu}>
+              {cellIds.map((cellId, index) => (
+                <MenuItem key={cellId}>
+                  <MenuLink to={`/dashboard/${cellId}`}>Dashboard {index + 1}</MenuLink>
+                </MenuItem>
+              ))}
+            </SubMenu>
+          </MenuItem>
+          <MenuItem>
             <button style={linkStyle} onClick={openModal}>Show Info</button>
             <Modal
               isOpen={modalIsOpen}
@@ -195,34 +193,34 @@ const SidebarMenu = () => {
               <ModalHeader>Simulation Twin</ModalHeader>
               <ModalContent>
                 <ModalSection>
-                <ModalSectionTitle>Professors:</ModalSectionTitle>
-                <ModalList>
-                  <ModalListItem>Prof. El Hassan ABDELWAHED</ModalListItem>
-                  <ModalListItem>Prof. Aimad QAZDAR</ModalListItem>
-                </ModalList>
-                <ModalSectionTitle>Researchers:</ModalSectionTitle>
-                <ModalList>
-                  <ModalListItem>Oussama HASIDI, PhD</ModalListItem>
-                </ModalList>
-                <ModalSectionTitle>Software Developers:</ModalSectionTitle>
-                <ModalList>
-                  <ModalListItem>Yassine El-Ouardi</ModalListItem>
-                  <ModalListItem>Achik Aznag</ModalListItem>
-                  <ModalListItem>Oualid Charaf</ModalListItem>
-                  <ModalListItem>Bouchra Boufous</ModalListItem>
-                </ModalList>
+                  <ModalSectionTitle>Professors:</ModalSectionTitle>
+                  <ModalList>
+                    <ModalListItem>Prof. El Hassan ABDELWAHED</ModalListItem>
+                    <ModalListItem>Prof. Aimad QAZDAR</ModalListItem>
+                  </ModalList>
+                  <ModalSectionTitle>Researchers:</ModalSectionTitle>
+                  <ModalList>
+                    <ModalListItem>Oussama HASIDI, PhD</ModalListItem>
+                  </ModalList>
+                  <ModalSectionTitle>Software Developers:</ModalSectionTitle>
+                  <ModalList>
+                    <ModalListItem>Yassine El-Ouardi</ModalListItem>
+                    <ModalListItem>Achik Aznag</ModalListItem>
+                    <ModalListItem>Oualid Charaf</ModalListItem>
+                    <ModalListItem>Bouchra Boufous</ModalListItem>
+                  </ModalList>
                 </ModalSection>
                 <ModalSection>
-                <ModalSectionTitle>Industrials Experts:</ModalSectionTitle>
-                <ModalList>
-                  <ModalListItem>Mme. Intissar BENZAKOUR</ModalListItem>
-                  <ModalListItem>M. Moulay Abdellah EL ALAOUI-CHRIFI</ModalListItem>
-                  <ModalListItem>M. Abdelmalek BOUSSETTA</ModalListItem>
-                  <ModalListItem>Mme. Rachida CHAHID</ModalListItem>
-                  <ModalListItem>M. Mohamed Achraf AMADDAH</ModalListItem>
-                  <ModalListItem>M. Halim ABDELLATIF</ModalListItem>
-                  <ModalListItem>M. Driss ASKOUR</ModalListItem>
-                </ModalList>
+                  <ModalSectionTitle>Industrials Experts:</ModalSectionTitle>
+                  <ModalList>
+                    <ModalListItem>Mme. Intissar BENZAKOUR</ModalListItem>
+                    <ModalListItem>M. Moulay Abdellah EL ALAOUI-CHRIFI</ModalListItem>
+                    <ModalListItem>M. Abdelmalek BOUSSETTA</ModalListItem>
+                    <ModalListItem>Mme. Rachida CHAHID</ModalListItem>
+                    <ModalListItem>M. Mohamed Achraf AMADDAH</ModalListItem>
+                    <ModalListItem>M. Halim ABDELLATIF</ModalListItem>
+                    <ModalListItem>M. Driss ASKOUR</ModalListItem>
+                  </ModalList>
                 </ModalSection>
               </ModalContent>
               <CloseButton onClick={closeModal}>Close</CloseButton>
@@ -234,19 +232,19 @@ const SidebarMenu = () => {
   );
 };
 
-const App = () => {
+const App: React.FC = () => {
   const [chart, setChart] = useState<IChart>(chartSimple);
 
   return (
     <BrowserRouter>
       <SidebarMenu />
-      <div style={{ marginLeft: 200}}>
+      <div style={{ marginLeft: 200 }}>
         <Routes>
           <Route path="/" element={<DragAndDropSidebar onStateChange={(newChart) => setChart(newChart)} />} />
           <Route path="/simulation" element={<SelectedSidebar />} />
           <Route path="/dashboard/:cellId" element={<MotherComp />} />
-          <Route path="/concentra/:cellId" element={<Concentrate/>} />
-          <Route path="/tailingte/:cellId" element={<Tailing/>} />
+          <Route path="/concentra/:cellId" element={<Concentrate />} />
+          <Route path="/tailingte/:cellId" element={<Tailing />} />
         </Routes>
       </div>
     </BrowserRouter>
@@ -254,11 +252,11 @@ const App = () => {
 };
 
 const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
+const root = ReactDOM.createRoot(container!);
 root.render(
-    <Provider store={store}>
-      <AppProvider>
-        <App />
-      </AppProvider>
-    </Provider>
+  <Provider store={store}>
+    <AppProvider>
+      <App />
+    </AppProvider>
+  </Provider>
 );
