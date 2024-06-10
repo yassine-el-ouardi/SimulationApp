@@ -6,11 +6,11 @@ import DashboardTopBar from './DashboardTopBar';
 import { useAppContext } from '../../AppContext';
 import { useDispatch } from 'react-redux';
 import { showNotification } from './headerSlice';
-import CircleStackIcon  from '@heroicons/react/24/outline/CircleStackIcon'
-import PbLineChart from './PbLineChart'
-import CuLineChart from './CuLineChart'
-import ZnLineChart from './ZnLineChart'
-import FeLineChart from './FeLineChart'
+import CircleStackIcon from '@heroicons/react/24/outline/CircleStackIcon';
+import PbLineChart from './PbLineChart';
+import CuLineChart from './CuLineChart';
+import ZnLineChart from './ZnLineChart';
+import FeLineChart from './FeLineChart';
 
 interface Stat {
   title: string;
@@ -45,15 +45,6 @@ const Tailing: React.FC = () => {
           |> range(start: 0)
           |> filter(fn: (r) => r["_measurement"] == "flotationCell" and r["node_id"] == "${cellId}")
           |> filter(fn: (r) =>
-            r["_field"] == "Air Efficiency" or
-            r["_field"] == "Flotation Rate: Cell" or
-            r["_field"] == "Entrainment: Cell" or
-            r["_field"] == "Total Solids Flow_Concentrate" or
-            r["_field"] == "Total Liquid Flow_Concentrate" or
-            r["_field"] == "Pulp Volumetric Flow_Concentrate" or
-            r["_field"] == "Solids SG_Concentrate" or
-            r["_field"] == "Pulp SG_Concentrate" or
-            r["_field"] == "Solids Fraction_Concentrate" or
             r["_field"] == "Total Solids Flow_Tailings" or
             r["_field"] == "Total Liquid Flow_Tailings" or
             r["_field"] == "Pulp Volumetric Flow_Tailings" or
@@ -63,14 +54,10 @@ const Tailing: React.FC = () => {
             r["_field"] == "Cu_Tails" or
             r["_field"] == "Fe_Tails" or
             r["_field"] == "Pb_Tails" or
-            r["_field"] == "Zn_Tails" or
-            r["_field"] == "Cu_Concentrate" or
-            r["_field"] == "Fe_Concentrate" or
-            r["_field"] == "Pb_Concentrate" or
-            r["_field"] == "Zn_Concentrate"
+            r["_field"] == "Zn_Tails"
           )
           |> sort(columns: ["_time"], desc: true)
-          |> limit(n: 23)
+          |> limit(n: 1)
       `;
 
       const rows: any[] = [];
@@ -90,29 +77,27 @@ const Tailing: React.FC = () => {
             setTimestamp(latestTimestamp);
 
             const fieldNames = [
-              'Air Efficiency', 'Flotation Rate: Cell', 'Entrainment: Cell',
-              'Total Solids Flow_Concentrate', 'Total Liquid Flow_Concentrate', 'Pulp Volumetric Flow_Concentrate',
-              'Solids SG_Concentrate', 'Pulp SG_Concentrate', 'Solids Fraction_Concentrate',
               'Total Solids Flow_Tailings', 'Total Liquid Flow_Tailings', 'Pulp Volumetric Flow_Tailings',
               'Solids SG_Tailings', 'Pulp SG_Tailings', 'Solids Fraction_Tailings',
-              'Cu_Tails', 'Fe_Tails', 'Pb_Tails', 'Zn_Tails',
-              'Cu_Concentrate', 'Fe_Concentrate', 'Pb_Concentrate', 'Zn_Concentrate'
+              'Cu_Tails', 'Fe_Tails', 'Pb_Tails', 'Zn_Tails'
+            ];
+
+            const fieldTitles = [
+              "Total Solids Flow", "Total Liquid Flow", "Pulp Volumetric Flow",
+              "Solids SG", "Pulp SG", "Solids Fraction",
+              "Copper Percentage", "Iron Percentage", "Lead Percentage", "Zinc Percentage"
             ];
 
             const fieldDescriptions = [
-              'N/A', 'N/A', 'N/A',
               't/h', 't/h', 'm³/h',
               'g/cm³', 'g/cm³', '%',
-              't/h', 't/h', 'm³/h',
-              'g/cm³', 'g/cm³', '%',
-              '%', '%', '%', '%',
               '%', '%', '%', '%'
             ];
 
             const newStatsData = fieldNames.map((fieldName, index) => {
               const row = rows.find(r => r._field === fieldName);
               return {
-                title: fieldName,
+                title: fieldTitles[index],
                 value: row ? row._value.toFixed(2) : 'N/A',
                 description: fieldDescriptions[index],
                 icon: <CircleStackIcon className='w-8 h-8' />,
@@ -152,8 +137,6 @@ const Tailing: React.FC = () => {
 
       {/** ---------------------- Select Period Content ------------------------- */}
       <DashboardTopBar updateDashboardPeriod={updateDashboardPeriod} />
-
-
 
       {/** ---------------------- Different stats content 1 ------------------------- */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-2">
