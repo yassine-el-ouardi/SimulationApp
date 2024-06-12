@@ -538,8 +538,8 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
       y: position.y,  // For example, 50 pixels below the new node's position
     };*/
     const targetPosition2 = {
-      x: position.x + 200, // For example, 100 pixels to the right of the new node's position
-      y: position.y + 50,  // For example, 50 pixels below the new node's position
+      x: position.x + 130, // For example, 100 pixels to the right of the new node's position
+      y: position.y + 48,  // For example, 50 pixels below the new node's position
     };
 
 
@@ -574,8 +574,8 @@ export const onCanvasDrop: IStateCallback<IOnCanvasDrop> = ({
 
     // Specify the target position for the link
     const targetPosition = {
-      x: position.x +200, // For example, 100 pixels to the right of the new node's position
-      y: position.y + 20,  // For example, 50 pixels below the new node's position
+      x: position.x +130, // For example, 100 pixels to the right of the new node's position
+      y: position.y + 22,  // For example, 50 pixels below the new node's position
     };
     /*const targetPosition2 = {
       x: position.x + 50, // For example, 100 pixels to the right of the new node's position
