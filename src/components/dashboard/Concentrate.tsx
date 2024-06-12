@@ -134,7 +134,13 @@ const Concentrate: React.FC = () => {
     <>
     <div className="flex-1 overflow-y-auto pt-8 px-6  bg-base-200" style={{padding: 30 }}>
       {/** ---------------------- Title with Timestamp ------------------------- */}
-      <h1 className="text-2xl font-semibold ml-2" style={{paddingBottom: 30}}>Concentrate at: ( {timestamp ? formatTimestamp(timestamp) : 'N/A'})</h1>
+      <h1 className="text-2xl font-semibold ml-2" style={{paddingBottom: 30}}>Concentrate:</h1>
+      <div className="stats bg-base-100 shadow" style={{position: "absolute", right: 30, top: 30 }}>
+          <div className="stat">
+            <h1 >
+              {timestamp ? formatTimestamp(timestamp) : 'N/A'}
+            </h1>
+          </div></div>
 
       {/** ---------------------- Select Period Content ------------------------- */}
       <DashboardTopBar updateDashboardPeriod={updateDashboardPeriod} />

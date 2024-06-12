@@ -99,10 +99,12 @@ const AmountStats: React.FC = () => {
     <div>
       <div className="flex-1 overflow-y-auto pt-8 px-6 bg-base-200" style={{ padding: 30 }}>
         {/** ---------------------- Title with Timestamp ------------------------- */}
-        <h1 className="text-2xl font-semibold ml-2" style={{ paddingBottom: 30 }}>
-          ( {timestamp ? formatTimestamp(timestamp) : 'N/A'})
-        </h1>
-
+        <div className="stats bg-base-100 shadow" style={{ marginBottom: 30, float: "right" }}>
+          <div className="stat">
+            <h1 >
+              {timestamp ? formatTimestamp(timestamp) : 'N/A'}
+            </h1>
+          </div></div>
         {/** ---------------------- Different stats content 1 ------------------------- */}
         <div className="stats bg-base-100 shadow">
           {
@@ -114,9 +116,9 @@ const AmountStats: React.FC = () => {
               </div>
             ))
           }
-          </div>
         </div>
       </div>
+    </div>
   );
 }
 

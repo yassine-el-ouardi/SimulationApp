@@ -34,7 +34,7 @@ const url = 'http://localhost:8086'; // Change this to your InfluxDB URL
 const token = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA=='; // Change this to your InfluxDB token
 const org = 'Dev team'; // Change this to your org name
 
-const CuLineChart: React.FC = () => {
+const CuLineChartTailing: React.FC = () => {
   const dispatch = useDispatch();
   const { cellId } = useParams<{ cellId: string }>();
   const [dataPoints, setDataPoints] = useState<number[]>([]);
@@ -54,7 +54,7 @@ const CuLineChart: React.FC = () => {
       from(bucket: "${bucket}")
         |> range(start: -7d)
         |> filter(fn: (r) => r["_measurement"] == "flotationCell" and r["node_id"] == "${cellId}")
-        |> filter(fn: (r) => r["_field"] == "Cu_Concentrate")
+        |> filter(fn: (r) => r["_field"] == "Cu_Tails")
         |> sort(columns: ["_time"], desc: true)
         |> limit(n: 6)
         |> sort(columns: ["_time"], desc: false)
@@ -135,4 +135,4 @@ const CuLineChart: React.FC = () => {
   );
 }
 
-export default CuLineChart;
+export default CuLineChartTailing;

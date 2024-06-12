@@ -7,10 +7,10 @@ import { useAppContext } from '../../AppContext';
 import { useDispatch } from 'react-redux';
 import { showNotification } from './headerSlice';
 import CircleStackIcon from '@heroicons/react/24/outline/CircleStackIcon';
-import PbLineChart from './PbLineChart';
-import CuLineChart from './CuLineChart';
-import ZnLineChart from './ZnLineChart';
-import FeLineChart from './FeLineChart';
+import PbLineChartTailing from './PbLineChartTailing';
+import CuLineChartTailing from './CuLineChartTailing';
+import ZnLineChartTailing from './ZnLineChartTailing';
+import FeLineChartTailing from './FeLineChartTailing';
 
 interface Stat {
   title: string;
@@ -133,7 +133,13 @@ const Tailing: React.FC = () => {
     <>
     <div className="flex-1 overflow-y-auto pt-8 px-6  bg-base-200" style={{padding: 30 }}>
       {/** ---------------------- Title with Timestamp ------------------------- */}
-      <h1 className="text-2xl font-semibold ml-2" style={{paddingBottom: 30}}>Tailing at: ( {timestamp ? formatTimestamp(timestamp) : 'N/A'})</h1>
+      <h1 className="text-2xl font-semibold ml-2" style={{paddingBottom: 30}}>Tailing: </h1>
+      <div className="stats bg-base-100 shadow" style={{position: "absolute", right: 30, top: 30 }}>
+          <div className="stat">
+            <h1 >
+              {timestamp ? formatTimestamp(timestamp) : 'N/A'}
+            </h1>
+          </div></div>
 
       {/** ---------------------- Select Period Content ------------------------- */}
       <DashboardTopBar updateDashboardPeriod={updateDashboardPeriod} />
@@ -149,14 +155,14 @@ const Tailing: React.FC = () => {
 
       {/** ---------------------- Different charts 1------------------------- */}
       <div className="grid lg:grid-cols-2 mt-4 grid-cols-1 gap-6">
-        <CuLineChart />
-        <FeLineChart />
+        <CuLineChartTailing />
+        <FeLineChartTailing />
       </div>
 
       {/** ---------------------- Different charts 2 -------------------------*/}
       <div className="grid lg:grid-cols-2 mt-10 grid-cols-1 gap-6">
-        <PbLineChart />
-        <ZnLineChart />
+        <PbLineChartTailing />
+        <ZnLineChartTailing />
       </div> 
     </div>
     </>
