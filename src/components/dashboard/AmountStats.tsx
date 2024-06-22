@@ -2,6 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { InfluxDB } from '@influxdata/influxdb-client';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../../AppContext';
+import OpenAI from 'openai';
+
+// Define the structure of the assistant message content
+interface TextContent {
+  type: 'text';
+  text: {
+    value: string;
+    annotations: any[];
+  };
+}
+
+interface AssistantMessage {
+  role: string;
+  content: TextContent[];
+}
+
+interface AssistantResponse {
+  data: AssistantMessage[];
+}
 
 interface Stat {
   title: string;
@@ -13,12 +32,19 @@ const bucket = 'Seconds'; // Change this to your bucket name
 const url = 'http://localhost:8086'; // Change this to your InfluxDB URL
 const token = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA=='; // Change this to your InfluxDB token
 const org = 'Dev team'; // Change this to your org name
+const openaiApiKey = process.env.OPENAI_API_KEY; // Your OpenAI API Key
 
 const AmountStats: React.FC = () => {
   const { cellId } = useParams<{ cellId: string }>();
   const [statsData, setStatsData] = useState<Stat[]>([]);
   const [timestamp, setTimestamp] = useState<string | null>(null);
+  const [advice, setAdvice] = useState<string>('');
   const { chartState } = useAppContext();
+  const [openai, setOpenai] = useState<OpenAI | null>(null);
+
+  useEffect(() => {
+    setOpenai(new OpenAI({ apiKey: openaiApiKey, dangerouslyAllowBrowser: true }));
+  }, []);
 
   useEffect(() => {
     console.log("chart updated in AmountStats:", chartState);
@@ -36,7 +62,27 @@ const AmountStats: React.FC = () => {
           |> filter(fn: (r) =>
             r["_field"] == "Air Efficiency" or
             r["_field"] == "Flotation Rate: Cell" or
-            r["_field"] == "Entrainment: Cell"
+            r["_field"] == "Entrainment: Cell" or
+            r["_field"] == "Total Solids Flow_Concentrate" or
+            r["_field"] == "Total Liquid Flow_Concentrate" or
+            r["_field"] == "Pulp Volumetric Flow_Concentrate" or
+            r["_field"] == "Solids SG_Concentrate" or
+            r["_field"] == "Pulp SG_Concentrate" or
+            r["_field"] == "Solids Fraction_Concentrate" or
+            r["_field"] == "Total Solids Flow_Tailings" or
+            r["_field"] == "Total Liquid Flow_Tailings" or
+            r["_field"] == "Pulp Volumetric Flow_Tailings" or
+            r["_field"] == "Solids SG_Tailings" or
+            r["_field"] == "Pulp SG_Tailings" or
+            r["_field"] == "Solids Fraction_Tailings" or
+            r["_field"] == "Cu_Tails" or
+            r["_field"] == "Fe_Tails" or
+            r["_field"] == "Pb_Tails" or
+            r["_field"] == "Zn_Tails" or
+            r["_field"] == "Cu_Concentrate" or
+            r["_field"] == "Fe_Concentrate" or
+            r["_field"] == "Pb_Concentrate" or
+            r["_field"] == "Zn_Concentrate"
           )
           |> sort(columns: ["_time"], desc: true)
           |> limit(n: 1)
@@ -52,7 +98,7 @@ const AmountStats: React.FC = () => {
         error: (error) => {
           console.error('Query error:', error);
         },
-        complete: () => {
+        complete: async () => {
           console.log('Query completed successfully');
           if (rows.length > 0) {
             const latestTimestamp = rows[0]._time;
@@ -61,21 +107,94 @@ const AmountStats: React.FC = () => {
             const fieldNamesMap = {
               'Air Efficiency': 'Air efficiency Of the cell',
               'Flotation Rate: Cell': 'Flotation rate Of the cell',
-              'Entrainment: Cell': 'Entrainment of the cell'
+              'Entrainment: Cell': 'Entrainment of the cell',
+              'Total Solids Flow_Concentrate': 'Total Solids Flow_Concentrate',
+              'Total Liquid Flow_Concentrate': 'Total Liquid Flow_Concentrate',
+              'Pulp Volumetric Flow_Concentrate': 'Pulp Volumetric Flow_Concentrate',
+              'Solids SG_Concentrate': 'Solids SG_Concentrate',
+              'Pulp SG_Concentrate': 'Pulp SG_Concentrate',
+              'Solids Fraction_Concentrate': 'Solids Fraction_Concentrate',
+              'Total Solids Flow_Tailings': 'Total Solids Flow_Tailings',
+              'Total Liquid Flow_Tailings': 'Total Liquid Flow_Tailings',
+              'Pulp Volumetric Flow_Tailings': 'Pulp Volumetric Flow_Tailings',
+              'Solids SG_Tailings': 'Solids SG_Tailings',
+              'Pulp SG_Tailings': 'Pulp SG_Tailings',
+              'Solids Fraction_Tailings': 'Solids Fraction_Tailings',
+              'Cu_Tails': 'Cu_Tails',
+              'Fe_Tails': 'Fe_Tails',
+              'Pb_Tails': 'Pb_Tails',
+              'Zn_Tails': 'Zn_Tails',
+              'Cu_Concentrate': 'Cu_Concentrate',
+              'Fe_Concentrate': 'Fe_Concentrate',
+              'Pb_Concentrate': 'Pb_Concentrate',
+              'Zn_Concentrate': 'Zn_Concentrate'
             };
+
             const fieldDescriptions = {
               'Air Efficiency': 'Kg/m3',
               'Flotation Rate: Cell': '1/min',
-              'Entrainment: Cell': 'µm'
+              'Entrainment: Cell': 'µm',
+              'Total Solids Flow_Concentrate': 'Kg/h',
+              'Total Liquid Flow_Concentrate': 'L/h',
+              'Pulp Volumetric Flow_Concentrate': 'm³/h',
+              'Solids SG_Concentrate': '',
+              'Pulp SG_Concentrate': '',
+              'Solids Fraction_Concentrate': '%',
+              'Total Solids Flow_Tailings': 'Kg/h',
+              'Total Liquid Flow_Tailings': 'L/h',
+              'Pulp Volumetric Flow_Tailings': 'm³/h',
+              'Solids SG_Tailings': '',
+              'Pulp SG_Tailings': '',
+              'Solids Fraction_Tailings': '%',
+              'Cu_Tails': '%',
+              'Fe_Tails': '%',
+              'Pb_Tails': '%',
+              'Zn_Tails': '%',
+              'Cu_Concentrate': '%',
+              'Fe_Concentrate': '%',
+              'Pb_Concentrate': '%',
+              'Zn_Concentrate': '%'
             };
 
-            const newStatsData = rows.map((row) => ({
-              title: fieldNamesMap[row._field],
-              value: row._value.toFixed(2),
-              description: fieldDescriptions[row._field],
-            }));
+            const newStatsData = rows
+              .filter((row) => ['Air Efficiency', 'Flotation Rate: Cell', 'Entrainment: Cell'].includes(row._field))
+              .map((row) => ({
+                title: fieldNamesMap[row._field],
+                value: row._value.toFixed(2),
+                description: fieldDescriptions[row._field],
+              }));
 
             setStatsData(newStatsData);
+
+            // Prepare data for OpenAI assistant
+            const inputData = rows.reduce((acc, row) => {
+              acc[row._field] = row._value;
+              return acc;
+            }, {});
+
+            // Call OpenAI assistant
+            if (openai) {
+              try {
+                const thread = await openai.beta.threads.create();
+                await openai.beta.threads.messages.create(thread.id, { role: "user", content: JSON.stringify(inputData) });
+                const run = await openai.beta.threads.runs.create(thread.id, { assistant_id: 'asst_LmbAwCNrEh63pUb0qCGw8yuZ' });
+                const getAnswer = async (threadId, runId) => {
+                  const getRun = await openai.beta.threads.runs.retrieve(threadId, runId);
+                  if (getRun.status === "completed") {
+                    const messages = await openai.beta.threads.messages.list(threadId) as AssistantResponse;
+                    const assistantMessage = messages.data.find(msg => msg.role === 'assistant');
+                    if (assistantMessage && assistantMessage.content[0].type === 'text') {
+                      setAdvice((assistantMessage.content[0] as TextContent).text.value);
+                    }
+                  } else {
+                    setTimeout(() => getAnswer(threadId, runId), 200);
+                  }
+                };
+                getAnswer(thread.id, run.id);
+              } catch (error) {
+                console.error('OpenAI API error:', error);
+              }
+            }
           } else {
             setStatsData([]);
             setTimestamp(null);
@@ -85,10 +204,10 @@ const AmountStats: React.FC = () => {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 10000);
 
     return () => clearInterval(intervalId);
-  }, [cellId]);
+  }, [cellId, openai]);
 
   const formatTimestamp = (timestamp: string): string => {
     const date = new Date(timestamp);
@@ -101,10 +220,11 @@ const AmountStats: React.FC = () => {
         {/** ---------------------- Title with Timestamp ------------------------- */}
         <div className="stats bg-base-100 shadow" style={{ marginBottom: 30, float: "right" }}>
           <div className="stat">
-            <h1 >
+            <h1>
               {timestamp ? formatTimestamp(timestamp) : 'N/A'}
             </h1>
-          </div></div>
+          </div>
+        </div>
         {/** ---------------------- Different stats content 1 ------------------------- */}
         <div className="stats bg-base-100 shadow">
           {
@@ -116,6 +236,13 @@ const AmountStats: React.FC = () => {
               </div>
             ))
           }
+        </div>
+        {/** ---------------------- Assistant Advice ------------------------- */}
+        <div className="stats bg-base-100 shadow" style={{ marginTop: 30 }}>
+          <div className="stat">
+            <div className="stat-title">Assistant Advice</div>
+            <div className="stat-value">{advice}</div>
+          </div>
         </div>
       </div>
     </div>
