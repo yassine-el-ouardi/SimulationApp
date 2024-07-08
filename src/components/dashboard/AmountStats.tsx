@@ -28,17 +28,20 @@ interface Stat {
   description: string;
 }
 
+interface AmountStatsProps {
+  setAdvice: (advice: string) => void;
+}
+
 const bucket = 'Seconds'; // Change this to your bucket name
 const url = 'http://localhost:8086'; // Change this to your InfluxDB URL
 const token = 'sUJZaiT1oMfvd0MKraMlw5WYl442Mom46YCLFcReJ3LXX0Ka9NWHF8e6uV6N8euHBY2C_QZph5Q4U78SPTkOLA=='; // Change this to your InfluxDB token
 const org = 'Dev team'; // Change this to your org name
-const openaiApiKey = process.env.OPENAI_API_KEY; // Your OpenAI API Key
+const openaiApiKey = process.env.REACT_APP_OPENAI_API_KEY; // Your OpenAI API Key
 
-const AmountStats: React.FC = () => {
+const AmountStats: React.FC<AmountStatsProps> = ({ setAdvice }) => {
   const { cellId } = useParams<{ cellId: string }>();
   const [statsData, setStatsData] = useState<Stat[]>([]);
   const [timestamp, setTimestamp] = useState<string | null>(null);
-  const [advice, setAdvice] = useState<string>('');
   const { chartState } = useAppContext();
   const [openai, setOpenai] = useState<OpenAI | null>(null);
 
@@ -103,11 +106,12 @@ const AmountStats: React.FC = () => {
           if (rows.length > 0) {
             const latestTimestamp = rows[0]._time;
             setTimestamp(latestTimestamp);
+            document.getElementById('timestamp')!.innerText = latestTimestamp ? formatTimestamp(latestTimestamp) : 'N/A';
 
             const fieldNamesMap = {
-              'Air Efficiency': 'Air efficiency Of the cell',
-              'Flotation Rate: Cell': 'Flotation rate Of the cell',
-              'Entrainment: Cell': 'Entrainment of the cell',
+              'Air Efficiency': 'Air efficiency',
+              'Flotation Rate: Cell': 'Flotation rate',
+              'Entrainment: Cell': 'Entrainment',
               'Total Solids Flow_Concentrate': 'Total Solids Flow_Concentrate',
               'Total Liquid Flow_Concentrate': 'Total Liquid Flow_Concentrate',
               'Pulp Volumetric Flow_Concentrate': 'Pulp Volumetric Flow_Concentrate',
@@ -157,7 +161,7 @@ const AmountStats: React.FC = () => {
             };
 
             const newStatsData = rows
-              .filter((row) => ['Air Efficiency', 'Flotation Rate: Cell', 'Entrainment: Cell'].includes(row._field))
+              .filter(row => row._field === 'Air Efficiency' || row._field === 'Flotation Rate: Cell' || row._field === 'Entrainment: Cell')
               .map((row) => ({
                 title: fieldNamesMap[row._field],
                 value: row._value.toFixed(2),
@@ -184,7 +188,9 @@ const AmountStats: React.FC = () => {
                     const messages = await openai.beta.threads.messages.list(threadId) as AssistantResponse;
                     const assistantMessage = messages.data.find(msg => msg.role === 'assistant');
                     if (assistantMessage && assistantMessage.content[0].type === 'text') {
-                      setAdvice((assistantMessage.content[0] as TextContent).text.value);
+                      const adviceText = (assistantMessage.content[0] as TextContent).text.value;
+                      setAdvice(adviceText);
+                      document.getElementById('ai-advice')!.innerText = adviceText;
                     }
                   } else {
                     setTimeout(() => getAnswer(threadId, runId), 200);
@@ -195,6 +201,7 @@ const AmountStats: React.FC = () => {
                 console.error('OpenAI API error:', error);
               }
             }
+            //setAdvice("Adjust pulp SG for better solid fraction in concentrate. Increase air efficiency to improve flotation rate and decrease entrainment.");
           } else {
             setStatsData([]);
             setTimestamp(null);
@@ -204,7 +211,7 @@ const AmountStats: React.FC = () => {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 10000);
+    const intervalId = setInterval(fetchData, 3000);
 
     return () => clearInterval(intervalId);
   }, [cellId, openai]);
@@ -215,16 +222,7 @@ const AmountStats: React.FC = () => {
   };
 
   return (
-    <div>
-      <div className="flex-1 overflow-y-auto pt-8 px-6 bg-base-200" style={{ padding: 30 }}>
-        {/** ---------------------- Title with Timestamp ------------------------- */}
-        <div className="stats bg-base-100 shadow" style={{ marginBottom: 30, float: "right" }}>
-          <div className="stat">
-            <h1>
-              {timestamp ? formatTimestamp(timestamp) : 'N/A'}
-            </h1>
-          </div>
-        </div>
+      <div className="flex-1 overflow-y-auto bg-base-200">
         {/** ---------------------- Different stats content 1 ------------------------- */}
         <div className="stats bg-base-100 shadow">
           {
@@ -237,15 +235,7 @@ const AmountStats: React.FC = () => {
             ))
           }
         </div>
-        {/** ---------------------- Assistant Advice ------------------------- */}
-        <div className="stats bg-base-100 shadow" style={{ marginTop: 30 }}>
-          <div className="stat">
-            <div className="stat-title">Assistant Advice</div>
-            <div className="stat-value">{advice}</div>
-          </div>
-        </div>
       </div>
-    </div>
   );
 }
 

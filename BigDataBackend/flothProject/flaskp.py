@@ -3,6 +3,7 @@ import tensorflow as tf
 import joblib
 import pandas as pd
 from influxdb_client import InfluxDBClient, Point
+import random
 
 app = Flask(__name__)
 
@@ -43,23 +44,36 @@ def predict():
     try:
         # Extract and prepare data from the POST request
         json_request = request.get_json()
-        features = json_request['features']
         node_id = json_request['node_id']  # Retrieve node_id from the request
 
-        # Create a DataFrame from the received data
-        input_df = pd.DataFrame([features], columns=scalerX.feature_names_in_)
-
-        # Normalize input data
-        scaled_input = scalerX.transform(input_df)
-
-        # Make prediction with model
-        raw_prediction = model.predict(scaled_input)
-
-        # Postprocess prediction: Inverse transform with scalerY
-        final_prediction = scalerY.inverse_transform(raw_prediction)
-
-        # Convert prediction to a list for JSON response
-        prediction_list = final_prediction.tolist()[0]
+        # Fake data (replace this with your actual fake data)
+        prediction_list = [
+            random.uniform(0.5, 1.5),  # Air Efficiency
+            random.uniform(0.1, 0.5),  # Flotation Rate: Cell
+            random.uniform(0.01, 0.1),  # Entrainment: Cell
+            random.uniform(50, 100),  # Total Solids Flow_Concentrate
+            random.uniform(50, 100),  # Total Liquid Flow_Concentrate
+            random.uniform(50, 100),  # Pulp Volumetric Flow_Concentrate
+            random.uniform(1.0, 4.0),  # Solids SG_Concentrate
+            random.uniform(1.0, 2.0),  # Pulp SG_Concentrate
+            random.uniform(5, 15),  # Solids Fraction_Concentrate
+            random.uniform(50, 100),  # Total Solids Flow_Tailings
+            random.uniform(50, 100),  # Total Liquid Flow_Tailings
+            random.uniform(50, 100),  # Pulp Volumetric Flow_Tailings
+            random.uniform(1.0, 4.0),  # Solids SG_Tailings
+            random.uniform(1.0, 2.0),  # Pulp SG_Tailings
+            random.uniform(5, 15),  # Solids Fraction_Tailings
+            random.uniform(0, 10),  # Cu_Tails
+            random.uniform(0, 10),  # Fe_Tails
+            random.uniform(0, 10),  # Pb_Tails
+            random.uniform(0, 10),  # Zn_Tails
+            random.uniform(0, 10),  # Cu_Concentrate
+            random.uniform(0, 10),  # Fe_Concentrate
+            random.uniform(0, 10),  # Pb_Concentrate
+            random.uniform(0, 10)   # Zn_Concentrate
+        ]
+        
+        # Adjust one of the fake data values based on other values
         prediction_list[11] = prediction_list[9] + prediction_list[10] / prediction_list[13]
         print(prediction_list)
 
@@ -74,7 +88,7 @@ def predict():
             'Cu_Concentrate', 'Fe_Concentrate', 'Pb_Concentrate', 'Zn_Concentrate'
         ]
 
-        # Write prediction data to InfluxDB
+        # Write fake prediction data to InfluxDB
         point = Point("flotationCell").tag("node_id", node_id)
         for name, value in zip(field_names, prediction_list):
             point.field(name, value)
